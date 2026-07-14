@@ -69,36 +69,37 @@ public final class EbnfParser {
     }
 
     private EbnfRule parseRule() {
-        EbnfToken name = expect(EbnfTokenType.IDENTIFIER);
+        EbnfToken token = expect(EbnfTokenType.IDENTIFIER);
         expect(EbnfTokenType.EQUALS);
         EbnfNode expression = parseExpression();
         expect(EbnfTokenType.SEMICOLON);
-        return new EbnfRule(name.getText(), expression);
+        String tokenText = token.getText();
+        return new EbnfRule(tokenText, expression);
     }
 
     private EbnfNode parseExpression() {
-        List<EbnfNode> alternatives = new ArrayList<>();
-        alternatives.add(parseSequence());
+        List<EbnfNode> expressions = new ArrayList<>();
+        expressions.add(parseSequence());
         while (match(EbnfTokenType.PIPE)) {
-            alternatives.add(parseSequence());
+            expressions.add(parseSequence());
         }
-        if (alternatives.size() == 1) {
-            return alternatives.get(0);
+        if (expressions.size() == 1) {
+            return expressions.get(0);
         } else {
-            return new EbnfChoice(alternatives);
+            return new EbnfChoice(expressions);
         }
     }
 
     private EbnfNode parseSequence() {
-        List<EbnfNode> elements = new ArrayList<>();
-        elements.add(parseFactor());
+        List<EbnfNode> expressions = new ArrayList<>();
+        expressions.add(parseFactor());
         while (match(EbnfTokenType.COMMA)) {
-            elements.add(parseFactor());
+            expressions.add(parseFactor());
         }
-        if (elements.size() == 1) {
-            return elements.get(0);
+        if (expressions.size() == 1) {
+            return expressions.get(0);
         } else {
-            return new EbnfSequence(elements);
+            return new EbnfSequence(expressions);
         }
     }
 
