@@ -84,10 +84,10 @@ public final class EbnfParser implements Serializable {
 
     private EbnfNode parseExpression() {
         List<EbnfNode> nodes = new ArrayList<>();
-        nodes.add(parseSequence());
-        while (match(EbnfTokenType.PIPE)) {
-            nodes.add(parseSequence());
-        }
+        do {
+            EbnfNode node = parseSequence();
+            nodes.add(node);
+        } while (match(EbnfTokenType.PIPE));
         if (nodes.size() == 1) {
             return nodes.get(0);
         } else {
@@ -97,10 +97,10 @@ public final class EbnfParser implements Serializable {
 
     private EbnfNode parseSequence() {
         List<EbnfNode> nodes = new ArrayList<>();
-        nodes.add(parseFactor());
-        while (match(EbnfTokenType.COMMA)) {
-            nodes.add(parseFactor());
-        }
+        do {
+            EbnfNode node = parseFactor();
+            nodes.add(node);
+        } while (match(EbnfTokenType.COMMA));
         if (nodes.size() == 1) {
             return nodes.get(0);
         } else {
