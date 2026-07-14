@@ -143,13 +143,13 @@ public final class EbnfParser {
     }
 
     private EbnfToken consume() {
-        EbnfToken ebnfToken = peek();
+        EbnfToken token = peek();
         _position++;
-        return ebnfToken;
+        return token;
     }
 
-    private boolean match(final EbnfTokenType ebnfTokenType) {
-        if (check(ebnfTokenType)) {
+    private boolean match(final EbnfTokenType expectedTokenType) {
+        if (check(expectedTokenType)) {
             consume();
             return true;
         } else {
@@ -157,28 +157,28 @@ public final class EbnfParser {
         }
     }
 
-    private EbnfToken expect(final EbnfTokenType ebnfTokenType) {
-        if (check(ebnfTokenType)) {
+    private EbnfToken expect(final EbnfTokenType expectedTokenType) {
+        if (check(expectedTokenType)) {
             return consume();
         } else {
             EbnfToken ebnfToken = peek();
             EbnfTokenType actualTokenType = ebnfToken.getType();
             throw new EbnfParseException(
                     "Expected "
-                            + ebnfTokenType
+                            + expectedTokenType
                             + " but was "
                             + actualTokenType
             );
         }
     }
 
-    private boolean check(final EbnfTokenType type) {
+    private boolean check(final EbnfTokenType expectedTokenType) {
         if (isAtEnd()) {
-            return type == EbnfTokenType.EOF;
+            return expectedTokenType == EbnfTokenType.EOF;
         } else {
             EbnfToken ebnfToken = peek();
             EbnfTokenType ebnfTokenType = ebnfToken.getType();
-            return ebnfTokenType == type;
+            return ebnfTokenType == expectedTokenType;
         }
     }
 
