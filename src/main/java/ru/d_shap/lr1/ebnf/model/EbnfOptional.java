@@ -17,46 +17,33 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-package ru.d_shap.lr1.ebnf;
+package ru.d_shap.lr1.ebnf.model;
 
 /**
- * The EBNF rule.
+ * The EBNF optional.
  *
  * @author Dmitry Shapovalov
  */
-public final class EbnfRule implements EbnfNode {
+public final class EbnfOptional implements EbnfNode {
 
     private static final long serialVersionUID = 1L;
-
-    private final String _name;
 
     private final EbnfNode _expression;
 
     /**
      * Create new object.
      *
-     * @param name       the name of the EBNF rule.
-     * @param expression the expression of the EBNF rule.
+     * @param expression the expression of the EBNF optional.
      */
-    public EbnfRule(final String name, final EbnfNode expression) {
+    public EbnfOptional(final EbnfNode expression) {
         super();
-        _name = name;
         _expression = expression;
     }
 
     /**
-     * Get the name of the EBNF rule.
+     * Get the expression of the EBNF optional.
      *
-     * @return the name of the EBNF rule.
-     */
-    public String getName() {
-        return _name;
-    }
-
-    /**
-     * Get the expression of the EBNF rule.
-     *
-     * @return the expression of the EBNF rule.
+     * @return the expression of the EBNF optional.
      */
     public EbnfNode getExpression() {
         return _expression;

@@ -17,36 +17,36 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-package ru.d_shap.lr1.ebnf;
+package ru.d_shap.lr1.ebnf.model;
 
 /**
- * The EBNF repeat.
+ * The EBNF terminal.
  *
  * @author Dmitry Shapovalov
  */
-public final class EbnfRepeat implements EbnfNode {
+public final class EbnfTerminal implements EbnfNode {
 
     private static final long serialVersionUID = 1L;
 
-    private final EbnfNode _expression;
+    private final String _value;
 
     /**
      * Create new object.
      *
-     * @param expression the expression of the EBNF repeat.
+     * @param value the value of the EBNF terminal.
      */
-    public EbnfRepeat(final EbnfNode expression) {
+    public EbnfTerminal(final String value) {
         super();
-        _expression = expression;
+        _value = value;
     }
 
     /**
-     * Get the expression of the EBNF repeat.
+     * Get the value of the EBNF terminal.
      *
-     * @return the expression of the EBNF repeat.
+     * @return the value of the EBNF terminal.
      */
-    public EbnfNode getExpression() {
-        return _expression;
+    public String getValue() {
+        return _value;
     }
 
 }

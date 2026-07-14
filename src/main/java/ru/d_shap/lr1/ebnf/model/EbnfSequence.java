@@ -17,17 +17,17 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-package ru.d_shap.lr1.ebnf;
+package ru.d_shap.lr1.ebnf.model;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The EBNF choice.
+ * The EBNF sequence.
  *
  * @author Dmitry Shapovalov
  */
-public final class EbnfChoice implements EbnfNode {
+public final class EbnfSequence implements EbnfNode {
 
     private static final long serialVersionUID = 1L;
 
@@ -36,9 +36,9 @@ public final class EbnfChoice implements EbnfNode {
     /**
      * Create new object.
      *
-     * @param expressions the expressions of the EBNF choice.
+     * @param expressions the expressions of the EBNF sequence.
      */
-    public EbnfChoice(final List<EbnfNode> expressions) {
+    public EbnfSequence(final List<EbnfNode> expressions) {
         super();
         if (expressions == null) {
             _expressions = null;
@@ -48,9 +48,9 @@ public final class EbnfChoice implements EbnfNode {
     }
 
     /**
-     * Get the number of the expressions in the EBNF choice.
+     * Get the number of the expressions in the EBNF sequence.
      *
-     * @return the number of the expressions in the EBNF choice.
+     * @return the number of the expressions in the EBNF sequence.
      */
     public int getCount() {
         if (_expressions == null) {
@@ -61,11 +61,11 @@ public final class EbnfChoice implements EbnfNode {
     }
 
     /**
-     * Get the expression of the EBNF choice at the specified index.
+     * Get the expression of the EBNF sequence at the specified index.
      *
      * @param index the specified index.
      *
-     * @return the expression of the EBNF choice at the specified index.
+     * @return the expression of the EBNF sequence at the specified index.
      */
     public EbnfNode getExpression(final int index) {
         if (_expressions == null) {

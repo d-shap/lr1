@@ -17,36 +17,55 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-package ru.d_shap.lr1.ebnf;
+package ru.d_shap.lr1.ebnf.model;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
- * The EBNF terminal.
+ * The EBNF grammar.
  *
  * @author Dmitry Shapovalov
  */
-public final class EbnfTerminal implements EbnfNode {
+public final class EbnfGrammar implements EbnfNode {
 
     private static final long serialVersionUID = 1L;
 
-    private final String _value;
+    private final Map<String, EbnfRule> _ebnfRules;
 
     /**
      * Create new object.
      *
-     * @param value the value of the EBNF terminal.
+     * @param ebnfRules the list of the EBNF rules.
      */
-    public EbnfTerminal(final String value) {
+    public EbnfGrammar(final List<EbnfRule> ebnfRules) {
         super();
-        _value = value;
+        if (ebnfRules == null) {
+            _ebnfRules = null;
+        } else {
+            _ebnfRules = new HashMap<>();
+            for (EbnfRule ebnfRule : ebnfRules) {
+                if (ebnfRule != null) {
+                    _ebnfRules.put(ebnfRule.getName(), ebnfRule);
+                }
+            }
+        }
     }
 
     /**
-     * Get the value of the EBNF terminal.
+     * Get the EBNF rule for the specified name.
      *
-     * @return the value of the EBNF terminal.
+     * @param name the specified name.
+     *
+     * @return the EBNF rule for the specified name.
      */
-    public String getValue() {
-        return _value;
+    public EbnfRule getEbnfRule(final String name) {
+        if (_ebnfRules == null) {
+            return null;
+        } else {
+            return _ebnfRules.get(name);
+        }
     }
 
 }

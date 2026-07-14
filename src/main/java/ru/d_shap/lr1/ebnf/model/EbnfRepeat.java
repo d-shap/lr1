@@ -17,55 +17,36 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-package ru.d_shap.lr1.ebnf;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+package ru.d_shap.lr1.ebnf.model;
 
 /**
- * The EBNF grammar.
+ * The EBNF repeat.
  *
  * @author Dmitry Shapovalov
  */
-public final class EbnfGrammar implements EbnfNode {
+public final class EbnfRepeat implements EbnfNode {
 
     private static final long serialVersionUID = 1L;
 
-    private final Map<String, EbnfRule> _ebnfRules;
+    private final EbnfNode _expression;
 
     /**
      * Create new object.
      *
-     * @param ebnfRules the list of the EBNF rules.
+     * @param expression the expression of the EBNF repeat.
      */
-    public EbnfGrammar(final List<EbnfRule> ebnfRules) {
+    public EbnfRepeat(final EbnfNode expression) {
         super();
-        if (ebnfRules == null) {
-            _ebnfRules = null;
-        } else {
-            _ebnfRules = new HashMap<>();
-            for (EbnfRule ebnfRule : ebnfRules) {
-                if (ebnfRule != null) {
-                    _ebnfRules.put(ebnfRule.getName(), ebnfRule);
-                }
-            }
-        }
+        _expression = expression;
     }
 
     /**
-     * Get the EBNF rule for the specified name.
+     * Get the expression of the EBNF repeat.
      *
-     * @param name the specified name.
-     *
-     * @return the EBNF rule for the specified name.
+     * @return the expression of the EBNF repeat.
      */
-    public EbnfRule getEbnfRule(final String name) {
-        if (_ebnfRules == null) {
-            return null;
-        } else {
-            return _ebnfRules.get(name);
-        }
+    public EbnfNode getExpression() {
+        return _expression;
     }
 
 }

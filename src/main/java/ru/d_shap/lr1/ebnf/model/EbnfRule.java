@@ -17,15 +17,49 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-package ru.d_shap.lr1.ebnf;
-
-import java.io.Serializable;
+package ru.d_shap.lr1.ebnf.model;
 
 /**
- * The EBNF node.
+ * The EBNF rule.
  *
  * @author Dmitry Shapovalov
  */
-public interface EbnfNode extends Serializable {
+public final class EbnfRule implements EbnfNode {
+
+    private static final long serialVersionUID = 1L;
+
+    private final String _name;
+
+    private final EbnfNode _expression;
+
+    /**
+     * Create new object.
+     *
+     * @param name       the name of the EBNF rule.
+     * @param expression the expression of the EBNF rule.
+     */
+    public EbnfRule(final String name, final EbnfNode expression) {
+        super();
+        _name = name;
+        _expression = expression;
+    }
+
+    /**
+     * Get the name of the EBNF rule.
+     *
+     * @return the name of the EBNF rule.
+     */
+    public String getName() {
+        return _name;
+    }
+
+    /**
+     * Get the expression of the EBNF rule.
+     *
+     * @return the expression of the EBNF rule.
+     */
+    public EbnfNode getExpression() {
+        return _expression;
+    }
 
 }
