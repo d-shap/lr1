@@ -18,6 +18,6 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 /**
- * Package contains classet to process EBNF.
+ * Package contains classes to process EBNF.
  */
 package ru.d_shap.lr1.ebnf;
