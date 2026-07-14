@@ -31,50 +31,50 @@ public final class EbnfSequence implements EbnfNode {
 
     private static final long serialVersionUID = 1L;
 
-    private final List<EbnfNode> _elements;
+    private final List<EbnfNode> _expressions;
 
     /**
      * Create new object.
      *
-     * @param elements the elements of the EBNF sequence.
+     * @param expressions the expressions of the EBNF sequence.
      */
-    public EbnfSequence(final List<EbnfNode> elements) {
+    public EbnfSequence(final List<EbnfNode> expressions) {
         super();
-        if (elements == null) {
-            _elements = null;
+        if (expressions == null) {
+            _expressions = null;
         } else {
-            _elements = new ArrayList<>(elements);
+            _expressions = new ArrayList<>(expressions);
         }
     }
 
     /**
-     * Get the size of the EBNF sequence.
+     * Get the number of the expressions in the EBNF sequence.
      *
-     * @return the size of the EBNF sequence.
+     * @return the number of the expressions in the EBNF sequence.
      */
-    public int size() {
-        if (_elements == null) {
+    public int getCount() {
+        if (_expressions == null) {
             return 0;
         } else {
-            return _elements.size();
+            return _expressions.size();
         }
     }
 
     /**
-     * Get the element of the EBNF sequence at the specified index.
+     * Get the expression of the EBNF sequence at the specified index.
      *
      * @param index the specified index.
      *
-     * @return the element of the EBNF sequence at the specified index.
+     * @return the expression of the EBNF sequence at the specified index.
      */
-    public EbnfNode getEbnfNode(final int index) {
-        if (_elements == null) {
+    public EbnfNode getExpression(final int index) {
+        if (_expressions == null) {
             return null;
         }
-        if (index < 0 || index >= _elements.size()) {
+        if (index < 0 || index >= _expressions.size()) {
             return null;
         }
-        return _elements.get(index);
+        return _expressions.get(index);
     }
 
 }
