@@ -170,14 +170,19 @@ public final class EbnfParser implements Serializable {
         }
     }
 
+    private boolean isAtEnd() {
+        if (check(EbnfTokenType.EOF)) {
+            consume();
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     private boolean check(final EbnfTokenType expectedTokenType) {
         EbnfToken token = peek();
         EbnfTokenType actualTokenType = token.getType();
         return actualTokenType == expectedTokenType;
-    }
-
-    private boolean isAtEnd() {
-        return check(EbnfTokenType.EOF);
     }
 
 }
