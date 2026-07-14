@@ -1,37 +1,61 @@
+///////////////////////////////////////////////////////////////////////////////////////////////////
+// LR(1) parser implementation.
+// Copyright (C) 2026 Dmitry Shapovalov.
+//
+// This file is part of LR(1) parser.
+//
+// LR(1) parser is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// LR(1) parser is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU Lesser General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public License
+// along with this program. If not, see <http://www.gnu.org/licenses/>.
+///////////////////////////////////////////////////////////////////////////////////////////////////
 package ru.d_shap.lr1.ebnf;
 
+/**
+ * The EBNF token.
+ *
+ * @author Dmitry Shapovalov
+ */
 final class EbnfToken {
 
-    EbnfTokenType type;
+    private final EbnfTokenType _type;
 
-    String text;
+    private final String _text;
 
-    int line;
+    private final int _line;
 
-    int column;
+    private final int _column;
 
     EbnfToken(final EbnfTokenType type, final String text, final int line, final int column) {
         super();
-        this.type = type;
-        this.text = text;
-        this.line = line;
-        this.column = column;
+        _type = type;
+        _text = text;
+        _line = line;
+        _column = column;
     }
 
-    public EbnfTokenType getType() {
-        return type;
+    EbnfTokenType getType() {
+        return _type;
     }
 
-    public String getText() {
-        return text;
+    String getText() {
+        return _text;
     }
 
-    public int getLine() {
-        return line;
+    int getLine() {
+        return _line;
     }
 
-    public int getColumn() {
-        return column;
+    int getColumn() {
+        return _column;
     }
 
 }
