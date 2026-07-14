@@ -54,6 +54,11 @@ public final class EbnfParser {
         _position = 0;
     }
 
+    /**
+     * Parse the EBNF tokens.
+     *
+     * @return the EBNF grammar.
+     */
     public EbnfGrammar parseGrammar() {
         List<EbnfRule> rules = new ArrayList<>();
         while (!isAtEnd()) {
