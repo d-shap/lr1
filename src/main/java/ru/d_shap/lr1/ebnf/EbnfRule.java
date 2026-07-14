@@ -26,6 +26,8 @@ package ru.d_shap.lr1.ebnf;
  */
 public final class EbnfRule implements EbnfNode {
 
+    private static final long serialVersionUID = 1L;
+
     private final String _name;
 
     private final EbnfNode _expression;

@@ -29,6 +29,8 @@ import java.util.List;
  */
 public final class EbnfSequence implements EbnfNode {
 
+    private static final long serialVersionUID = 1L;
+
     private final List<EbnfNode> _elements;
 
     /**
