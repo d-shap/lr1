@@ -31,50 +31,50 @@ public final class EbnfChoice implements EbnfNode {
 
     private static final long serialVersionUID = 1L;
 
-    private final List<EbnfNode> _elements;
+    private final List<EbnfNode> _expressions;
 
     /**
      * Create new object.
      *
-     * @param elements the elements of the EBNF choice.
+     * @param expressions the expression of the EBNF choice.
      */
-    public EbnfChoice(final List<EbnfNode> elements) {
+    public EbnfChoice(final List<EbnfNode> expressions) {
         super();
-        if (elements == null) {
-            _elements = null;
+        if (expressions == null) {
+            _expressions = null;
         } else {
-            _elements = new ArrayList<>(elements);
+            _expressions = new ArrayList<>(expressions);
         }
     }
 
     /**
-     * Get the size of the EBNF choice.
+     * Get the number of the expressions in the EBNF choice.
      *
-     * @return the size of the EBNF choice.
+     * @return the number of the expressions in the EBNF choice.
      */
-    public int size() {
-        if (_elements == null) {
+    public int getCount() {
+        if (_expressions == null) {
             return 0;
         } else {
-            return _elements.size();
+            return _expressions.size();
         }
     }
 
     /**
-     * Get the element of the EBNF choice at the specified index.
+     * Get the expression of the EBNF choice at the specified index.
      *
      * @param index the specified index.
      *
-     * @return the element of the EBNF choice at the specified index.
+     * @return the expression of the EBNF choice at the specified index.
      */
-    public EbnfNode getEbnfNode(final int index) {
-        if (_elements == null) {
+    public EbnfNode getExpression(final int index) {
+        if (_expressions == null) {
             return null;
         }
-        if (index < 0 || index >= _elements.size()) {
+        if (index < 0 || index >= _expressions.size()) {
             return null;
         }
-        return _elements.get(index);
+        return _expressions.get(index);
     }
 
 }
