@@ -32,22 +32,22 @@ public final class EbnfGrammar implements EbnfNode {
 
     private static final long serialVersionUID = 1L;
 
-    private final Map<String, EbnfRule> _ebnfRules;
+    private final Map<String, EbnfRule> _rules;
 
     /**
      * Create new object.
      *
-     * @param ebnfRules the list of the EBNF rules.
+     * @param rules the list of the EBNF rules.
      */
-    public EbnfGrammar(final List<EbnfRule> ebnfRules) {
+    public EbnfGrammar(final List<EbnfRule> rules) {
         super();
-        if (ebnfRules == null) {
-            _ebnfRules = null;
+        if (rules == null) {
+            _rules = null;
         } else {
-            _ebnfRules = new HashMap<>();
-            for (EbnfRule ebnfRule : ebnfRules) {
+            _rules = new HashMap<>();
+            for (EbnfRule ebnfRule : rules) {
                 if (ebnfRule != null) {
-                    _ebnfRules.put(ebnfRule.getName(), ebnfRule);
+                    _rules.put(ebnfRule.getName(), ebnfRule);
                 }
             }
         }
@@ -61,10 +61,10 @@ public final class EbnfGrammar implements EbnfNode {
      * @return the EBNF rule for the specified name.
      */
     public EbnfRule getEbnfRule(final String name) {
-        if (_ebnfRules == null) {
+        if (_rules == null) {
             return null;
         } else {
-            return _ebnfRules.get(name);
+            return _rules.get(name);
         }
     }
 
