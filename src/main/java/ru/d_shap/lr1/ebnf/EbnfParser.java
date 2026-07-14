@@ -174,9 +174,7 @@ public final class EbnfParser {
     }
 
     private boolean isAtEnd() {
-        EbnfToken token = peek();
-        EbnfTokenType actualTokenType = token.getType();
-        return actualTokenType == EbnfTokenType.EOF;
+        return check(EbnfTokenType.EOF);
     }
 
 }
