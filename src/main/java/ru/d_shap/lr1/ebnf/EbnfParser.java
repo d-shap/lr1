@@ -43,12 +43,7 @@ public final class EbnfParser {
 
     private int _position;
 
-    /**
-     * Create new object.
-     *
-     * @param tokens the EBNF tokens.
-     */
-    public EbnfParser(final List<EbnfToken> tokens) {
+    private EbnfParser(final List<EbnfToken> tokens) {
         super();
         _tokens = tokens;
         _position = 0;
@@ -57,9 +52,16 @@ public final class EbnfParser {
     /**
      * Parse the EBNF tokens.
      *
+     * @param tokens the EBNF tokens.
+     *
      * @return the EBNF grammar.
      */
-    public EbnfGrammar parseGrammar() {
+    public static EbnfGrammar parse(final List<EbnfToken> tokens) {
+        EbnfParser parser = new EbnfParser(tokens);
+        return parser.parseGrammar();
+    }
+
+    private EbnfGrammar parseGrammar() {
         List<EbnfRule> rules = new ArrayList<>();
         while (!isAtEnd()) {
             EbnfRule ebnfRule = parseRule();
