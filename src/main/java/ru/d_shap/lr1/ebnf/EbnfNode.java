@@ -19,11 +19,13 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 package ru.d_shap.lr1.ebnf;
 
+import java.io.Serializable;
+
 /**
  * The EBNF node.
  *
  * @author Dmitry Shapovalov
  */
-public interface EbnfNode {
+public interface EbnfNode extends Serializable {
 
 }
