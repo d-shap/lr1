@@ -131,7 +131,7 @@ public final class EbnfParser {
             expect(EbnfTokenType.RBRACE);
             return new EbnfRepeat(node);
         }
-        throw error(
+        throw new EbnfParseException(
                 "Unexpected token: "
                         + token.getType()
                         + " (" + token.getText() + ")"
@@ -147,11 +147,12 @@ public final class EbnfParser {
         }
     }
 
-    private EbnfToken expect(final EbnfTokenType type) {
-        if (!check(type)) {
-            throw error(
+    private EbnfToken expect(final EbnfTokenType expectType) {
+        if (!check(expectType)) {
+
+            throw new EbnfParseException(
                     "Expected "
-                            + type
+                            + expectType
                             + " but was "
                             + peek().getType()
             );
@@ -169,9 +170,9 @@ public final class EbnfParser {
     }
 
     private EbnfToken consume() {
-        EbnfToken token = peek();
+        EbnfToken ebnfToken = peek();
         _position++;
-        return token;
+        return ebnfToken;
     }
 
     private EbnfToken peek() {
@@ -180,10 +181,6 @@ public final class EbnfParser {
 
     private boolean isAtEnd() {
         return peek().getType() == EbnfTokenType.EOF;
-    }
-
-    private RuntimeException error(final String message) {
-        return new RuntimeException(message);
     }
 
 }
