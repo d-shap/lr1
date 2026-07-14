@@ -161,14 +161,9 @@ public final class EbnfParser {
         if (check(expectedTokenType)) {
             return consume();
         } else {
-            EbnfToken ebnfToken = peek();
-            EbnfTokenType actualTokenType = ebnfToken.getType();
-            throw new EbnfParseException(
-                    "Expected "
-                            + expectedTokenType
-                            + " but was "
-                            + actualTokenType
-            );
+            EbnfToken token = peek();
+            EbnfTokenType actualTokenType = token.getType();
+            throw new EbnfParseException("Expected " + expectedTokenType + " but was " + actualTokenType);
         }
     }
 
