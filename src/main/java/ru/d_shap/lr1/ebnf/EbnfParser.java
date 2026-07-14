@@ -75,36 +75,36 @@ public final class EbnfParser implements Serializable {
 
     private EbnfRule parseRule() {
         EbnfToken token = expect(EbnfTokenType.IDENTIFIER);
-        String name = token.getText();
+        String tokenText = token.getText();
         expect(EbnfTokenType.EQUALS);
-        EbnfNode expression = parseExpression();
+        EbnfNode node = parseExpression();
         expect(EbnfTokenType.SEMICOLON);
-        return new EbnfRule(name, expression);
+        return new EbnfRule(tokenText, node);
     }
 
     private EbnfNode parseExpression() {
-        List<EbnfNode> expressions = new ArrayList<>();
-        expressions.add(parseSequence());
+        List<EbnfNode> nodes = new ArrayList<>();
+        nodes.add(parseSequence());
         while (match(EbnfTokenType.PIPE)) {
-            expressions.add(parseSequence());
+            nodes.add(parseSequence());
         }
-        if (expressions.size() == 1) {
-            return expressions.get(0);
+        if (nodes.size() == 1) {
+            return nodes.get(0);
         } else {
-            return new EbnfChoice(expressions);
+            return new EbnfChoice(nodes);
         }
     }
 
     private EbnfNode parseSequence() {
-        List<EbnfNode> expressions = new ArrayList<>();
-        expressions.add(parseFactor());
+        List<EbnfNode> nodes = new ArrayList<>();
+        nodes.add(parseFactor());
         while (match(EbnfTokenType.COMMA)) {
-            expressions.add(parseFactor());
+            nodes.add(parseFactor());
         }
-        if (expressions.size() == 1) {
-            return expressions.get(0);
+        if (nodes.size() == 1) {
+            return nodes.get(0);
         } else {
-            return new EbnfSequence(expressions);
+            return new EbnfSequence(nodes);
         }
     }
 
