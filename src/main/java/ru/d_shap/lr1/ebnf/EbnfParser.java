@@ -105,13 +105,14 @@ public final class EbnfParser {
     private EbnfNode parseFactor() {
         EbnfToken token = peek();
         EbnfTokenType tokenType = token.getType();
+        String tokenText = token.getText();
         if (tokenType == EbnfTokenType.IDENTIFIER) {
             consume();
-            return new EbnfRuleReference(token.getText());
+            return new EbnfRuleReference(tokenText);
         }
         if (tokenType == EbnfTokenType.STRING) {
             consume();
-            return new EbnfTerminal(token.getText());
+            return new EbnfTerminal(tokenText);
         }
         if (tokenType == EbnfTokenType.LPAREN) {
             consume();
@@ -131,11 +132,7 @@ public final class EbnfParser {
             expect(EbnfTokenType.RBRACE);
             return new EbnfRepeat(node);
         }
-        throw new EbnfParseException(
-                "Unexpected token: "
-                        + token.getType()
-                        + " (" + token.getText() + ")"
-        );
+        throw new EbnfParseException("Unexpected token: " + tokenType + " (" + tokenText + ")");
     }
 
     private EbnfToken peek() {
