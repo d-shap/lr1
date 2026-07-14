@@ -161,11 +161,13 @@ public final class EbnfParser {
         if (check(ebnfTokenType)) {
             return consume();
         } else {
+            EbnfToken ebnfToken = peek();
+            EbnfTokenType actualTokenType = ebnfToken.getType();
             throw new EbnfParseException(
                     "Expected "
                             + ebnfTokenType
                             + " but was "
-                            + peek().getType()
+                            + actualTokenType
             );
         }
     }
@@ -174,7 +176,9 @@ public final class EbnfParser {
         if (isAtEnd()) {
             return type == EbnfTokenType.EOF;
         } else {
-            return peek().getType() == type;
+            EbnfToken ebnfToken = peek();
+            EbnfTokenType ebnfTokenType = ebnfToken.getType();
+            return ebnfTokenType == type;
         }
     }
 
