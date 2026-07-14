@@ -168,19 +168,15 @@ public final class EbnfParser {
     }
 
     private boolean check(final EbnfTokenType expectedTokenType) {
-        if (isAtEnd()) {
-            return expectedTokenType == EbnfTokenType.EOF;
-        } else {
-            EbnfToken ebnfToken = peek();
-            EbnfTokenType ebnfTokenType = ebnfToken.getType();
-            return ebnfTokenType == expectedTokenType;
-        }
+        EbnfToken token = peek();
+        EbnfTokenType actualTokenType = token.getType();
+        return actualTokenType == expectedTokenType;
     }
 
     private boolean isAtEnd() {
-        EbnfToken ebnfToken = peek();
-        EbnfTokenType ebnfTokenType = ebnfToken.getType();
-        return ebnfTokenType == EbnfTokenType.EOF;
+        EbnfToken token = peek();
+        EbnfTokenType actualTokenType = token.getType();
+        return actualTokenType == EbnfTokenType.EOF;
     }
 
 }
