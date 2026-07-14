@@ -75,11 +75,11 @@ public final class EbnfParser implements Serializable {
 
     private EbnfRule parseRule() {
         EbnfToken token = expect(EbnfTokenType.IDENTIFIER);
+        String name = token.getText();
         expect(EbnfTokenType.EQUALS);
         EbnfNode expression = parseExpression();
         expect(EbnfTokenType.SEMICOLON);
-        String tokenText = token.getText();
-        return new EbnfRule(tokenText, expression);
+        return new EbnfRule(name, expression);
     }
 
     private EbnfNode parseExpression() {
