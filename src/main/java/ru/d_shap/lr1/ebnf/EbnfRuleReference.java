@@ -20,11 +20,11 @@
 package ru.d_shap.lr1.ebnf;
 
 /**
- * The EBNF non-terminal.
+ * The EBNF rule reference.
  *
  * @author Dmitry Shapovalov
  */
-public final class EbnfNonTerminal implements EbnfNode {
+public final class EbnfRuleReference implements EbnfNode {
 
     private static final long serialVersionUID = 1L;
 
@@ -35,7 +35,7 @@ public final class EbnfNonTerminal implements EbnfNode {
      *
      * @param name the name of the EBNF rule.
      */
-    public EbnfNonTerminal(final String name) {
+    public EbnfRuleReference(final String name) {
         super();
         _name = name;
     }
