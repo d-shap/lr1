@@ -36,7 +36,7 @@ public final class EbnfChoice implements EbnfNode {
     /**
      * Create new object.
      *
-     * @param expressions the expression of the EBNF choice.
+     * @param expressions the expressions of the EBNF choice.
      */
     public EbnfChoice(final List<EbnfNode> expressions) {
         super();
