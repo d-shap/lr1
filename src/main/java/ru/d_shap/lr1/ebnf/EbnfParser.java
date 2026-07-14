@@ -138,8 +138,18 @@ public final class EbnfParser {
         );
     }
 
-    private boolean match(final EbnfTokenType type) {
-        if (check(type)) {
+    private EbnfToken peek() {
+        return _tokens.get(_position);
+    }
+
+    private EbnfToken consume() {
+        EbnfToken ebnfToken = peek();
+        _position++;
+        return ebnfToken;
+    }
+
+    private boolean match(final EbnfTokenType ebnfTokenType) {
+        if (check(ebnfTokenType)) {
             consume();
             return true;
         } else {
@@ -147,18 +157,17 @@ public final class EbnfParser {
         }
     }
 
-    private EbnfToken expect(final EbnfTokenType expectType) {
-        if (!check(expectType)) {
-
+    private EbnfToken expect(final EbnfTokenType ebnfTokenType) {
+        if (check(ebnfTokenType)) {
+            return consume();
+        } else {
             throw new EbnfParseException(
                     "Expected "
-                            + expectType
+                            + ebnfTokenType
                             + " but was "
                             + peek().getType()
             );
         }
-
-        return consume();
     }
 
     private boolean check(final EbnfTokenType type) {
@@ -169,18 +178,10 @@ public final class EbnfParser {
         }
     }
 
-    private EbnfToken consume() {
-        EbnfToken ebnfToken = peek();
-        _position++;
-        return ebnfToken;
-    }
-
-    private EbnfToken peek() {
-        return _tokens.get(_position);
-    }
-
     private boolean isAtEnd() {
-        return peek().getType() == EbnfTokenType.EOF;
+        EbnfToken ebnfToken = peek();
+        EbnfTokenType ebnfTokenType = ebnfToken.getType();
+        return ebnfTokenType == EbnfTokenType.EOF;
     }
 
 }
