@@ -19,12 +19,16 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 package ru.d_shap.lr1.ebnf;
 
+import java.io.Serializable;
+
 /**
  * The EBNF token.
  *
  * @author Dmitry Shapovalov
  */
-final class EbnfToken {
+final class EbnfToken implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private final EbnfTokenType _type;
 
