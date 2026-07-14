@@ -67,8 +67,8 @@ public final class EbnfParser implements Serializable {
     private EbnfGrammar parse() {
         List<EbnfRule> rules = new ArrayList<>();
         while (!isAtEnd()) {
-            EbnfRule ebnfRule = parseRule();
-            rules.add(ebnfRule);
+            EbnfRule rule = parseRule();
+            rules.add(rule);
         }
         return new EbnfGrammar(rules);
     }
