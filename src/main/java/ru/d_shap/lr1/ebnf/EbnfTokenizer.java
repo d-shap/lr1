@@ -208,6 +208,15 @@ public final class EbnfTokenizer implements Serializable {
         throw new EbnfException("Unexpected character: '" + currentChar + "' at line " + startLine + ", column " + startColumn);
     }
 
+    private EbnfToken parseIdentifier(final int startLine, final int startColumn) {
+        StringBuilder text = new StringBuilder();
+        while (!isAtEnd() && isIdentifierPart(peek())) {
+            text.append(peek());
+            advance();
+        }
+        return new EbnfToken(EbnfTokenType.IDENTIFIER, text.toString(), startLine, startColumn);
+    }
+
     private EbnfToken parseString(final char quoteChar, final int startLine, final int startColumn) {
         advance();
         StringBuilder text = new StringBuilder();
@@ -251,15 +260,6 @@ public final class EbnfTokenizer implements Serializable {
         }
         advance();
         return new EbnfToken(EbnfTokenType.STRING, text.toString(), startLine, startColumn);
-    }
-
-    private EbnfToken parseIdentifier(final int startLine, final int startColumn) {
-        StringBuilder text = new StringBuilder();
-        while (!isAtEnd() && isIdentifierPart(peek())) {
-            text.append(peek());
-            advance();
-        }
-        return new EbnfToken(EbnfTokenType.IDENTIFIER, text.toString(), startLine, startColumn);
     }
 
     private char peek() {
