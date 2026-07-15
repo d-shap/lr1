@@ -52,6 +52,7 @@ public final class EbnfTokenizer {
         _line = 1;
         _column = 1;
         readNextChar();
+        _currentChar = _nextChar;
         readNextChar();
     }
 
