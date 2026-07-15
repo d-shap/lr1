@@ -36,13 +36,13 @@ public final class EbnfTokenizer implements Serializable {
 
     private final Reader _reader;
 
-    private int _currentChar;
-
-    private int _nextChar;
-
     private int _line;
 
     private int _column;
+
+    private int _currentChar;
+
+    private int _nextChar;
 
     private EbnfTokenizer(final Reader reader) {
         super();
