@@ -45,10 +45,8 @@ public final class EbnfTokenizer {
      * Create a new tokenizer for the specified reader.
      *
      * @param reader the reader to tokenize.
-     *
-     * @throws IOException if an I/O error occurs.
      */
-    public EbnfTokenizer(final Reader reader) throws IOException {
+    public EbnfTokenizer(final Reader reader) {
         super();
         _reader = reader;
         _line = 1;
@@ -61,10 +59,8 @@ public final class EbnfTokenizer {
      * Tokenize the input and return a list of tokens.
      *
      * @return the list of tokens.
-     *
-     * @throws IOException if an I/O error occurs.
      */
-    public List<EbnfToken> tokenize() throws IOException {
+    public List<EbnfToken> tokenize() {
         List<EbnfToken> tokens = new ArrayList<>();
         while (!isAtEnd()) {
             skipWhitespaceAndComments();
@@ -78,7 +74,7 @@ public final class EbnfTokenizer {
         return tokens;
     }
 
-    private EbnfToken nextToken() throws IOException {
+    private EbnfToken nextToken() {
         int startLine = _line;
         int startColumn = _column;
         char currentChar = peek();
@@ -138,7 +134,7 @@ public final class EbnfTokenizer {
         throw new EbnfException("Unexpected character: '" + currentChar + "' at line " + startLine + ", column " + startColumn);
     }
 
-    private EbnfToken parseString(final char quoteChar, final int startLine, final int startColumn) throws IOException {
+    private EbnfToken parseString(final char quoteChar, final int startLine, final int startColumn) {
         advance(); // skip opening quote
         StringBuilder text = new StringBuilder();
         while (!isAtEnd() && peek() != quoteChar) {
@@ -182,7 +178,7 @@ public final class EbnfTokenizer {
         return new EbnfToken(EbnfTokenType.STRING, text.toString(), startLine, startColumn);
     }
 
-    private EbnfToken parseIdentifier(final int startLine, final int startColumn) throws IOException {
+    private EbnfToken parseIdentifier(final int startLine, final int startColumn) {
         StringBuilder text = new StringBuilder();
         while (!isAtEnd() && isIdentifierPart(peek())) {
             text.append(peek());
@@ -191,7 +187,7 @@ public final class EbnfTokenizer {
         return new EbnfToken(EbnfTokenType.IDENTIFIER, text.toString(), startLine, startColumn);
     }
 
-    private void skipWhitespaceAndComments() throws IOException {
+    private void skipWhitespaceAndComments() {
         while (!isAtEnd()) {
             char currentChar = peek();
             if (currentChar == ' ' || currentChar == '\t' || currentChar == '\r') {
@@ -244,7 +240,7 @@ public final class EbnfTokenizer {
         return (char) _nextChar;
     }
 
-    private void advance() throws IOException {
+    private void advance() {
         if (!isAtEnd()) {
             if (_currentChar == '\n') {
                 _line++;
@@ -257,17 +253,16 @@ public final class EbnfTokenizer {
         }
     }
 
-    private void readNextChar() throws IOException {
-        int ch = _reader.read();
-        if (ch == -1) {
-            _nextChar = -1;
-        } else {
-            _nextChar = ch;
+    private void readNextChar() {
+        try {
+            _nextChar = _reader.read();
+        } catch (IOException ex) {
+            throw new EbnfParseException("Read exception", ex);
         }
     }
 
     private boolean isAtEnd() {
-        return _currentChar == -1;
+        return _currentChar < 0;
     }
 
     private boolean isIdentifierStart(final char ch) {
