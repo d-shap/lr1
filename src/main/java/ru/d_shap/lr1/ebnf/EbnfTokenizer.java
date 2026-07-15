@@ -216,6 +216,14 @@ public final class EbnfTokenizer implements Serializable {
         return new EbnfToken(EbnfTokenType.IDENTIFIER, text.toString(), startLine, startColumn);
     }
 
+    private boolean isIdentifierStart(final char ch) {
+        return ch >= 'a' && ch <= 'z' || ch >= 'A' && ch <= 'Z' || ch == '_';
+    }
+
+    private boolean isIdentifierPart(final char ch) {
+        return isIdentifierStart(ch) || ch >= '0' && ch <= '9';
+    }
+
     private EbnfToken parseString(final char quoteChar, final int startLine, final int startColumn) {
         advance();
         StringBuilder text = new StringBuilder();
@@ -300,14 +308,6 @@ public final class EbnfTokenizer implements Serializable {
 
     private boolean isAtEnd() {
         return _currentChar < 0;
-    }
-
-    private boolean isIdentifierStart(final char ch) {
-        return ch >= 'a' && ch <= 'z' || ch >= 'A' && ch <= 'Z' || ch == '_';
-    }
-
-    private boolean isIdentifierPart(final char ch) {
-        return isIdentifierStart(ch) || ch >= '0' && ch <= '9';
     }
 
 }
