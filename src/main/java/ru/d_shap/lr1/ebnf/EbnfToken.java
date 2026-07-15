@@ -26,7 +26,7 @@ import java.io.Serializable;
  *
  * @author Dmitry Shapovalov
  */
-final class EbnfToken implements Serializable {
+public final class EbnfToken implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -46,19 +46,39 @@ final class EbnfToken implements Serializable {
         _column = column;
     }
 
-    EbnfTokenType getType() {
+    /**
+     * Get the EBNF token type.
+     *
+     * @return the EBNF token type.
+     */
+    public EbnfTokenType getType() {
         return _type;
     }
 
-    String getText() {
+    /**
+     * Get the EBNF token text.
+     *
+     * @return the EBNF token text.
+     */
+    public String getText() {
         return _text;
     }
 
-    int getLine() {
+    /**
+     * Get the EBNF token line.
+     *
+     * @return the EBNF token line.
+     */
+    public int getLine() {
         return _line;
     }
 
-    int getColumn() {
+    /**
+     * Get the EBNF token column.
+     *
+     * @return the EBNF token column.
+     */
+    public int getColumn() {
         return _column;
     }
 
