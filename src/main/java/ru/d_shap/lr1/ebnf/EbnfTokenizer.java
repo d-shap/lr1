@@ -54,7 +54,6 @@ public final class EbnfTokenizer implements Serializable {
         _line = 1;
         _column = 1;
         readNextChar();
-        _currentChar = _nextChar;
         readNextChar();
     }
 
@@ -286,13 +285,13 @@ public final class EbnfTokenizer implements Serializable {
             } else {
                 _column++;
             }
-            _currentChar = _nextChar;
             readNextChar();
         }
     }
 
     private void readNextChar() {
         try {
+            _currentChar = _nextChar;
             _nextChar = _reader.read();
         } catch (IOException ex) {
             throw new EbnfParseException("Read exception", ex);
