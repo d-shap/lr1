@@ -104,7 +104,8 @@ public final class EbnfTokenizer implements Serializable {
             EbnfToken token = nextToken();
             tokens.add(token);
         }
-        tokens.add(new EbnfToken(EbnfTokenType.EOF, "", _line, _column));
+        EbnfToken token = new EbnfToken(EbnfTokenType.EOF, "", _line, _column);
+        tokens.add(token);
         return tokens;
     }
 
