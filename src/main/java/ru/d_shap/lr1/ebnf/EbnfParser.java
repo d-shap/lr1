@@ -75,7 +75,7 @@ public final class EbnfParser implements Serializable {
 
     private EbnfRule parseRule() {
         EbnfToken token = expect(EbnfTokenType.IDENTIFIER);
-        String tokenText = token.getText();
+        String tokenText = token.getTokenText();
         expect(EbnfTokenType.EQUALS);
         EbnfNode node = parseExpression();
         expect(EbnfTokenType.SEMICOLON);
@@ -110,8 +110,8 @@ public final class EbnfParser implements Serializable {
 
     private EbnfNode parseFactor() {
         EbnfToken token = peek();
-        EbnfTokenType tokenType = token.getType();
-        String tokenText = token.getText();
+        EbnfTokenType tokenType = token.getTokenType();
+        String tokenText = token.getTokenText();
         if (tokenType == EbnfTokenType.IDENTIFIER) {
             consume();
             return new EbnfRuleReference(tokenText);
@@ -165,7 +165,7 @@ public final class EbnfParser implements Serializable {
             return consume();
         } else {
             EbnfToken token = peek();
-            EbnfTokenType actualTokenType = token.getType();
+            EbnfTokenType actualTokenType = token.getTokenType();
             throw new EbnfParseException("Expected " + expectedTokenType + " but was " + actualTokenType);
         }
     }
@@ -181,7 +181,7 @@ public final class EbnfParser implements Serializable {
 
     private boolean check(final EbnfTokenType expectedTokenType) {
         EbnfToken token = peek();
-        EbnfTokenType actualTokenType = token.getType();
+        EbnfTokenType actualTokenType = token.getTokenType();
         return actualTokenType == expectedTokenType;
     }
 
