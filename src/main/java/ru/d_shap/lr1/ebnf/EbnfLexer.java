@@ -42,9 +42,9 @@ public final class EbnfLexer {
     private int _column;
 
     /**
-     * Create a new tokenizer for the specified reader.
+     * Create new object.
      *
-     * @param reader the reader to tokenize.
+     * @param reader the reader.
      */
     public EbnfLexer(final Reader reader) {
         super();
@@ -56,9 +56,9 @@ public final class EbnfLexer {
     }
 
     /**
-     * Tokenize the input and return a list of tokens.
+     * Tokenize the input.
      *
-     * @return the list of tokens.
+     * @return the EBNF tokens.
      */
     public List<EbnfToken> tokenize() {
         List<EbnfToken> tokens = new ArrayList<>();
