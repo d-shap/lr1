@@ -1,4 +1,4 @@
-/// ////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////
 // LR(1) parser implementation.
 // Copyright (C) 2026 Dmitry Shapovalov.
 //
@@ -16,7 +16,7 @@
 //
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
-/// ////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////
 package ru.d_shap.lr1.ebnf;
 
 import java.io.IOException;
@@ -41,8 +41,6 @@ public final class EbnfTokenizer {
 
     private int _column;
 
-    private boolean _eof;
-
     /**
      * Create a new tokenizer for the specified reader.
      *
@@ -55,7 +53,6 @@ public final class EbnfTokenizer {
         _reader = reader;
         _line = 1;
         _column = 1;
-        _eof = false;
         readNextChar();
         readNextChar();
     }
