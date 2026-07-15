@@ -30,18 +30,18 @@ public final class EbnfToken implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private final EbnfTokenType _type;
+    private final EbnfTokenType _tokenType;
 
-    private final String _text;
+    private final String _tokenText;
 
     private final int _line;
 
     private final int _column;
 
-    EbnfToken(final EbnfTokenType type, final String text, final int line, final int column) {
+    EbnfToken(final EbnfTokenType tokenType, final String tokenText, final int line, final int column) {
         super();
-        _type = type;
-        _text = text;
+        _tokenType = tokenType;
+        _tokenText = tokenText;
         _line = line;
         _column = column;
     }
@@ -51,8 +51,8 @@ public final class EbnfToken implements Serializable {
      *
      * @return the EBNF token type.
      */
-    public EbnfTokenType getType() {
-        return _type;
+    public EbnfTokenType getTokenType() {
+        return _tokenType;
     }
 
     /**
@@ -60,8 +60,8 @@ public final class EbnfToken implements Serializable {
      *
      * @return the EBNF token text.
      */
-    public String getText() {
-        return _text;
+    public String getTokenText() {
+        return _tokenText;
     }
 
     /**
@@ -80,6 +80,11 @@ public final class EbnfToken implements Serializable {
      */
     public int getColumn() {
         return _column;
+    }
+
+    @Override
+    public String toString() {
+        return _tokenType.stringValue(_tokenText);
     }
 
 }
