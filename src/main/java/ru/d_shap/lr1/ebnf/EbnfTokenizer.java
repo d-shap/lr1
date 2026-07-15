@@ -21,6 +21,7 @@ package ru.d_shap.lr1.ebnf;
 
 import java.io.IOException;
 import java.io.Reader;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +30,9 @@ import java.util.List;
  *
  * @author Dmitry Shapovalov
  */
-public final class EbnfTokenizer {
+public final class EbnfTokenizer implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private final Reader _reader;
 
@@ -41,12 +44,7 @@ public final class EbnfTokenizer {
 
     private int _column;
 
-    /**
-     * Create new object.
-     *
-     * @param reader the reader.
-     */
-    public EbnfTokenizer(final Reader reader) {
+    private EbnfTokenizer(final Reader reader) {
         super();
         _reader = reader;
         _line = 1;
@@ -57,11 +55,18 @@ public final class EbnfTokenizer {
     }
 
     /**
-     * Tokenize the input.
+     * Tokenize the reader.
+     *
+     * @param reader the reader.
      *
      * @return the EBNF tokens.
      */
-    public List<EbnfToken> tokenize() {
+    public static List<EbnfToken> tokenize(final Reader reader) {
+        EbnfTokenizer tokenizer = new EbnfTokenizer(reader);
+        return tokenizer.tokenize();
+    }
+
+    private List<EbnfToken> tokenize() {
         List<EbnfToken> tokens = new ArrayList<>();
         while (!isAtEnd()) {
             skipWhitespaceAndComments();
