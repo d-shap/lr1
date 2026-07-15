@@ -74,6 +74,45 @@ public final class EbnfLexer {
         return tokens;
     }
 
+    private void skipWhitespaceAndComments() {
+        while (!isAtEnd()) {
+            char currentChar = peek();
+            if (currentChar == ' ' || currentChar == '\t' || currentChar == '\r') {
+                advance();
+            } else if (currentChar == '\n') {
+                advance();
+                _line++;
+                _column = 1;
+            } else if (currentChar == '/' && peekNext() == '/') {
+                // Skip line comment
+                advance();
+                advance();
+                while (!isAtEnd() && peek() != '\n') {
+                    advance();
+                }
+            } else if (currentChar == '/' && peekNext() == '*') {
+                // Skip block comment
+                advance();
+                advance();
+                while (!isAtEnd() && !(peek() == '*' && peekNext() == '/')) {
+                    if (peek() == '\n') {
+                        _line++;
+                        _column = 1;
+                        advance();
+                    } else {
+                        advance();
+                    }
+                }
+                if (!isAtEnd()) {
+                    advance();
+                    advance();
+                }
+            } else {
+                break;
+            }
+        }
+    }
+
     private EbnfToken nextToken() {
         int startLine = _line;
         int startColumn = _column;
@@ -174,7 +213,7 @@ public final class EbnfLexer {
         if (isAtEnd()) {
             throw new EbnfException("Unterminated string at line " + startLine + ", column " + startColumn);
         }
-        advance(); // skip closing quote
+        advance();
         return new EbnfToken(EbnfTokenType.STRING, text.toString(), startLine, startColumn);
     }
 
@@ -185,45 +224,6 @@ public final class EbnfLexer {
             advance();
         }
         return new EbnfToken(EbnfTokenType.IDENTIFIER, text.toString(), startLine, startColumn);
-    }
-
-    private void skipWhitespaceAndComments() {
-        while (!isAtEnd()) {
-            char currentChar = peek();
-            if (currentChar == ' ' || currentChar == '\t' || currentChar == '\r') {
-                advance();
-            } else if (currentChar == '\n') {
-                advance();
-                _line++;
-                _column = 1;
-            } else if (currentChar == '/' && peekNext() == '/') {
-                // Skip line comment
-                advance();
-                advance();
-                while (!isAtEnd() && peek() != '\n') {
-                    advance();
-                }
-            } else if (currentChar == '/' && peekNext() == '*') {
-                // Skip block comment
-                advance();
-                advance();
-                while (!isAtEnd() && !(peek() == '*' && peekNext() == '/')) {
-                    if (peek() == '\n') {
-                        _line++;
-                        _column = 1;
-                        advance();
-                    } else {
-                        advance();
-                    }
-                }
-                if (!isAtEnd()) {
-                    advance(); // skip '*'
-                    advance(); // skip '/'
-                }
-            } else {
-                break;
-            }
-        }
     }
 
     private char peek() {
