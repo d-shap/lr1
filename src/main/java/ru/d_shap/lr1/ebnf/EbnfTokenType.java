@@ -26,30 +26,97 @@ package ru.d_shap.lr1.ebnf;
  */
 public enum EbnfTokenType {
 
-    IDENTIFIER,
+    IDENTIFIER {
+        @Override
+        String stringValue(final String tokenText) {
+            return name() + "(" + tokenText + ")";
+        }
+    },
 
-    STRING,
+    STRING {
+        @Override
+        String stringValue(final String tokenText) {
+            return name() + "(" + tokenText + ")";
+        }
+    },
 
-    EQUALS,
+    EQUALS {
+        @Override
+        String stringValue(final String tokenText) {
+            return name();
+        }
+    },
 
-    COMMA,
+    COMMA {
+        @Override
+        String stringValue(final String tokenText) {
+            return name();
+        }
+    },
 
-    PIPE,
+    PIPE {
+        @Override
+        String stringValue(final String tokenText) {
+            return name();
+        }
+    },
 
-    SEMICOLON,
+    SEMICOLON {
+        @Override
+        String stringValue(final String tokenText) {
+            return name();
+        }
+    },
 
-    LPAREN,
+    LPAREN {
+        @Override
+        String stringValue(final String tokenText) {
+            return name();
+        }
+    },
 
-    RPAREN,
+    RPAREN {
+        @Override
+        String stringValue(final String tokenText) {
+            return name();
+        }
+    },
 
-    LBRACKET,
+    LBRACKET {
+        @Override
+        String stringValue(final String tokenText) {
+            return name();
+        }
+    },
 
-    RBRACKET,
+    RBRACKET {
+        @Override
+        String stringValue(final String tokenText) {
+            return name();
+        }
+    },
 
-    LBRACE,
+    LBRACE {
+        @Override
+        String stringValue(final String tokenText) {
+            return name();
+        }
+    },
 
-    RBRACE,
+    RBRACE {
+        @Override
+        String stringValue(final String tokenText) {
+            return name();
+        }
+    },
 
-    EOF
+    EOF {
+        @Override
+        String stringValue(final String tokenText) {
+            return name();
+        }
+    };
+
+    abstract String stringValue(String tokenText);
 
 }
