@@ -20,8 +20,12 @@
 package ru.d_shap.lr1.ebnf;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.Serializable;
+import java.io.StringReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,6 +56,30 @@ public final class EbnfTokenizer implements Serializable {
         readNextChar();
         _currentChar = _nextChar;
         readNextChar();
+    }
+
+    /**
+     * Tokenize the string.
+     *
+     * @param string the string.
+     *
+     * @return the EBNF tokens.
+     */
+    public static List<EbnfToken> tokenize(final String string) {
+        Reader reader = new StringReader(string);
+        return tokenize(reader);
+    }
+
+    /**
+     * Tokenize the input stream.
+     *
+     * @param inputStream the input stream.
+     *
+     * @return the EBNF tokens.
+     */
+    public static List<EbnfToken> tokenize(final InputStream inputStream) {
+        Reader reader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
+        return tokenize(reader);
     }
 
     /**
