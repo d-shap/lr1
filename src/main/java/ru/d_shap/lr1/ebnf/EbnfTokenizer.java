@@ -265,15 +265,17 @@ public final class EbnfTokenizer implements Serializable {
     private char peek() {
         if (isAtEnd()) {
             return '\0';
+        } else {
+            return (char) _currentChar;
         }
-        return (char) _currentChar;
     }
 
     private char peekNext() {
         if (isAtEnd()) {
             return '\0';
+        } else {
+            return (char) _nextChar;
         }
-        return (char) _nextChar;
     }
 
     private void advance() {
