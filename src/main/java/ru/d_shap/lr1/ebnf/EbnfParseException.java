@@ -37,4 +37,14 @@ public class EbnfParseException extends EbnfException {
         super(message);
     }
 
+    /**
+     * Create new object.
+     *
+     * @param message the message.
+     * @param cause   the cause.
+     */
+    public EbnfParseException(final String message, final Throwable cause) {
+        super(message, cause);
+    }
+
 }
