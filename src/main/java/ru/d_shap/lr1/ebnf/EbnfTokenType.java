@@ -24,7 +24,7 @@ package ru.d_shap.lr1.ebnf;
  *
  * @author Dmitry Shapovalov
  */
-enum EbnfTokenType {
+public enum EbnfTokenType {
 
     IDENTIFIER,
 
