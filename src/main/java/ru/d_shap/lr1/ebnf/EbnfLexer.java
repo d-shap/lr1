@@ -202,6 +202,7 @@ public final class EbnfLexer {
                             break;
                         default:
                             text.append(escaped);
+                            break;
                     }
                     advance();
                 }
