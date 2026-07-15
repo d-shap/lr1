@@ -174,7 +174,7 @@ public final class EbnfLexer {
     }
 
     private EbnfToken parseString(final char quoteChar, final int startLine, final int startColumn) {
-        advance(); // skip opening quote
+        advance();
         StringBuilder text = new StringBuilder();
         while (!isAtEnd() && peek() != quoteChar) {
             if (peek() == '\\') {
