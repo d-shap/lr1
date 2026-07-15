@@ -25,11 +25,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The EBNF tokenizer.
+ * The EBNF lexer.
  *
  * @author Dmitry Shapovalov
  */
-public final class EbnfTokenizer {
+public final class EbnfLexer {
 
     private final Reader _reader;
 
@@ -46,7 +46,7 @@ public final class EbnfTokenizer {
      *
      * @param reader the reader to tokenize.
      */
-    public EbnfTokenizer(final Reader reader) {
+    public EbnfLexer(final Reader reader) {
         super();
         _reader = reader;
         _line = 1;
