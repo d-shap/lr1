@@ -24,7 +24,7 @@ package ru.d_shap.lr1.ebnf.model;
  *
  * @author Dmitry Shapovalov
  */
-public final class EbnfExcept implements EbnfNode {
+public final class EbnfExcept extends EbnfNode {
 
     private static final long serialVersionUID = 1L;
 
@@ -35,11 +35,13 @@ public final class EbnfExcept implements EbnfNode {
     /**
      * Create new object.
      *
-     * @param base the base expression of the EBNF exception.
+     * @param line      the line number.
+     * @param column    the column number.
+     * @param base      the base expression of the EBNF exception.
      * @param exception the exception expression (to exclude) of the EBNF exception.
      */
-    public EbnfExcept(final EbnfNode base, final EbnfNode exception) {
-        super();
+    public EbnfExcept(final int line, final int column, final EbnfNode base, final EbnfNode exception) {
+        super(line, column);
         _base = base;
         _exception = exception;
     }

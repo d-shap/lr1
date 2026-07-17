@@ -1,4 +1,4 @@
-///////////////////////////////////////////////////////////////////////////////////////////////////
+/// ////////////////////////////////////////////////////////////////////////////////////////////////
 // LR(1) parser implementation.
 // Copyright (C) 2026 Dmitry Shapovalov.
 //
@@ -16,7 +16,7 @@
 //
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
-///////////////////////////////////////////////////////////////////////////////////////////////////
+/// ////////////////////////////////////////////////////////////////////////////////////////////////
 package ru.d_shap.lr1.ebnf.model;
 
 import java.io.Serializable;
@@ -26,6 +26,42 @@ import java.io.Serializable;
  *
  * @author Dmitry Shapovalov
  */
-public interface EbnfNode extends Serializable {
+public abstract class EbnfNode implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
+    private final int _line;
+
+    private final int _column;
+
+    /**
+     * Create new object.
+     *
+     * @param line the line number.
+     * @param column the column number.
+     */
+    protected EbnfNode(final int line, final int column) {
+        super();
+        _line = line;
+        _column = column;
+    }
+
+    /**
+     * Get the line number.
+     *
+     * @return the line number.
+     */
+    public int getLine() {
+        return _line;
+    }
+
+    /**
+     * Get the column number.
+     *
+     * @return the column number.
+     */
+    public int getColumn() {
+        return _column;
+    }
 
 }

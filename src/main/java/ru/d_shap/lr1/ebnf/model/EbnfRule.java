@@ -1,4 +1,4 @@
-///////////////////////////////////////////////////////////////////////////////////////////////////
+/// ////////////////////////////////////////////////////////////////////////////////////////////////
 // LR(1) parser implementation.
 // Copyright (C) 2026 Dmitry Shapovalov.
 //
@@ -16,7 +16,7 @@
 //
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
-///////////////////////////////////////////////////////////////////////////////////////////////////
+/// ////////////////////////////////////////////////////////////////////////////////////////////////
 package ru.d_shap.lr1.ebnf.model;
 
 /**
@@ -24,7 +24,7 @@ package ru.d_shap.lr1.ebnf.model;
  *
  * @author Dmitry Shapovalov
  */
-public final class EbnfRule implements EbnfNode {
+public final class EbnfRule extends EbnfNode {
 
     private static final long serialVersionUID = 1L;
 
@@ -35,11 +35,13 @@ public final class EbnfRule implements EbnfNode {
     /**
      * Create new object.
      *
+     * @param line the line number.
+     * @param column the column number.
      * @param name       the name of the EBNF rule.
      * @param expression the expression of the EBNF rule.
      */
-    public EbnfRule(final String name, final EbnfNode expression) {
-        super();
+    public EbnfRule(final int line, final int column, final String name, final EbnfNode expression) {
+        super(line, column);
         _name = name;
         _expression = expression;
     }

@@ -24,7 +24,7 @@ package ru.d_shap.lr1.ebnf.model;
  *
  * @author Dmitry Shapovalov
  */
-public final class EbnfSpecialSequence implements EbnfNode {
+public final class EbnfSpecialSequence extends EbnfNode {
 
     private static final long serialVersionUID = 1L;
 
@@ -33,10 +33,12 @@ public final class EbnfSpecialSequence implements EbnfNode {
     /**
      * Create new object.
      *
-     * @param text the text of the EBNF special sequence.
+     * @param line   the line number.
+     * @param column the column number.
+     * @param text   the text of the EBNF special sequence.
      */
-    public EbnfSpecialSequence(final String text) {
-        super();
+    public EbnfSpecialSequence(final int line, final int column, final String text) {
+        super(line, column);
         _text = text;
     }
 
