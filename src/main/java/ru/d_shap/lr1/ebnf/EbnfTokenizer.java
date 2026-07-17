@@ -1,4 +1,4 @@
-///////////////////////////////////////////////////////////////////////////////////////////////////
+/// ////////////////////////////////////////////////////////////////////////////////////////////////
 // LR(1) parser implementation.
 // Copyright (C) 2026 Dmitry Shapovalov.
 //
@@ -16,7 +16,7 @@
 //
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
-///////////////////////////////////////////////////////////////////////////////////////////////////
+/// ////////////////////////////////////////////////////////////////////////////////////////////////
 package ru.d_shap.lr1.ebnf;
 
 import java.io.IOException;
@@ -114,32 +114,36 @@ public final class EbnfTokenizer {
                 advance();
                 _line++;
                 _column = 1;
-            } else if (currentChar == '/' && peekNext() == '/') {
-                // Skip line comment
-                advance();
-                advance();
-                while (!isAtEnd() && peek() != '\n') {
-                    advance();
-                }
-            } else if (currentChar == '/' && peekNext() == '*') {
-                // Skip block comment
-                advance();
-                advance();
-                while (!isAtEnd() && !(peek() == '*' && peekNext() == '/')) {
-                    if (peek() == '\n') {
-                        _line++;
-                        _column = 1;
-                        advance();
-                    } else {
-                        advance();
-                    }
-                }
-                if (!isAtEnd()) {
-                    advance();
-                    advance();
-                }
+            } else if (currentChar == '(' && peekNext() == '*') {
+                // Skip EBNF comment (* ... *)
+                skipEbnfComment();
             } else {
                 break;
+            }
+        }
+    }
+
+    private void skipEbnfComment() {
+        advance(); // skip '('
+        advance(); // skip '*'
+        int depth = 1;
+        while (!isAtEnd() && depth > 0) {
+            if (peek() == '(' && peekNext() == '*') {
+                // Nested comment start
+                advance();
+                advance();
+                depth++;
+            } else if (peek() == '*' && peekNext() == ')') {
+                // Comment end
+                advance();
+                advance();
+                depth--;
+            } else {
+                if (peek() == '\n') {
+                    _line++;
+                    _column = 1;
+                }
+                advance();
             }
         }
     }
