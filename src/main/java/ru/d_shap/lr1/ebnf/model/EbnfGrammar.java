@@ -69,4 +69,17 @@ public final class EbnfGrammar implements Serializable {
         }
     }
 
+    /**
+     * Get all rules.
+     *
+     * @return the list of all rules.
+     */
+    public List<EbnfRule> getRules() {
+        if (_rules == null) {
+            return new java.util.ArrayList<>();
+        } else {
+            return new java.util.ArrayList<>(_rules.values());
+        }
+    }
+
 }
