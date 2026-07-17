@@ -55,6 +55,10 @@ public final class EbnfValidator {
 
     private final List<EbnfValidationException> _errors;
 
+    private final Set<String> _visitingRules;
+
+    private final Map<String, Boolean> _hasLeftRecursion;
+
     /**
      * Create new object.
      *
@@ -67,6 +71,8 @@ public final class EbnfValidator {
         _hasTerminal = new HashMap<>();
         _reachableRules = new HashSet<>();
         _errors = new ArrayList<>();
+        _visitingRules = new HashSet<>();
+        _hasLeftRecursion = new HashMap<>();
     }
 
     /**
@@ -78,10 +84,15 @@ public final class EbnfValidator {
         _definedRules.clear();
         _hasTerminal.clear();
         _reachableRules.clear();
+        _visitingRules.clear();
+        _hasLeftRecursion.clear();
 
         List<EbnfRule> rules = _grammar.getRules();
+
+        // Check for empty grammar
         if (rules.isEmpty()) {
-            return;
+            _errors.add(new EbnfEmptyGrammarException());
+            throw _errors.get(0);
         }
 
         // Collect all defined rules
@@ -116,6 +127,14 @@ public final class EbnfValidator {
             if (hasTerminal == null || !hasTerminal) {
                 _errors.add(new EbnfDeadEndRuleException(rule.getLine(), rule.getColumn(), rule.getName()));
             }
+        }
+
+        // Check for circular dependencies
+        detectCircularDependencies(rules);
+
+        // Check for left recursion
+        for (EbnfRule rule : rules) {
+            detectLeftRecursion(rule);
         }
 
         // If there are errors, throw the first one
@@ -284,6 +303,253 @@ public final class EbnfValidator {
         }
         if (node instanceof EbnfExcept) {
             return nodeHasTerminal(((EbnfExcept) node).getBase());
+        }
+
+        return false;
+    }
+
+    /**
+     * Detect circular dependencies between rules.
+     *
+     * @param rules the list of rules.
+     */
+    private void detectCircularDependencies(final List<EbnfRule> rules) {
+        for (EbnfRule rule : rules) {
+            List<String> cycle = new ArrayList<>();
+            if (hasCycleDependency(rule.getName(), rule.getName(), cycle)) {
+                EbnfRule cycleRule = _definedRules.get(rule.getName());
+                _errors.add(new EbnfCircularDependencyException(cycleRule.getLine(), cycleRule.getColumn(), cycle));
+            }
+        }
+    }
+
+    /**
+     * Check if a rule has cyclic dependency.
+     *
+     * @param startRule   the starting rule name.
+     * @param currentRule the current rule name.
+     * @param cycle       the list to collect the cycle.
+     *
+     * @return true if cycle is detected.
+     */
+    private boolean hasCycleDependency(final String startRule, final String currentRule, final List<String> cycle) {
+        cycle.add(currentRule);
+        EbnfRule rule = _definedRules.get(currentRule);
+        if (rule == null) {
+            cycle.remove(cycle.size() - 1);
+            return false;
+        }
+
+        List<String> referencedRules = collectDirectReferences(rule.getExpression());
+        for (String referencedRule : referencedRules) {
+            if (referencedRule.equals(startRule) && cycle.size() > 1) {
+                cycle.add(startRule);
+                return true;
+            }
+            if (!cycle.contains(referencedRule)) {
+                if (hasCycleDependency(startRule, referencedRule, cycle)) {
+                    return true;
+                }
+            }
+        }
+
+        cycle.remove(cycle.size() - 1);
+        return false;
+    }
+
+    /**
+     * Collect direct references from a node.
+     *
+     * @param node the node.
+     *
+     * @return the list of directly referenced rule names.
+     */
+    private List<String> collectDirectReferences(final EbnfNode node) {
+        List<String> references = new ArrayList<>();
+        collectDirectReferencesHelper(node, references);
+        return references;
+    }
+
+    private void collectDirectReferencesHelper(final EbnfNode node, final List<String> references) {
+        if (node == null) {
+            return;
+        }
+
+        if (node instanceof EbnfRuleReference) {
+            String ruleName = ((EbnfRuleReference) node).getName();
+            if (!references.contains(ruleName)) {
+                references.add(ruleName);
+            }
+        } else if (node instanceof EbnfChoice) {
+            EbnfChoice choice = (EbnfChoice) node;
+            for (int i = 0; i < choice.getCount(); i++) {
+                collectDirectReferencesHelper(choice.getExpression(i), references);
+            }
+        } else if (node instanceof EbnfSequence) {
+            EbnfSequence sequence = (EbnfSequence) node;
+            for (int i = 0; i < sequence.getCount(); i++) {
+                collectDirectReferencesHelper(sequence.getExpression(i), references);
+            }
+        } else if (node instanceof EbnfOptional) {
+            collectDirectReferencesHelper(((EbnfOptional) node).getExpression(), references);
+        } else if (node instanceof EbnfRepeat) {
+            collectDirectReferencesHelper(((EbnfRepeat) node).getExpression(), references);
+        } else if (node instanceof EbnfExcept) {
+            collectDirectReferencesHelper(((EbnfExcept) node).getBase(), references);
+            collectDirectReferencesHelper(((EbnfExcept) node).getException(), references);
+        }
+    }
+
+    /**
+     * Detect left recursion in a rule.
+     *
+     * @param rule the rule to check.
+     */
+    private void detectLeftRecursion(final EbnfRule rule) {
+        String ruleName = rule.getName();
+        Boolean hasLeftRecursion = _hasLeftRecursion.get(ruleName);
+        if (hasLeftRecursion != null) {
+            if (hasLeftRecursion) {
+                _errors.add(new EbnfLeftRecursionException(rule.getLine(), rule.getColumn(), ruleName));
+            }
+            return;
+        }
+
+        _visitingRules.clear();
+        if (checkLeftRecursion(ruleName, rule.getExpression())) {
+            _hasLeftRecursion.put(ruleName, true);
+            _errors.add(new EbnfLeftRecursionException(rule.getLine(), rule.getColumn(), ruleName));
+        } else {
+            _hasLeftRecursion.put(ruleName, false);
+        }
+    }
+
+    /**
+     * Check if a node starts with a reference to the given rule (left recursion).
+     *
+     * @param ruleName the rule name to check for.
+     * @param node     the node to analyze.
+     *
+     * @return true if left recursion is detected.
+     */
+    private boolean checkLeftRecursion(final String ruleName, final EbnfNode node) {
+        if (node == null) {
+            return false;
+        }
+
+        if (node instanceof EbnfTerminal || node instanceof EbnfSpecialSequence) {
+            return false;
+        }
+
+        if (node instanceof EbnfRuleReference) {
+            String referencedRule = ((EbnfRuleReference) node).getName();
+            if (referencedRule.equals(ruleName)) {
+                return true;
+            }
+            // Check if the referenced rule itself has left recursion
+            if (!_visitingRules.contains(referencedRule)) {
+                _visitingRules.add(referencedRule);
+                EbnfRule refRule = _definedRules.get(referencedRule);
+                if (refRule != null && checkLeftRecursion(ruleName, refRule.getExpression())) {
+                    return true;
+                }
+                _visitingRules.remove(referencedRule);
+            }
+            return false;
+        }
+
+        if (node instanceof EbnfChoice) {
+            EbnfChoice choice = (EbnfChoice) node;
+            for (int i = 0; i < choice.getCount(); i++) {
+                if (checkLeftRecursion(ruleName, choice.getExpression(i))) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        if (node instanceof EbnfSequence) {
+            EbnfSequence sequence = (EbnfSequence) node;
+            for (int i = 0; i < sequence.getCount(); i++) {
+                EbnfNode expr = sequence.getExpression(i);
+                if (checkLeftRecursion(ruleName, expr)) {
+                    return true;
+                }
+                // If current expression doesn't contain optional/repeat, stop checking
+                if (!canBeEmpty(expr)) {
+                    return false;
+                }
+            }
+            return false;
+        }
+
+        if (node instanceof EbnfOptional || node instanceof EbnfRepeat) {
+            // Optional and repeat don't cause left recursion at this position
+            return false;
+        }
+
+        if (node instanceof EbnfExcept) {
+            return checkLeftRecursion(ruleName, ((EbnfExcept) node).getBase());
+        }
+
+        return false;
+    }
+
+    /**
+     * Check if a node can be empty (match zero symbols).
+     *
+     * @param node the node to check.
+     *
+     * @return true if the node can be empty.
+     */
+    private boolean canBeEmpty(final EbnfNode node) {
+        if (node == null) {
+            return true;
+        }
+
+        if (node instanceof EbnfTerminal || node instanceof EbnfSpecialSequence) {
+            return false;
+        }
+
+        if (node instanceof EbnfOptional) {
+            return true;
+        }
+
+        if (node instanceof EbnfRepeat) {
+            return true;
+        }
+
+        if (node instanceof EbnfChoice) {
+            EbnfChoice choice = (EbnfChoice) node;
+            for (int i = 0; i < choice.getCount(); i++) {
+                if (canBeEmpty(choice.getExpression(i))) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        if (node instanceof EbnfSequence) {
+            EbnfSequence sequence = (EbnfSequence) node;
+            for (int i = 0; i < sequence.getCount(); i++) {
+                if (!canBeEmpty(sequence.getExpression(i))) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        if (node instanceof EbnfRuleReference) {
+            String ruleName = ((EbnfRuleReference) node).getName();
+            EbnfRule rule = _definedRules.get(ruleName);
+            if (rule != null) {
+                return canBeEmpty(rule.getExpression());
+            }
+            return false;
+        }
+
+        if (node instanceof EbnfExcept) {
+            return canBeEmpty(((EbnfExcept) node).getBase());
         }
 
         return false;
