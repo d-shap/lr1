@@ -74,11 +74,13 @@ public final class EbnfParser {
 
     private EbnfRule parseRule() {
         EbnfToken token = expect(EbnfTokenType.IDENTIFIER);
+        int line = token.getLine();
+        int column = token.getColumn();
         String tokenText = token.getTokenText();
         expect(EbnfTokenType.EQUALS);
         EbnfNode node = parseExpression();
         expect(EbnfTokenType.SEMICOLON);
-        return new EbnfRule(tokenText, node);
+        return new EbnfRule(line, column, tokenText, node);
     }
 
     private EbnfNode parseExpression() {
@@ -90,7 +92,10 @@ public final class EbnfParser {
         if (nodes.size() == 1) {
             return nodes.get(0);
         } else {
-            return new EbnfChoice(nodes);
+            EbnfNode node = nodes.get(0);
+            int line = node.getLine();
+            int column = node.getColumn();
+            return new EbnfChoice(line, column, nodes);
         }
     }
 
@@ -103,15 +108,20 @@ public final class EbnfParser {
         if (nodes.size() == 1) {
             return nodes.get(0);
         } else {
-            return new EbnfSequence(nodes);
+            EbnfNode node = nodes.get(0);
+            int line = node.getLine();
+            int column = node.getColumn();
+            return new EbnfSequence(line, column, nodes);
         }
     }
 
     private EbnfNode parseExcept() {
         EbnfNode node = parseFactor();
         if (match(EbnfTokenType.MINUS)) {
+            int line = node.getLine();
+            int column = node.getColumn();
             EbnfNode exception = parseFactor();
-            return new EbnfExcept(node, exception);
+            return new EbnfExcept(line, column, node, exception);
         }
         return node;
     }
@@ -120,13 +130,15 @@ public final class EbnfParser {
         EbnfToken token = peek();
         EbnfTokenType tokenType = token.getTokenType();
         String tokenText = token.getTokenText();
+        int line = token.getLine();
+        int column = token.getColumn();
         if (tokenType == EbnfTokenType.IDENTIFIER) {
             consume();
-            return new EbnfRuleReference(tokenText);
+            return new EbnfRuleReference(line, column, tokenText);
         }
         if (tokenType == EbnfTokenType.STRING) {
             consume();
-            return new EbnfTerminal(tokenText);
+            return new EbnfTerminal(line, column, tokenText);
         }
         if (tokenType == EbnfTokenType.QUESTION) {
             consume();
@@ -136,7 +148,7 @@ public final class EbnfParser {
                 consume();
             }
             expect(EbnfTokenType.QUESTION);
-            return new EbnfSpecialSequence(text.toString().trim());
+            return new EbnfSpecialSequence(line, column, text.toString().trim());
         }
         if (tokenType == EbnfTokenType.LPAREN) {
             consume();
@@ -148,13 +160,13 @@ public final class EbnfParser {
             consume();
             EbnfNode node = parseExpression();
             expect(EbnfTokenType.RBRACKET);
-            return new EbnfOptional(node);
+            return new EbnfOptional(line, column, node);
         }
         if (tokenType == EbnfTokenType.LBRACE) {
             consume();
             EbnfNode node = parseExpression();
             expect(EbnfTokenType.RBRACE);
-            return new EbnfRepeat(node);
+            return new EbnfRepeat(line, column, node);
         }
         throw new EbnfParseException("Unexpected token: " + tokenType + " (" + tokenText + ")");
     }
