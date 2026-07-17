@@ -19,7 +19,6 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 package ru.d_shap.lr1.ebnf;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,9 +37,7 @@ import ru.d_shap.lr1.ebnf.model.EbnfTerminal;
  *
  * @author Dmitry Shapovalov
  */
-public final class EbnfParser implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public final class EbnfParser {
 
     private final List<EbnfToken> _tokens;
 

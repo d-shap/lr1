@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.io.Serializable;
 import java.io.StringReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -34,9 +33,7 @@ import java.util.List;
  *
  * @author Dmitry Shapovalov
  */
-public final class EbnfTokenizer implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public final class EbnfTokenizer {
 
     private final Reader _reader;
 
