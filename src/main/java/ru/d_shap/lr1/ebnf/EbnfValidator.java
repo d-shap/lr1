@@ -111,10 +111,12 @@ public final class EbnfValidator {
 
         // Build reachability graph from first rule
         String startRule = rules.get(0).getName();
+        _reachableRules.add(startRule); // Add start rule first
         buildReachableRules(startRule);
 
-        // Check for unreachable rules
-        for (EbnfRule rule : rules) {
+        // Check for unreachable rules (skip first rule as it's always reachable)
+        for (int i = 1; i < rules.size(); i++) {
+            EbnfRule rule = rules.get(i);
             if (!_reachableRules.contains(rule.getName())) {
                 _errors.add(new EbnfUnreachableRuleException(rule.getLine(), rule.getColumn(), rule.getName()));
             }
