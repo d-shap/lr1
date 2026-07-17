@@ -1,4 +1,4 @@
-///////////////////////////////////////////////////////////////////////////////////////////////////
+/// ////////////////////////////////////////////////////////////////////////////////////////////////
 // LR(1) parser implementation.
 // Copyright (C) 2026 Dmitry Shapovalov.
 //
@@ -16,13 +16,14 @@
 //
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
-///////////////////////////////////////////////////////////////////////////////////////////////////
+/// ////////////////////////////////////////////////////////////////////////////////////////////////
 package ru.d_shap.lr1.ebnf;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import ru.d_shap.lr1.ebnf.model.EbnfChoice;
+import ru.d_shap.lr1.ebnf.model.EbnfExcept;
 import ru.d_shap.lr1.ebnf.model.EbnfGrammar;
 import ru.d_shap.lr1.ebnf.model.EbnfNode;
 import ru.d_shap.lr1.ebnf.model.EbnfOptional;
@@ -30,6 +31,7 @@ import ru.d_shap.lr1.ebnf.model.EbnfRepeat;
 import ru.d_shap.lr1.ebnf.model.EbnfRule;
 import ru.d_shap.lr1.ebnf.model.EbnfRuleReference;
 import ru.d_shap.lr1.ebnf.model.EbnfSequence;
+import ru.d_shap.lr1.ebnf.model.EbnfSpecialSequence;
 import ru.d_shap.lr1.ebnf.model.EbnfTerminal;
 
 /**
@@ -95,7 +97,7 @@ public final class EbnfParser {
     private EbnfNode parseSequence() {
         List<EbnfNode> nodes = new ArrayList<>();
         do {
-            EbnfNode node = parseFactor();
+            EbnfNode node = parseExcept();
             nodes.add(node);
         } while (match(EbnfTokenType.COMMA));
         if (nodes.size() == 1) {
@@ -103,6 +105,15 @@ public final class EbnfParser {
         } else {
             return new EbnfSequence(nodes);
         }
+    }
+
+    private EbnfNode parseExcept() {
+        EbnfNode node = parseFactor();
+        if (match(EbnfTokenType.MINUS)) {
+            EbnfNode exception = parseFactor();
+            return new EbnfExcept(node, exception);
+        }
+        return node;
     }
 
     private EbnfNode parseFactor() {
@@ -116,6 +127,16 @@ public final class EbnfParser {
         if (tokenType == EbnfTokenType.STRING) {
             consume();
             return new EbnfTerminal(tokenText);
+        }
+        if (tokenType == EbnfTokenType.QUESTION) {
+            consume();
+            StringBuilder text = new StringBuilder();
+            while (!isAtEnd() && !check(EbnfTokenType.QUESTION)) {
+                text.append(peek().getTokenText());
+                consume();
+            }
+            expect(EbnfTokenType.QUESTION);
+            return new EbnfSpecialSequence(text.toString().trim());
         }
         if (tokenType == EbnfTokenType.LPAREN) {
             consume();
