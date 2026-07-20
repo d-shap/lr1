@@ -37,17 +37,6 @@ public final class EbnfRepeat extends EbnfNode {
     private final String _operator;
 
     /**
-     * Create new object with default operator "*".
-     *
-     * @param line       the line number.
-     * @param column     the column number.
-     * @param expression the expression of the EBNF repeat.
-     */
-    public EbnfRepeat(final int line, final int column, final EbnfNode expression) {
-        this(line, column, expression, "*");
-    }
-
-    /**
      * Create new object.
      *
      * @param line       the line number.
