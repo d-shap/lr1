@@ -23,6 +23,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -183,14 +184,24 @@ public final class LR1ItemSet implements Serializable {
         StringBuilder sb = new StringBuilder();
         sb.append("State ").append(_stateNumber).append(":\n");
         List<LR1Item> sortedItems = new ArrayList<>(_items);
-        sortedItems.sort((a, b) -> {
-            int cmp = a.getProduction().getLhs().compareTo(b.getProduction().getLhs());
-            if (cmp != 0) return cmp;
-            cmp = Integer.compare(a.getProduction().getRuleNumber(), b.getProduction().getRuleNumber());
-            if (cmp != 0) return cmp;
-            cmp = Integer.compare(a.getDotPosition(), b.getDotPosition());
-            if (cmp != 0) return cmp;
-            return a.getLookahead().compareTo(b.getLookahead());
+        Collections.sort(sortedItems, new Comparator<LR1Item>() {
+
+            @Override
+            public int compare(final LR1Item a, final LR1Item b) {
+                int cmp = a.getProduction().getLhs().compareTo(b.getProduction().getLhs());
+                if (cmp != 0) {
+                    return cmp;
+                }
+                cmp = Integer.compare(a.getProduction().getRuleNumber(), b.getProduction().getRuleNumber());
+                if (cmp != 0) {
+                    return cmp;
+                }
+                cmp = Integer.compare(a.getDotPosition(), b.getDotPosition());
+                if (cmp != 0) {
+                    return cmp;
+                }
+                return a.getLookahead().compareTo(b.getLookahead());
+            }
         });
         for (LR1Item item : sortedItems) {
             sb.append("  ").append(item).append("\n");
