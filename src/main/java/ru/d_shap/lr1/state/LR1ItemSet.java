@@ -40,32 +40,34 @@ public final class LR1ItemSet implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private final Set<LR1Item> _items;
+
     private final int _stateNumber;
+
     private volatile int _hashCode = 0;
 
     /**
      * Create new LR(1) item set.
      *
-     * @param items the set of LR(1) items.
+     * @param items       the set of LR(1) items.
      * @param stateNumber the state number for identification.
      */
     public LR1ItemSet(final Set<LR1Item> items, final int stateNumber) {
         super();
         _items = Collections.unmodifiableSet(new HashSet<>(
-            Objects.requireNonNull(items, "items cannot be null")));
+                Objects.requireNonNull(items, "items cannot be null")));
         _stateNumber = stateNumber;
     }
 
     /**
      * Create new LR(1) item set from a list of items.
      *
-     * @param items the list of LR(1) items.
+     * @param items       the list of LR(1) items.
      * @param stateNumber the state number for identification.
      */
     public LR1ItemSet(final Collection<LR1Item> items, final int stateNumber) {
         super();
         _items = Collections.unmodifiableSet(new HashSet<>(
-            Objects.requireNonNull(items, "items cannot be null")));
+                Objects.requireNonNull(items, "items cannot be null")));
         _stateNumber = stateNumber;
     }
 
@@ -100,6 +102,7 @@ public final class LR1ItemSet implements Serializable {
      * Check if the set contains a specific item.
      *
      * @param item the item to check.
+     *
      * @return true if the set contains the item.
      */
     public boolean contains(final LR1Item item) {
@@ -146,16 +149,23 @@ public final class LR1ItemSet implements Serializable {
         for (LR1Item item : _items) {
             String symbol = item.getSymbolAfterDot();
             if (symbol != null) {
-                result.computeIfAbsent(symbol, k -> new ArrayList<>()).add(item);
+                if (!result.containsKey(symbol)) {
+                    result.put(symbol, new ArrayList<LR1Item>());
+                }
+                result.get(symbol).add(item);
             }
         }
         return result;
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         LR1ItemSet that = (LR1ItemSet) o;
         return _items.equals(that._items);
     }
