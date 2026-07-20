@@ -117,7 +117,21 @@ public enum EbnfTokenType {
         }
     },
 
+    PLUS {
+        @Override
+        String stringValue(final String tokenText) {
+            return name();
+        }
+    },
+
     MINUS {
+        @Override
+        String stringValue(final String tokenText) {
+            return name();
+        }
+    },
+
+    ASTERISK {
         @Override
         String stringValue(final String tokenText) {
             return name();
