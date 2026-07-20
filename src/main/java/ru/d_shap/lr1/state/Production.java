@@ -35,14 +35,16 @@ public final class Production implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private final String _lhs;
+
     private final List<String> _rhs;
+
     private final int _ruleNumber;
 
     /**
      * Create new production.
      *
-     * @param lhs the left-hand side (non-terminal).
-     * @param rhs the right-hand side (sequence of symbols).
+     * @param lhs        the left-hand side (non-terminal).
+     * @param rhs        the right-hand side (sequence of symbols).
      * @param ruleNumber the rule number for identification.
      */
     public Production(final String lhs, final List<String> rhs, final int ruleNumber) {
@@ -89,8 +91,8 @@ public final class Production implements Serializable {
         }
         Production that = (Production) o;
         return _ruleNumber == that._ruleNumber &&
-               _lhs.equals(that._lhs) &&
-               _rhs.equals(that._rhs);
+                _lhs.equals(that._lhs) &&
+                _rhs.equals(that._rhs);
     }
 
     @Override
@@ -100,7 +102,15 @@ public final class Production implements Serializable {
 
     @Override
     public String toString() {
-        return _lhs + " → " + String.join(" ", _rhs);
+        StringBuilder sb = new StringBuilder();
+        sb.append(_lhs).append(" → ");
+        for (int i = 0; i < _rhs.size(); i++) {
+            if (i > 0) {
+                sb.append(" ");
+            }
+            sb.append(_rhs.get(i));
+        }
+        return sb.toString();
     }
 
 }
