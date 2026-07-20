@@ -1,3 +1,22 @@
+/// ////////////////////////////////////////////////////////////////////////////////////////////////
+// LR(1) parser implementation.
+// Copyright (C) 2026 Dmitry Shapovalov.
+//
+// This file is part of LR(1) parser.
+//
+// LR(1) parser is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Lesser General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// LR(1) parser is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU Lesser General Public License for more details.
+//
+// You should have received a copy of the GNU Lesser General Public License
+// along with this program. If not, see <http://www.gnu.org/licenses/>.
+/// ////////////////////////////////////////////////////////////////////////////////////////////////
 package ru.d_shap.lr1.state;
 
 import java.util.ArrayList;
@@ -5,11 +24,24 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import ru.d_shap.lr1.ebnf.model.EbnfChoice;
 import ru.d_shap.lr1.ebnf.model.EbnfGrammar;
+import ru.d_shap.lr1.ebnf.model.EbnfNode;
+import ru.d_shap.lr1.ebnf.model.EbnfOptional;
+import ru.d_shap.lr1.ebnf.model.EbnfRepeat;
 import ru.d_shap.lr1.ebnf.model.EbnfRule;
+import ru.d_shap.lr1.ebnf.model.EbnfRuleReference;
+import ru.d_shap.lr1.ebnf.model.EbnfSequence;
+import ru.d_shap.lr1.ebnf.model.EbnfTerminal;
 
 /**
  * Converts EBNF grammar to LR(1) Production rules.
+ * <p>
+ * Handles EBNF constructs:
+ * - Choice (|) → multiple productions
+ * - Sequence → single production with symbols in order
+ * - Optional (?) → two productions (with and without)
+ * - Repeat (*, +) → recursive productions
  *
  * @author Dmitry Shapovalov
  */
@@ -21,6 +53,10 @@ public final class GrammarConverter {
 
     private final List<Production> _allProductions;
 
+    private int _ruleNumber;
+
+    private int _auxCounter;
+
     /**
      * Create a new grammar converter.
      *
@@ -31,6 +67,8 @@ public final class GrammarConverter {
         _ebnfGrammar = ebnfGrammar;
         _grammarMap = new HashMap<>();
         _allProductions = new ArrayList<>();
+        _ruleNumber = 0;
+        _auxCounter = 0;
         convertGrammar();
     }
 
@@ -38,29 +76,120 @@ public final class GrammarConverter {
      * Convert EBNF grammar to production rules.
      */
     private void convertGrammar() {
-        int ruleNumber = 0;
-
         for (EbnfRule ebnfRule : _ebnfGrammar.getRules()) {
             String lhs = ebnfRule.getName();
-
-            // For now, create a simple production for each rule
-            // This is a placeholder - real conversion would need to handle
-            // EBNF constructs like choice, optional, repeat
             List<String> rhs = new ArrayList<>();
-            rhs.add("expr");  // Placeholder RHS
-
-            Production production = new Production(lhs, rhs, ruleNumber);
-            _allProductions.add(production);
-
-            List<Production> productions = _grammarMap.get(lhs);
-            if (productions == null) {
-                productions = new ArrayList<>();
-                _grammarMap.put(lhs, productions);
-            }
-            productions.add(production);
-
-            ruleNumber++;
+            convertNode(ebnfRule.getExpression(), rhs, lhs);
         }
+    }
+
+    /**
+     * Convert an EBNF node to a list of symbols for a production RHS.
+     * May create additional productions for complex EBNF constructs.
+     *
+     * @param node      the EBNF node to convert.
+     * @param rhs       the RHS list to populate.
+     * @param parentLhs the LHS of the parent production (for error context).
+     */
+    private void convertNode(final EbnfNode node, final List<String> rhs, final String parentLhs) {
+        if (node == null) {
+            return;
+        }
+
+        if (node instanceof EbnfTerminal) {
+            EbnfTerminal terminal = (EbnfTerminal) node;
+            rhs.add(terminal.getValue());
+
+        } else if (node instanceof EbnfRuleReference) {
+            EbnfRuleReference ref = (EbnfRuleReference) node;
+            rhs.add(ref.getName());
+
+        } else if (node instanceof EbnfSequence) {
+            EbnfSequence seq = (EbnfSequence) node;
+            for (int i = 0; i < seq.getCount(); i++) {
+                convertNode(seq.getExpression(i), rhs, parentLhs);
+            }
+
+        } else if (node instanceof EbnfChoice) {
+            // Choice creates multiple productions: A → B | C | D
+            // becomes A → B; A → C; A → D
+            EbnfChoice choice = (EbnfChoice) node;
+            String lhs = parentLhs;
+
+            for (int i = 0; i < choice.getCount(); i++) {
+                List<String> altRhs = new ArrayList<>(rhs);
+                convertNode(choice.getExpression(i), altRhs, lhs);
+                addProduction(lhs, altRhs);
+            }
+
+        } else if (node instanceof EbnfOptional) {
+            // Optional creates two productions: A → ... | ε (empty)
+            EbnfOptional opt = (EbnfOptional) node;
+            String auxName = createAuxName();
+
+            // Create two productions for auxiliary non-terminal
+            List<String> withContent = new ArrayList<>();
+            convertNode(opt.getExpression(), withContent, auxName);
+            addProduction(auxName, withContent);
+
+            addProduction(auxName, new ArrayList<String>());  // Empty alternative
+
+            rhs.add(auxName);
+
+        } else if (node instanceof EbnfRepeat) {
+            // Repeat: A* → A → A A | ε
+            //         A+ → A → A A | A
+            EbnfRepeat repeat = (EbnfRepeat) node;
+            String auxName = createAuxName();
+
+            // A → innerExpr A | innerExpr | ε (for A*)
+            //     innerExpr A | innerExpr (for A+)
+            List<String> recursive = new ArrayList<>();
+            convertNode(repeat.getExpression(), recursive, auxName);
+            recursive.add(auxName);
+            addProduction(auxName, recursive);
+
+            List<String> base = new ArrayList<>();
+            convertNode(repeat.getExpression(), base, auxName);
+            addProduction(auxName, base);
+
+            if ("*".equals(repeat.getOperator())) {
+                addProduction(auxName, new ArrayList<String>());  // Empty alternative for *
+            }
+
+            rhs.add(auxName);
+        }
+    }
+
+    /**
+     * Add a production rule to the grammar.
+     *
+     * @param lhs the left-hand side.
+     * @param rhs the right-hand side.
+     */
+    private void addProduction(final String lhs, final List<String> rhs) {
+        Production production = new Production(lhs, new ArrayList<>(rhs), _ruleNumber);
+        _allProductions.add(production);
+
+        List<Production> productions = _grammarMap.get(lhs);
+        if (productions == null) {
+            productions = new ArrayList<>();
+            _grammarMap.put(lhs, productions);
+        }
+        productions.add(production);
+
+        _ruleNumber++;
+    }
+
+    /**
+     * Create an auxiliary non-terminal name.
+     *
+     * @return the generated auxiliary name.
+     */
+    private String createAuxName() {
+        int idx = _auxCounter;
+        _auxCounter++;
+        return "_aux_" + idx;
     }
 
     /**
@@ -73,7 +202,7 @@ public final class GrammarConverter {
     }
 
     /**
-     * Get all productions.
+     * \n * Get all productions.
      *
      * @return list of all productions.
      */
