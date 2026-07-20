@@ -1,4 +1,4 @@
-///////////////////////////////////////////////////////////////////////////////////////////////////
+/// ////////////////////////////////////////////////////////////////////////////////////////////////
 // LR(1) parser implementation.
 // Copyright (C) 2026 Dmitry Shapovalov.
 //
@@ -16,10 +16,12 @@
 //
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
-///////////////////////////////////////////////////////////////////////////////////////////////////
+/// ////////////////////////////////////////////////////////////////////////////////////////////////
 package ru.d_shap.lr1;
 
 import java.io.InputStream;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -30,7 +32,14 @@ import ru.d_shap.lr1.ebnf.EbnfParser;
 import ru.d_shap.lr1.ebnf.EbnfToken;
 import ru.d_shap.lr1.ebnf.EbnfTokenizer;
 import ru.d_shap.lr1.ebnf.model.EbnfGrammar;
+import ru.d_shap.lr1.state.ActionGotoTable;
 import ru.d_shap.lr1.state.FirstSetComputer;
+import ru.d_shap.lr1.state.GrammarConverter;
+import ru.d_shap.lr1.state.LR1Item;
+import ru.d_shap.lr1.state.LR1ItemSet;
+import ru.d_shap.lr1.state.LR1StateBuilder;
+import ru.d_shap.lr1.state.LR1TableBuilder;
+import ru.d_shap.lr1.state.Production;
 
 /**
  * The test runner.
@@ -50,13 +59,57 @@ public final class TestRunner {
     public void runIt() {
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream("math.ebnf");
         List<EbnfToken> tokens = EbnfTokenizer.tokenize(inputStream);
+        System.out.println("=== TOKENS ===");
         System.out.println(tokens);
-        EbnfGrammar grammar = EbnfParser.parse(tokens);
-        System.out.println(grammar);
-        FirstSetComputer firstSetComputer = new FirstSetComputer(grammar);
+
+        EbnfGrammar ebnfGrammar = EbnfParser.parse(tokens);
+        System.out.println("\n=== EBNF GRAMMAR ===");
+        System.out.println(ebnfGrammar);
+
+        // Convert EBNF grammar to Production rules
+        GrammarConverter grammarConverter = new GrammarConverter(ebnfGrammar);
+        Map<String, List<Production>> grammarMap = grammarConverter.getGrammarMap();
+        List<Production> allProductions = grammarConverter.getAllProductions();
+
+        System.out.println("\n=== PRODUCTIONS ===");
+        for (Production production : allProductions) {
+            System.out.println(production.getRuleNumber() + ": " + production);
+        }
+
+        // Compute FIRST sets
+        FirstSetComputer firstSetComputer = new FirstSetComputer(ebnfGrammar);
         firstSetComputer.compute();
         Map<String, Set<String>> firstSets = firstSetComputer.getAllFirstSets();
+
+        System.out.println("\n=== FIRST SETS ===");
         System.out.println(firstSets);
+
+        // Build LR(1) states
+        String startSymbol = ebnfGrammar.getRules().get(0).getName();
+        LR1StateBuilder stateBuilder = new LR1StateBuilder(grammarMap, firstSets);
+
+        // Create initial item: [S' → S •, $]
+        Set<LR1Item> initialItems = new HashSet<>();
+        Production startProduction = new Production("S'", Collections.singletonList(startSymbol), -1);
+        LR1Item initialItem = new LR1Item(startProduction, 0, "$");
+        initialItems.add(initialItem);
+
+        List<LR1ItemSet> states = stateBuilder.buildStates(initialItems);
+
+        System.out.println("\n=== LR(1) STATES ===");
+        for (LR1ItemSet state : states) {
+            System.out.println("State " + state.getStateNumber() + ":");
+            for (LR1Item item : state.getItems()) {
+                System.out.println("  " + item);
+            }
+        }
+
+        // Build ACTION/GOTO tables
+        LR1TableBuilder tableBuilder = new LR1TableBuilder(states, stateBuilder.getAllTransitions(), grammarMap);
+        ActionGotoTable table = tableBuilder.buildTables();
+
+        System.out.println("\n=== ACTION/GOTO TABLES ===");
+        System.out.println(table.printTables(allProductions));
     }
 
 }
