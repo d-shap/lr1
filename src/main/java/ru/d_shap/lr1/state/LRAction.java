@@ -178,12 +178,18 @@ public final class LRAction implements Serializable {
 
     @Override
     public String toString() {
-        return switch (_type) {
-            case SHIFT -> "shift(" + _stateOrRuleNumber + ")";
-            case REDUCE -> "reduce(" + _stateOrRuleNumber + ")";
-            case ACCEPT -> "accept";
-            case ERROR -> "error";
-        };
+        switch (_type) {
+            case SHIFT:
+                return "shift(" + _stateOrRuleNumber + ")";
+            case REDUCE:
+                return "reduce(" + _stateOrRuleNumber + ")";
+            case ACCEPT:
+                return "accept";
+            case ERROR:
+                return "error";
+            default:
+                return "unknown";
+        }
     }
 
 }
