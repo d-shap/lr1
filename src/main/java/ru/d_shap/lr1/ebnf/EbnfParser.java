@@ -116,12 +116,27 @@ public final class EbnfParser {
     }
 
     private EbnfNode parseExcept() {
-        EbnfNode node = parseFactor();
+        EbnfNode node = parseRepeat();
         if (match(EbnfTokenType.MINUS)) {
             int line = node.getLine();
             int column = node.getColumn();
-            EbnfNode exception = parseFactor();
+            EbnfNode exception = parseRepeat();
             return new EbnfExcept(line, column, node, exception);
+        }
+        return node;
+    }
+
+    private EbnfNode parseRepeat() {
+        EbnfNode node = parseFactor();
+        if (match(EbnfTokenType.ASTERISK)) {
+            int line = node.getLine();
+            int column = node.getColumn();
+            return new EbnfRepeat(line, column, node, "*");
+        }
+        if (match(EbnfTokenType.PLUS)) {
+            int line = node.getLine();
+            int column = node.getColumn();
+            return new EbnfRepeat(line, column, node, "+");
         }
         return node;
     }
@@ -166,7 +181,7 @@ public final class EbnfParser {
             consume();
             EbnfNode node = parseExpression();
             expect(EbnfTokenType.RBRACE);
-            return new EbnfRepeat(line, column, node);
+            return new EbnfRepeat(line, column, node, "*");
         }
         throw new EbnfParseException("Unexpected token: " + tokenType + " (" + tokenText + ")");
     }
