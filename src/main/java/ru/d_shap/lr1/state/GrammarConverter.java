@@ -1,4 +1,4 @@
-package ru.d_shap.lr1;
+package ru.d_shap.lr1.state;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,7 +7,6 @@ import java.util.Map;
 
 import ru.d_shap.lr1.ebnf.model.EbnfGrammar;
 import ru.d_shap.lr1.ebnf.model.EbnfRule;
-import ru.d_shap.lr1.state.Production;
 
 /**
  * Converts EBNF grammar to LR(1) Production rules.
