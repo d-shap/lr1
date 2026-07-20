@@ -21,6 +21,10 @@ package ru.d_shap.lr1.ebnf.model;
 
 /**
  * The EBNF repeat.
+ * <p>
+ * Supports:
+ * - "*" (zero or more repetitions)
+ * - "+" (one or more repetitions)
  *
  * @author Dmitry Shapovalov
  */
@@ -30,16 +34,35 @@ public final class EbnfRepeat extends EbnfNode {
 
     private final EbnfNode _expression;
 
+    private final String _operator;
+
     /**
-     * Create new object.
+     * Create new object with default operator "*".
      *
-     * @param line the line number.
-     * @param column the column number.
+     * @param line       the line number.
+     * @param column     the column number.
      * @param expression the expression of the EBNF repeat.
      */
     public EbnfRepeat(final int line, final int column, final EbnfNode expression) {
+        this(line, column, expression, "*");
+    }
+
+    /**
+     * Create new object.
+     *
+     * @param line       the line number.
+     * @param column     the column number.
+     * @param expression the expression of the EBNF repeat.
+     * @param operator   the repeat operator ("*" or "+").
+     */
+    public EbnfRepeat(final int line, final int column, final EbnfNode expression, final String operator) {
         super(line, column);
         _expression = expression;
+        if ("*".equals(operator) || "+".equals(operator)) {
+            _operator = operator;
+        } else {
+            _operator = "*"; // Default to "*" if invalid operator
+        }
     }
 
     /**
@@ -49,6 +72,15 @@ public final class EbnfRepeat extends EbnfNode {
      */
     public EbnfNode getExpression() {
         return _expression;
+    }
+
+    /**
+     * Get the repeat operator.
+     *
+     * @return "*" for zero or more, "+" for one or more.
+     */
+    public String getOperator() {
+        return _operator;
     }
 
 }
