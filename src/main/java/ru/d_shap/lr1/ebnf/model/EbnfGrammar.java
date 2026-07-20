@@ -20,7 +20,7 @@
 package ru.d_shap.lr1.ebnf.model;
 
 import java.io.Serializable;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -45,7 +45,7 @@ public final class EbnfGrammar implements Serializable {
         if (rules == null) {
             _rules = null;
         } else {
-            _rules = new HashMap<>();
+            _rules = new LinkedHashMap<>();
             for (EbnfRule ebnfRule : rules) {
                 if (ebnfRule != null) {
                     _rules.put(ebnfRule.getName(), ebnfRule);

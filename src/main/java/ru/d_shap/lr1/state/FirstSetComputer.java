@@ -21,6 +21,7 @@ package ru.d_shap.lr1.state;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -58,7 +59,7 @@ public final class FirstSetComputer {
     public FirstSetComputer(final EbnfGrammar grammar) {
         super();
         _grammar = grammar;
-        _firstSets = new HashMap<>();
+        _firstSets = new LinkedHashMap<>();
     }
 
     /**
