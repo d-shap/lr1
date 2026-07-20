@@ -194,6 +194,22 @@ public final class EbnfTokenizer {
             advance();
             return new EbnfToken(EbnfTokenType.RBRACE, "}", startLine, startColumn);
         }
+        if (currentChar == '?') {
+            advance();
+            return new EbnfToken(EbnfTokenType.QUESTION, "?", startLine, startColumn);
+        }
+        if (currentChar == '+') {
+            advance();
+            return new EbnfToken(EbnfTokenType.PLUS, "+", startLine, startColumn);
+        }
+        if (currentChar == '-') {
+            advance();
+            return new EbnfToken(EbnfTokenType.PLUS, "-", startLine, startColumn);
+        }
+        if (currentChar == '*') {
+            advance();
+            return new EbnfToken(EbnfTokenType.ASTERISK, "*", startLine, startColumn);
+        }
 
         // String tokens (quoted with single or double quotes)
         if (currentChar == '"' || currentChar == '\'') {
