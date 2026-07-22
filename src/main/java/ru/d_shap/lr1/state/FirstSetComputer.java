@@ -188,8 +188,11 @@ public final class FirstSetComputer {
             EbnfRepeat repeat = (EbnfRepeat) node;
             Set<String> exprFirst = computeFirst(repeat.getExpression());
             result.addAll(exprFirst);
-            // Repeat can always derive epsilon (0 or more times)
-            result.add(EPSILON);
+            // For * (zero or more): can derive epsilon
+            // For + (one or more): cannot derive epsilon
+            if ("*".equals(repeat.getOperator())) {
+                result.add(EPSILON);
+            }
         }
 
         return result;
