@@ -80,6 +80,10 @@ public final class GrammarConverter {
             String lhs = ebnfRule.getName();
             List<String> rhs = new ArrayList<>();
             convertNode(ebnfRule.getExpression(), rhs, lhs);
+            // Add the main production rule for this grammar rule
+            if (!rhs.isEmpty()) {
+                addProduction(lhs, rhs);
+            }
         }
     }
 
