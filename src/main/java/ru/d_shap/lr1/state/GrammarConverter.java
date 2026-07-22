@@ -113,11 +113,17 @@ public final class GrammarConverter {
         } else if (node instanceof EbnfChoice) {
             // Choice creates multiple productions: A → B | C | D
             // becomes A → B; A → C; A → D
-            for (int i = 0; i < ((EbnfChoice) node).getCount(); i++) {
-                List<String> altRhs = new ArrayList<>(rhs);
-                convertNode(((EbnfChoice) node).getExpression(i), altRhs, parentLhs);
-                addProduction(parentLhs, altRhs);
+            EbnfChoice choice = (EbnfChoice) node;
+            String auxName = createAuxName();
+
+            // Create production for each alternative
+            for (int i = 0; i < choice.getCount(); i++) {
+                List<String> altRhs = new ArrayList<>();
+                convertNode(choice.getExpression(i), altRhs, auxName);
+                addProduction(auxName, altRhs);
             }
+
+            rhs.add(auxName);
 
         } else if (node instanceof EbnfOptional) {
             // Optional creates two productions: A → ... | ε (empty)
