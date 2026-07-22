@@ -158,7 +158,8 @@ public final class GrammarConverter {
             addProduction(auxName, base);
 
             if ("*".equals(repeat.getOperator())) {
-                addProduction(auxName, new ArrayList<String>());  // Empty alternative for *
+                // Empty alternative for *
+                addProduction(auxName, new ArrayList<String>());
             }
 
             rhs.add(auxName);
