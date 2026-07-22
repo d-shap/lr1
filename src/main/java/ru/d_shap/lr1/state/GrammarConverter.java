@@ -113,6 +113,7 @@ public final class GrammarConverter {
         } else if (node instanceof EbnfChoice) {
             // Choice creates multiple productions: A → B | C | D
             // becomes A → B; A → C; A → D
+            // Use auxiliary non-terminal to handle choice in any context
             EbnfChoice choice = (EbnfChoice) node;
             String auxName = createAuxName();
 
@@ -141,24 +142,24 @@ public final class GrammarConverter {
             rhs.add(auxName);
 
         } else if (node instanceof EbnfRepeat) {
-            // Repeat: A* → A → A A | ε
-            //         A+ → A → A A | A
+            // Repeat: A* → innerExpr A | ε  (zero or more)
+            //         A+ → innerExpr A | innerExpr (one or more)
             EbnfRepeat repeat = (EbnfRepeat) node;
             String auxName = createAuxName();
 
-            // A → innerExpr A | innerExpr | ε (for A*)
-            //     innerExpr A | innerExpr (for A+)
+            // Recursive production: A → innerExpr A
             List<String> recursive = new ArrayList<>();
             convertNode(repeat.getExpression(), recursive, auxName);
             recursive.add(auxName);
             addProduction(auxName, recursive);
 
-            List<String> base = new ArrayList<>();
-            convertNode(repeat.getExpression(), base, auxName);
-            addProduction(auxName, base);
-
-            if ("*".equals(repeat.getOperator())) {
-                // Empty alternative for *
+            if ("+".equals(repeat.getOperator())) {
+                // For A+: also add base case A → innerExpr
+                List<String> base = new ArrayList<>();
+                convertNode(repeat.getExpression(), base, auxName);
+                addProduction(auxName, base);
+            } else {
+                // For A*: add empty alternative A → ε
                 addProduction(auxName, new ArrayList<String>());
             }
 
