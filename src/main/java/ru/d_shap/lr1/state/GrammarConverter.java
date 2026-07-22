@@ -127,15 +127,16 @@ public final class GrammarConverter {
 
         } else if (node instanceof EbnfOptional) {
             // Optional creates two productions: A → ... | ε (empty)
-            EbnfOptional opt = (EbnfOptional) node;
+            EbnfOptional optional = (EbnfOptional) node;
             String auxName = createAuxName();
 
             // Create two productions for auxiliary non-terminal
             List<String> withContent = new ArrayList<>();
-            convertNode(opt.getExpression(), withContent, auxName);
+            convertNode(optional.getExpression(), withContent, auxName);
             addProduction(auxName, withContent);
 
-            addProduction(auxName, new ArrayList<String>());  // Empty alternative
+            // Empty alternative
+            addProduction(auxName, new ArrayList<String>());
 
             rhs.add(auxName);
 
