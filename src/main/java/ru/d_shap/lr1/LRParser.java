@@ -95,7 +95,7 @@ public class LRParser {
                 if (action.getType() == ActionGotoTable.ActionType.SHIFT) {
                     // SHIFT: добавить токен в стек символов и перейти в новое состояние
                     symbolStack.push(createTerminalNode(currentToken));
-                    int nextState = action.getStateOrRuleNumber();
+                    int nextState = action.getValue();
                     stateStack.push(nextState);
                     tokenIndex++;
 
@@ -107,7 +107,7 @@ public class LRParser {
 
                 } else if (action.getType() == ActionGotoTable.ActionType.REDUCE) {
                     // REDUCE: применить производственное правило
-                    int ruleNumber = action.getStateOrRuleNumber();
+                    int ruleNumber = action.getValue();
                     Production production = productions.get(ruleNumber);
 
                     // Извлечь символы из стека
@@ -130,8 +130,8 @@ public class LRParser {
 
                     // Получить следующее состояние из таблицы GOTO
                     int topState = stateStack.peek();
-                    Integer gotoState = actionGotoTable.getGoto(topState, production.getLhs());
-                    if (gotoState == null) {
+                    int gotoState = actionGotoTable.getGoto(topState, production.getLhs());
+                    if (gotoState == -1) {
                         return createErrorResult("Invalid GOTO state for: " + production.getLhs(),
                                 currentToken.getLine(), currentToken.getColumn());
                     }
