@@ -192,11 +192,17 @@ public final class FirstSetComputer {
         } else if (node instanceof EbnfRepeat) {
             EbnfRepeat repeat = (EbnfRepeat) node;
             Set<String> exprFirst = computeFirst(repeat.getExpression());
-            result.addAll(exprFirst);
-            // For * (zero or more): can derive epsilon
-            // For + (one or more): cannot derive epsilon
+            // For * (zero or more): can derive epsilon, don't add inner symbols
+            // For + (one or more): must have at least one occurrence, add inner symbols
             if ("*".equals(repeat.getOperator())) {
                 result.add(EPSILON);
+            } else if ("+".equals(repeat.getOperator())) {
+                // Add only non-epsilon symbols from repeated expression
+                for (String symbol : exprFirst) {
+                    if (!EPSILON.equals(symbol)) {
+                        result.add(symbol);
+                    }
+                }
             }
         }
 
