@@ -141,6 +141,8 @@ public final class FirstSetComputer {
             }
         } else if (node instanceof EbnfSequence) {
             EbnfSequence sequence = (EbnfSequence) node;
+            boolean allCanDeriveEpsilon = true;
+
             for (int i = 0; i < sequence.getCount(); i++) {
                 EbnfNode expr = sequence.getExpression(i);
                 Set<String> exprFirst = computeFirst(expr);
@@ -152,22 +154,14 @@ public final class FirstSetComputer {
                     }
                 }
 
-                // If current expression can derive epsilon, continue to next
-                if (!exprFirst.contains(EPSILON)) {
-                    break;
-                }
-            }
-
-            // If all expressions can derive epsilon, add epsilon
-            boolean allCanDeriveEpsilon = true;
-            for (int i = 0; i < sequence.getCount(); i++) {
-                EbnfNode expr = sequence.getExpression(i);
-                Set<String> exprFirst = computeFirst(expr);
+                // If current expression cannot derive epsilon, stop here
                 if (!exprFirst.contains(EPSILON)) {
                     allCanDeriveEpsilon = false;
                     break;
                 }
             }
+
+            // If all expressions can derive epsilon, add epsilon
             if (allCanDeriveEpsilon && sequence.getCount() > 0) {
                 result.add(EPSILON);
             }
