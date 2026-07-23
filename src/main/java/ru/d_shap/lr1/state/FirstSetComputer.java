@@ -181,7 +181,12 @@ public final class FirstSetComputer {
         } else if (node instanceof EbnfOptional) {
             EbnfOptional optional = (EbnfOptional) node;
             Set<String> exprFirst = computeFirst(optional.getExpression());
-            result.addAll(exprFirst);
+            // Add only non-epsilon symbols from optional expression
+            for (String symbol : exprFirst) {
+                if (!EPSILON.equals(symbol)) {
+                    result.add(symbol);
+                }
+            }
             // Optional can always derive epsilon
             result.add(EPSILON);
         } else if (node instanceof EbnfRepeat) {
