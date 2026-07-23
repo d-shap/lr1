@@ -41,8 +41,6 @@ public class LRParser {
 
     private final List<Production> productions;
 
-    private final String startSymbol;
-
     private final ASTBuilder astBuilder;
 
     /**
@@ -50,13 +48,11 @@ public class LRParser {
      *
      * @param actionGotoTable таблицы ACTION и GOTO для парсера
      * @param productions     список всех производственных правил
-     * @param startSymbol     стартовый символ грамматики
      */
-    public LRParser(final ActionGotoTable actionGotoTable, final List<Production> productions, final String startSymbol) {
+    public LRParser(final ActionGotoTable actionGotoTable, final List<Production> productions) {
         super();
         this.actionGotoTable = Objects.requireNonNull(actionGotoTable, "actionGotoTable cannot be null");
         this.productions = Objects.requireNonNull(productions, "productions cannot be null");
-        this.startSymbol = Objects.requireNonNull(startSymbol, "startSymbol cannot be null");
         astBuilder = new ASTBuilder();
     }
 
