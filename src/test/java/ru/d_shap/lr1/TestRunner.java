@@ -28,6 +28,8 @@ import java.util.Set;
 
 import org.junit.Test;
 
+import ru.d_shap.lr1.ast.ASTNode;
+import ru.d_shap.lr1.ast.ASTTreePrinter;
 import ru.d_shap.lr1.ebnf.EbnfParser;
 import ru.d_shap.lr1.ebnf.EbnfToken;
 import ru.d_shap.lr1.ebnf.EbnfTokenizer;
@@ -56,7 +58,7 @@ public final class TestRunner {
     }
 
     @Test
-    public void runIt() {
+    public void runIt() throws Tokenizer.TokenizerException {
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream("math.ebnf");
         List<EbnfToken> tokens = EbnfTokenizer.tokenize(inputStream);
         System.out.println("=== TOKENS ===");
@@ -110,6 +112,17 @@ public final class TestRunner {
 
         System.out.println("\n=== ACTION/GOTO TABLES ===");
         System.out.println(table.printTables(allProductions));
+
+        Tokenizer tokenizer = new GrammarTokenizer();
+        List<Token> ttt = tokenizer.tokenize("2 + 3");
+
+        LRParser parser = new LRParser(table, allProductions);
+        ParseResult result = parser.parse(ttt);
+
+        if (result.isSuccess()) {
+            ASTNode ast = result.getAST();
+            System.out.println(ASTTreePrinter.print(ast));
+        }
     }
 
 }
