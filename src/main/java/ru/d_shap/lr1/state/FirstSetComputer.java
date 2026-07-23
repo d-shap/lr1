@@ -128,7 +128,6 @@ public final class FirstSetComputer {
         }
 
         // Iterate through symbols in RHS
-        boolean allCanDeriveEpsilon = true;
         for (int i = 0; i < rhs.size(); i++) {
             String symbol = rhs.get(i);
             Set<String> symbolFirst = getFirstSetForSymbol(symbol);
@@ -138,14 +137,8 @@ public final class FirstSetComputer {
 
             // If current symbol cannot derive epsilon, stop here
             if (!canDeriveEpsilon(symbol)) {
-                allCanDeriveEpsilon = false;
                 break;
             }
-        }
-
-        // If all symbols can derive epsilon, this production derives epsilon
-        if (allCanDeriveEpsilon) {
-            // Mark epsilon capability (not added to FIRST set itself)
         }
 
         return result;
