@@ -77,7 +77,7 @@ public final class TestRunner {
         }
 
         // Compute FIRST sets
-        FirstSetComputer firstSetComputer = new FirstSetComputer(ebnfGrammar);
+        FirstSetComputer firstSetComputer = new FirstSetComputer(grammarMap);
         firstSetComputer.compute();
         Map<String, Set<String>> firstSets = firstSetComputer.getAllFirstSets();
 

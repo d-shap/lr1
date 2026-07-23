@@ -22,21 +22,12 @@ package ru.d_shap.lr1.state;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import ru.d_shap.lr1.ebnf.model.EbnfChoice;
-import ru.d_shap.lr1.ebnf.model.EbnfGrammar;
-import ru.d_shap.lr1.ebnf.model.EbnfNode;
-import ru.d_shap.lr1.ebnf.model.EbnfOptional;
-import ru.d_shap.lr1.ebnf.model.EbnfRepeat;
-import ru.d_shap.lr1.ebnf.model.EbnfRule;
-import ru.d_shap.lr1.ebnf.model.EbnfRuleReference;
-import ru.d_shap.lr1.ebnf.model.EbnfSequence;
-import ru.d_shap.lr1.ebnf.model.EbnfTerminal;
-
 /**
- * Computes FIRST sets for EBNF grammar.
+ * Computes FIRST sets for production rules.
  * <p>
  * FIRST(X) is the set of terminals that can appear as the first symbol in any string
  * that can be derived from X.
@@ -45,20 +36,18 @@ import ru.d_shap.lr1.ebnf.model.EbnfTerminal;
  */
 public final class FirstSetComputer {
 
-    private static final String EPSILON = "ε";
-
-    private final EbnfGrammar _grammar;
+    private final Map<String, List<Production>> _grammarMap;
 
     private final Map<String, Set<String>> _firstSets;
 
     /**
      * Create new object.
      *
-     * @param grammar the EBNF grammar.
+     * @param grammarMap map of non-terminal names to their production rules.
      */
-    public FirstSetComputer(final EbnfGrammar grammar) {
+    public FirstSetComputer(final Map<String, List<Production>> grammarMap) {
         super();
-        _grammar = grammar;
+        _grammarMap = grammarMap;
         _firstSets = new LinkedHashMap<>();
     }
 
@@ -66,20 +55,27 @@ public final class FirstSetComputer {
      * Compute FIRST sets for all rules in the grammar.
      */
     public void compute() {
-        // Initialize FIRST sets for all rules
-        for (EbnfRule rule : _grammar.getRules()) {
-            Set<String> set = new HashSet<>();
-            _firstSets.put(rule.getName(), set);
+        // Initialize FIRST sets for all non-terminals
+        for (String nonTerminal : _grammarMap.keySet()) {
+            _firstSets.put(nonTerminal, new HashSet<String>());
         }
 
         // Iteratively compute FIRST sets until convergence
         boolean changed = true;
         while (changed) {
             changed = false;
-            for (EbnfRule rule : _grammar.getRules()) {
-                Set<String> oldSet = new HashSet<>(_firstSets.get(rule.getName()));
-                Set<String> newSet = computeFirst(rule.getExpression());
-                _firstSets.put(rule.getName(), newSet);
+            for (String nonTerminal : _grammarMap.keySet()) {
+                Set<String> oldSet = new HashSet<>(_firstSets.get(nonTerminal));
+                Set<String> newSet = new HashSet<>();
+
+                // For each production rule for this non-terminal
+                List<Production> productions = _grammarMap.get(nonTerminal);
+                for (Production production : productions) {
+                    Set<String> productionFirst = computeFirstForProduction(production);
+                    newSet.addAll(productionFirst);
+                }
+
+                _firstSets.put(nonTerminal, newSet);
                 if (!oldSet.equals(newSet)) {
                     changed = true;
                 }
@@ -116,91 +112,91 @@ public final class FirstSetComputer {
     }
 
     /**
-     * Compute FIRST set for an EBNF node.
+     * Compute FIRST set for a single production rule.
      *
-     * @param node the EBNF node.
+     * @param production the production rule.
      *
-     * @return the FIRST set for the specified node.
+     * @return the FIRST set for the specified production.
      */
-    private Set<String> computeFirst(final EbnfNode node) {
+    private Set<String> computeFirstForProduction(final Production production) {
         Set<String> result = new HashSet<>();
+        List<String> rhs = production.getRhs();
 
-        if (node == null) {
+        // If production is empty (epsilon production)
+        if (rhs.isEmpty()) {
             return result;
         }
 
-        if (node instanceof EbnfTerminal) {
-            EbnfTerminal terminal = (EbnfTerminal) node;
-            result.add(terminal.getValue());
-        } else if (node instanceof EbnfRuleReference) {
-            EbnfRuleReference reference = (EbnfRuleReference) node;
-            String ruleName = reference.getName();
-            Set<String> ruleFirstSet = _firstSets.get(ruleName);
-            if (ruleFirstSet != null) {
-                result.addAll(ruleFirstSet);
-            }
-        } else if (node instanceof EbnfSequence) {
-            EbnfSequence sequence = (EbnfSequence) node;
-            boolean allCanDeriveEpsilon = true;
+        // Iterate through symbols in RHS
+        boolean allCanDeriveEpsilon = true;
+        for (int i = 0; i < rhs.size(); i++) {
+            String symbol = rhs.get(i);
+            Set<String> symbolFirst = getFirstSetForSymbol(symbol);
 
-            for (int i = 0; i < sequence.getCount(); i++) {
-                EbnfNode expr = sequence.getExpression(i);
-                Set<String> exprFirst = computeFirst(expr);
+            // Add all non-epsilon symbols from current symbol
+            result.addAll(symbolFirst);
 
-                // Add all non-epsilon symbols from current expression
-                for (String symbol : exprFirst) {
-                    if (!EPSILON.equals(symbol)) {
-                        result.add(symbol);
-                    }
-                }
-
-                // If current expression cannot derive epsilon, stop here
-                if (!exprFirst.contains(EPSILON)) {
-                    allCanDeriveEpsilon = false;
-                    break;
-                }
-            }
-
-            // If all expressions can derive epsilon, add epsilon
-            if (allCanDeriveEpsilon && sequence.getCount() > 0) {
-                result.add(EPSILON);
-            }
-        } else if (node instanceof EbnfChoice) {
-            EbnfChoice choice = (EbnfChoice) node;
-            for (int i = 0; i < choice.getCount(); i++) {
-                EbnfNode expr = choice.getExpression(i);
-                Set<String> exprFirst = computeFirst(expr);
-                result.addAll(exprFirst);
-            }
-        } else if (node instanceof EbnfOptional) {
-            EbnfOptional optional = (EbnfOptional) node;
-            Set<String> exprFirst = computeFirst(optional.getExpression());
-            // Add only non-epsilon symbols from optional expression
-            for (String symbol : exprFirst) {
-                if (!EPSILON.equals(symbol)) {
-                    result.add(symbol);
-                }
-            }
-            // Optional can always derive epsilon
-            result.add(EPSILON);
-        } else if (node instanceof EbnfRepeat) {
-            EbnfRepeat repeat = (EbnfRepeat) node;
-            Set<String> exprFirst = computeFirst(repeat.getExpression());
-            // For * (zero or more): can derive epsilon, don't add inner symbols
-            // For + (one or more): must have at least one occurrence, add inner symbols
-            if ("*".equals(repeat.getOperator())) {
-                result.add(EPSILON);
-            } else if ("+".equals(repeat.getOperator())) {
-                // Add only non-epsilon symbols from repeated expression
-                for (String symbol : exprFirst) {
-                    if (!EPSILON.equals(symbol)) {
-                        result.add(symbol);
-                    }
-                }
+            // If current symbol cannot derive epsilon, stop here
+            if (!canDeriveEpsilon(symbol)) {
+                allCanDeriveEpsilon = false;
+                break;
             }
         }
 
+        // If all symbols can derive epsilon, this production derives epsilon
+        if (allCanDeriveEpsilon) {
+            // Mark epsilon capability (not added to FIRST set itself)
+        }
+
         return result;
+    }
+
+    /**
+     * Get FIRST set for a single symbol (terminal or non-terminal).
+     *
+     * @param symbol the symbol.
+     *
+     * @return the FIRST set for the symbol.
+     */
+    private Set<String> getFirstSetForSymbol(final String symbol) {
+        Set<String> result = new HashSet<>();
+
+        // Check if it's a non-terminal
+        if (_grammarMap.containsKey(symbol)) {
+            Set<String> nonTerminalFirst = _firstSets.get(symbol);
+            if (nonTerminalFirst != null) {
+                result.addAll(nonTerminalFirst);
+            }
+        } else {
+            // It's a terminal, add it to FIRST set
+            result.add(symbol);
+        }
+
+        return result;
+    }
+
+    /**
+     * Check if a symbol can derive epsilon.
+     *
+     * @param symbol the symbol.
+     *
+     * @return true if the symbol can derive epsilon, false otherwise.
+     */
+    private boolean canDeriveEpsilon(final String symbol) {
+        // Check if it's a non-terminal
+        if (_grammarMap.containsKey(symbol)) {
+            // A non-terminal can derive epsilon if any of its productions derives epsilon
+            List<Production> productions = _grammarMap.get(symbol);
+            for (Production production : productions) {
+                if (production.getRhs().isEmpty()) {
+                    return true;
+                }
+            }
+            return false;
+        } else {
+            // Terminals cannot derive epsilon
+            return false;
+        }
     }
 
 }
