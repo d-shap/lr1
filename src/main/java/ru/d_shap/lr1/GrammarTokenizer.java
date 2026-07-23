@@ -20,13 +20,21 @@
 package ru.d_shap.lr1;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import ru.d_shap.lr1.state.Production;
 
 /**
  * Универсальный токенайзер, настраиваемый через правила токенизации.
  * Поддерживает регулярные выражения для распознавания различных типов токенов.
+ * Может быть инициализирован автоматически из грамматики.
  */
 public class GrammarTokenizer extends Tokenizer.BaseTokenizer {
 
@@ -89,15 +97,156 @@ public class GrammarTokenizer extends Tokenizer.BaseTokenizer {
         }
     }
 
+    /**
+     * Инициализировать токенайзер из грамматики.
+     * Автоматически добавляет правила для всех терминалов из грамматики.
+     * Сначала добавляются общие паттерны (числа, идентификаторы), затем специфичные терминалы.
+     *
+     * @param grammarMap     карта нетерминалов к их продукциям
+     * @param allProductions список всех продукций
+     */
+    public void initializeFromGrammar(final Map<String, List<Production>> grammarMap,
+                                      final List<Production> allProductions) {
+        // Собрать все терминалы из грамматики
+        Set<String> terminals = extractTerminals(grammarMap, allProductions);
+
+        // Добавить общие паттерны в начало (они более приоритетны)
+        addCommonPatterns();
+
+        // Добавить терминалы из грамматики в специфическом порядке
+        addTerminalRules(terminals);
+    }
+
+    /**
+     * Извлечь все терминалы из грамматики.
+     * Терминал - это символ, который не является нетерминалом.
+     *
+     * @param grammarMap     карта нетерминалов
+     * @param allProductions все продукции
+     *
+     * @return множество терминалов
+     */
+    private Set<String> extractTerminals(final Map<String, List<Production>> grammarMap,
+                                         final List<Production> allProductions) {
+        Set<String> terminals = new HashSet<>();
+        Set<String> nonTerminals = grammarMap.keySet();
+
+        for (Production production : allProductions) {
+            for (String symbol : production.getRhs()) {
+                // Если символ не является нетерминалом, это терминал
+                if (!nonTerminals.contains(symbol)) {
+                    terminals.add(symbol);
+                }
+            }
+        }
+
+        return terminals;
+    }
+
+    /**
+     * Добавить общие паттерны токенизации (числа, идентификаторы, операторы).
+     */
+    private void addCommonPatterns() {
+        // Пробелы и комментарии (должны пропускаться)
+        addTokenRule("WHITESPACE", "\\s+");
+
+        // Числа (целые и дробные)
+        addTokenRule("NUMBER", "\\d+(\\.\\d+)?");
+
+        // Идентификаторы
+        addTokenRule("IDENTIFIER", "[a-zA-Z_][a-zA-Z0-9_]*");
+    }
+
+    /**
+     * Добавить правила для терминалов из грамматики.
+     * Более длинные терминалы добавляются в начало, чтобы они совпадали в первую очередь.
+     *
+     * @param terminals множество терминалов
+     */
+    private void addTerminalRules(final Set<String> terminals) {
+        // Отделить операторы от других терминалов
+        List<String> operators = new ArrayList<>();
+        List<String> otherTerminals = new ArrayList<>();
+
+        for (String terminal : terminals) {
+            // Исключить синтетические терминалы (например, '$')
+            if ("$".equals(terminal)) {
+                continue;
+            }
+
+            // Операторы - это короткие спецсимволы
+            if (isOperator(terminal)) {
+                operators.add(terminal);
+            } else {
+                otherTerminals.add(terminal);
+            }
+        }
+
+        // Сортировать операторы по длине (длинные в начало)
+        Collections.sort(operators, new Comparator<String>() {
+
+            @Override
+            public int compare(final String a, final String b) {
+                return Integer.compare(b.length(), a.length());
+            }
+        });
+
+        // Добавить операторы
+        for (String op : operators) {
+            String escapedOp = Pattern.quote(op);
+            addTokenRule(op, escapedOp);
+        }
+
+        // Добавить остальные терминалы (обычно идентификаторы)
+        for (String terminal : otherTerminals) {
+            // Если это уже подпадает под существующие правила (NUMBER, IDENTIFIER),
+            // не добавляем отдельное правило
+            if (isKeyword(terminal)) {
+                addTokenRule(terminal, Pattern.quote(terminal));
+            } else {
+                // Для ключевых слов добавляем правило с проверкой границы слова
+                addTokenRule(terminal, terminal + "(?![a-zA-Z0-9_])");
+            }
+        }
+    }
+
+    /**
+     * Проверить, является ли строка оператором (спецсимволом).
+     *
+     * @param str строка для проверки
+     *
+     * @return true, если это оператор
+     */
+    private boolean isOperator(final String str) {
+        // Операторы - это строки, состоящие из спецсимволов
+        return str.matches("[^a-zA-Z0-9_$]+");
+    }
+
+    /**
+     * Проверить, является ли строка ключевым словом.
+     *
+     * @param str строка для проверки
+     *
+     * @return true, если это выглядит как ключевое слово
+     */
+    private boolean isKeyword(final String str) {
+        // Ключевые слова - это идентификаторы, которые не состоят только из букв/цифр
+        return str.matches("[a-zA-Z][a-zA-Z0-9]*");
+    }
+
     @Override
     public List<Token> tokenize(final String text) throws TokenizerException {
+        if (tokenRules.isEmpty()) {
+            throw new TokenizerException("No token rules defined. Call addTokenRule() or initializeFromGrammar() first.", 1, 1);
+        }
+
         List<Token> tokens = new ArrayList<>();
         int position = 0;
         int line = 1;
         int column = 1;
 
         while (position < text.length()) {
-            // Попробовать применить каждое правило
+            // Попробовать применить каждое правило по порядку
             boolean matched = false;
 
             for (TokenRule rule : tokenRules) {

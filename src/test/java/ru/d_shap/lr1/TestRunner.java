@@ -113,8 +113,9 @@ public final class TestRunner {
         System.out.println("\n=== ACTION/GOTO TABLES ===");
         System.out.println(table.printTables(allProductions));
 
-        Tokenizer tokenizer = new GrammarTokenizer();
-        List<Token> ttt = tokenizer.tokenize("2 + 3");
+        GrammarTokenizer grammarTokenizer = new GrammarTokenizer();
+        grammarTokenizer.initializeFromGrammar(grammarMap, allProductions);
+        List<Token> ttt = grammarTokenizer.tokenize("2 + 3");
 
         LRParser parser = new LRParser(table, allProductions);
         ParseResult result = parser.parse(ttt);
