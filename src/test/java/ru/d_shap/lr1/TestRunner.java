@@ -115,7 +115,7 @@ public final class TestRunner {
 
         GrammarTokenizer grammarTokenizer = new GrammarTokenizer();
         grammarTokenizer.initializeFromGrammar(grammarMap, allProductions);
-        List<Token> tokens = grammarTokenizer.tokenize("2 + 3");
+        List<Token> tokens = grammarTokenizer.tokenize("21 + 3 ^ 2 / sin(11.2 * 0.21)");
         System.out.println("\n=== TOKENS ===");
         System.out.println(tokens);
 
