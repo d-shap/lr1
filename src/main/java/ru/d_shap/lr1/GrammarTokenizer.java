@@ -152,11 +152,11 @@ public class GrammarTokenizer extends Tokenizer.BaseTokenizer {
 
         // Цифры (отдельные)
         for (char c = '0'; c <= '9'; c++) {
-            addTokenRule(String.valueOf(c), "\\" + c);
+            addTokenRule(String.valueOf(c), Pattern.quote(String.valueOf(c)));
         }
 
         // Точка для decimal_part
-        addTokenRule(".", "\\.");
+        addTokenRule(".", Pattern.quote("."));
 
         // Идентификаторы (для функций: sin, cos, tan и т.д.)
         addTokenRule("IDENTIFIER", "[a-zA-Z_][a-zA-Z0-9_]*");
