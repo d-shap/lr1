@@ -145,4 +145,92 @@ public final class TestRunner {
         }
     }
 
+    @Test
+    public void runJson() throws Tokenizer.TokenizerException {
+        InputStream inputStream = getClass().getClassLoader().getResourceAsStream("json.ebnf");
+        List<EbnfToken> ebnfTokens = EbnfTokenizer.tokenize(inputStream);
+        System.out.println("=== TOKENS ===");
+        System.out.println(ebnfTokens);
+
+        EbnfGrammar ebnfGrammar = EbnfParser.parse(ebnfTokens);
+        System.out.println("\n=== EBNF GRAMMAR ===");
+        System.out.println(ebnfGrammar);
+
+        // Convert EBNF grammar to Production rules
+        GrammarConverter grammarConverter = new GrammarConverter(ebnfGrammar);
+        Map<String, List<Production>> grammarMap = grammarConverter.getGrammarMap();
+        List<Production> allProductions = grammarConverter.getAllProductions();
+
+        System.out.println("\n=== PRODUCTIONS ===");
+        for (Production production : allProductions) {
+            System.out.println(production.getRuleNumber() + ": " + production);
+        }
+
+        // Compute FIRST sets
+        FirstSetComputer firstSetComputer = new FirstSetComputer(grammarMap);
+        firstSetComputer.compute();
+        Map<String, Set<String>> firstSets = firstSetComputer.getAllFirstSets();
+
+        System.out.println("\n=== FIRST SETS ===");
+        System.out.println(firstSets);
+
+        // Build LR(1) states
+        String startSymbol = ebnfGrammar.getRules().get(0).getName();
+        LR1StateBuilder stateBuilder = new LR1StateBuilder(grammarMap, firstSets);
+
+        // Create initial item: [S' → S •, $]
+        Set<LR1Item> initialItems = new HashSet<>();
+        Production startProduction = new Production("S'", Collections.singletonList(startSymbol), -1);
+        LR1Item initialItem = new LR1Item(startProduction, 0, "$");
+        initialItems.add(initialItem);
+
+        List<LR1ItemSet> states = stateBuilder.buildStates(initialItems);
+
+        System.out.println("\n=== LR(1) STATES ===");
+        for (LR1ItemSet state : states) {
+            System.out.println("State " + state.getStateNumber() + ":");
+            for (LR1Item item : state.getItems()) {
+                System.out.println("  " + item);
+            }
+        }
+
+        // Build ACTION/GOTO tables
+        LR1TableBuilder tableBuilder = new LR1TableBuilder(states, stateBuilder.getAllTransitions(), grammarMap);
+        ActionGotoTable table = tableBuilder.buildTables();
+
+        System.out.println("\n=== ACTION/GOTO TABLES ===");
+        System.out.println(table.printTables(allProductions));
+
+        GrammarTokenizer grammarTokenizer = new GrammarTokenizer();
+        grammarTokenizer.initializeFromGrammar(grammarMap, allProductions);
+        List<Token> tokens = grammarTokenizer.tokenize("{\"name\":[1,2,true],\"value\":\"test\"}");
+        System.out.println("\n=== TOKENS ===");
+        System.out.println(tokens);
+
+        // Debug: print all terminals from productions
+        System.out.println("\n=== TERMINALS FROM GRAMMAR ===");
+        Set<String> allTerminals = new HashSet<>();
+        for (Production prod : allProductions) {
+            for (String symbol : prod.getRhs()) {
+                if (!grammarMap.containsKey(symbol)) {
+                    allTerminals.add(symbol);
+                }
+            }
+        }
+        System.out.println(allTerminals);
+
+        LRParser parser = new LRParser(table, allProductions);
+        ParseResult result = parser.parse(tokens);
+
+        if (result.isSuccess()) {
+            System.out.println("\n=== AST ===");
+            ASTNode ast = result.getAST();
+            System.out.println(ASTTreePrinter.print(ast));
+        } else {
+            System.out.println("\n=== ERROR ===");
+            System.out.println(result.getErrorMessage());
+            System.out.println(result.getErrorLocationString());
+        }
+    }
+
 }
