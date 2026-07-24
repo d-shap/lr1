@@ -144,16 +144,21 @@ public class GrammarTokenizer extends Tokenizer.BaseTokenizer {
     }
 
     /**
-     * Добавить общие паттерны токенизации (числа, идентификаторы, операторы).
+     * Добавить общие паттерны токенизации (цифры, точка, идентификаторы).
      */
     private void addCommonPatterns() {
         // Пробелы и комментарии (должны пропускаться)
         addTokenRule("WHITESPACE", "\\s+");
 
-        // Числа (целые и дробные)
-        addTokenRule("NUMBER", "\\d+(\\.\\d+)?");
+        // Цифры (отдельные)
+        for (char c = '0'; c <= '9'; c++) {
+            addTokenRule(String.valueOf(c), "\\" + c);
+        }
 
-        // Идентификаторы
+        // Точка для decimal_part
+        addTokenRule(".", "\\.");
+
+        // Идентификаторы (для функций: sin, cos, tan и т.д.)
         addTokenRule("IDENTIFIER", "[a-zA-Z_][a-zA-Z0-9_]*");
     }
 
@@ -174,6 +179,11 @@ public class GrammarTokenizer extends Tokenizer.BaseTokenizer {
                 continue;
             }
 
+            // Пропустить цифры и точку - они уже добавлены в addCommonPatterns()
+            if (terminal.length() == 1 && (terminal.matches("\\d") || ".".equals(terminal))) {
+                continue;
+            }
+
             // Операторы - это короткие спецсимволы
             if (isOperator(terminal)) {
                 operators.add(terminal);
@@ -183,30 +193,39 @@ public class GrammarTokenizer extends Tokenizer.BaseTokenizer {
         }
 
         // Сортировать операторы по длине (длинные в начало)
+
         Collections.sort(operators, new Comparator<String>() {
 
             @Override
+
             public int compare(final String a, final String b) {
+
                 return Integer.compare(b.length(), a.length());
+
             }
+
         });
 
-        // Добавить операторы
+        // Добавить операторы первыми (они имеют высший приоритет)
+
         for (String op : operators) {
+
             String escapedOp = Pattern.quote(op);
+
             addTokenRule(op, escapedOp);
+
         }
 
-        // Добавить остальные терминалы (обычно идентификаторы)
+        // Добавить остальные терминалы (ключевые слова для функций)
+
         for (String terminal : otherTerminals) {
-            // Если это уже подпадает под существующие правила (NUMBER, IDENTIFIER),
-            // не добавляем отдельное правило
-            if (isKeyword(terminal)) {
-                addTokenRule(terminal, Pattern.quote(terminal));
-            } else {
-                // Для ключевых слов добавляем правило с проверкой границы слова
-                addTokenRule(terminal, terminal + "(?![a-zA-Z0-9_])");
-            }
+
+            // Ключевые слова должны быть до IDENTIFIER для корректного совпадения
+
+            // Добавляем правило с проверкой границы слова
+
+            addTokenRule(terminal, "\\b" + Pattern.quote(terminal) + "\\b");
+
         }
     }
 
