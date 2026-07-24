@@ -135,9 +135,11 @@ public final class TestRunner {
         ParseResult result = parser.parse(tokens);
 
         if (result.isSuccess()) {
+            System.out.println("\n=== AST ===");
             ASTNode ast = result.getAST();
             System.out.println(ASTTreePrinter.print(ast));
         } else {
+            System.out.println("\n=== ERROR ===");
             System.out.println(result.getErrorMessage());
             System.out.println(result.getErrorLocationString());
         }
