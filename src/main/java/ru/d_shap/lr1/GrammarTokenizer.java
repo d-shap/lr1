@@ -144,22 +144,12 @@ public class GrammarTokenizer extends Tokenizer.BaseTokenizer {
     }
 
     /**
-     * Добавить общие паттерны токенизации (цифры, точка, идентификаторы).
+     * Добавить общие паттерны токенизации.
+     * Только пробелы - остальное определяется грамматикой.
      */
     private void addCommonPatterns() {
         // Пробелы и комментарии (должны пропускаться)
         addTokenRule("WHITESPACE", "\\s+");
-
-        // Цифры (отдельные)
-        for (char c = '0'; c <= '9'; c++) {
-            addTokenRule(String.valueOf(c), Pattern.quote(String.valueOf(c)));
-        }
-
-        // Точка для decimal_part
-        addTokenRule(".", Pattern.quote("."));
-
-        // Идентификаторы (для функций: sin, cos, tan и т.д.)
-        addTokenRule("IDENTIFIER", "[a-zA-Z_][a-zA-Z0-9_]*");
     }
 
     /**
@@ -169,9 +159,10 @@ public class GrammarTokenizer extends Tokenizer.BaseTokenizer {
      * @param terminals множество терминалов
      */
     private void addTerminalRules(final Set<String> terminals) {
-        // Отделить операторы от других терминалов
-        List<String> operators = new ArrayList<>();
-        List<String> otherTerminals = new ArrayList<>();
+        // Отделить по типам терминалов
+        List<String> multiCharOperators = new ArrayList<>();  // Операторы из нескольких символов
+        List<String> singleCharOperators = new ArrayList<>(); // Одиночные символы-операторы
+        List<String> keywordTerminals = new ArrayList<>();    // Ключевые слова (буквы)
 
         for (String terminal : terminals) {
             // Исключить синтетические терминалы (например, '$')
@@ -179,23 +170,28 @@ public class GrammarTokenizer extends Tokenizer.BaseTokenizer {
                 continue;
             }
 
-            // Пропустить цифры и точку - они уже добавлены в addCommonPatterns()
-            if (terminal.length() == 1 && (terminal.matches("\\d") || ".".equals(terminal))) {
-                continue;
-            }
-
-            // Операторы - это короткие спецсимволы
-            if (isOperator(terminal)) {
-                operators.add(terminal);
+            // Классифицировать терминал
+            if (terminal.length() > 1) {
+                // Многосимвольный терминал - обычно ключевое слово
+                if (isAlphaNumeric(terminal)) {
+                    keywordTerminals.add(terminal);
+                } else {
+                    // Многосимвольный оператор
+                    multiCharOperators.add(terminal);
+                }
             } else {
-                otherTerminals.add(terminal);
+                // Одиночный символ
+                singleCharOperators.add(terminal);
             }
         }
 
-        // Сортировать операторы по длине (длинные в начало)
-
-        // Сортировать операторы по длине (длинные в начало) и потом лексикографически
-        Collections.sort(operators, new Comparator<String>() {
+        // Сортировать все группы для консистентности
+        Collections.sort(multiCharOperators);
+        Collections.sort(singleCharOperators);
+        Collections.sort(keywordTerminals);
+        // Добавить в порядке приоритета:
+        // 1. Многосимвольные операторы (по длине убывая)
+        Collections.sort(multiCharOperators, new Comparator<String>() {
 
             @Override
             public int compare(final String a, final String b) {
@@ -203,47 +199,34 @@ public class GrammarTokenizer extends Tokenizer.BaseTokenizer {
                 if (lenCmp != 0) {
                     return lenCmp;
                 }
-                // Если длины равны, сортируем по алфавиту для консистентности
                 return a.compareTo(b);
             }
         });
-
-        // Добавить операторы первыми (они имеют высший приоритет)
-        for (String op : operators) {
-            String escapedOp = Pattern.quote(op);
-            addTokenRule(op, escapedOp);
+        for (String op : multiCharOperators) {
+            addTokenRule(op, Pattern.quote(op));
         }
 
-        // Добавить остальные терминалы (ключевые слова для функций)
-        for (String terminal : otherTerminals) {
-            // Ключевые слова должны быть до IDENTIFIER для корректного совпадения
-            // Добавляем правило с проверкой границы слова
-            addTokenRule(terminal, "\\b" + Pattern.quote(terminal) + "\\b");
+        // 2. Ключевые слова (должны быть до IDENTIFIER, если будет)
+        for (String keyword : keywordTerminals) {
+            // Проверяем границы слова, чтобы не совпадать с подстроками
+            addTokenRule(keyword, "\\b" + Pattern.quote(keyword) + "\\b");
+        }
+
+        // 3. Одиночные символы в конце
+        for (String op : singleCharOperators) {
+            addTokenRule(op, Pattern.quote(op));
         }
     }
 
     /**
-     * Проверить, является ли строка оператором (спецсимволом).
+     * Проверить, состоит ли строка из букв, цифр и подчёркивания.
      *
      * @param str строка для проверки
      *
-     * @return true, если это оператор
+     * @return true, если это буквы/цифры/подчёркивание
      */
-    private boolean isOperator(final String str) {
-        // Операторы - это строки, состоящие из спецсимволов
-        return str.matches("[^a-zA-Z0-9_$]+");
-    }
-
-    /**
-     * Проверить, является ли строка ключевым словом.
-     *
-     * @param str строка для проверки
-     *
-     * @return true, если это выглядит как ключевое слово
-     */
-    private boolean isKeyword(final String str) {
-        // Ключевые слова - это идентификаторы, которые не состоят только из букв/цифр
-        return str.matches("[a-zA-Z][a-zA-Z0-9]*");
+    private boolean isAlphaNumeric(final String str) {
+        return str.matches("[a-zA-Z_][a-zA-Z0-9_]*");
     }
 
     @Override
