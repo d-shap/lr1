@@ -32,9 +32,9 @@ import java.util.regex.Pattern;
 import ru.d_shap.lr1.state.Production;
 
 /**
- * Универсальный токенайзер, настраиваемый через правила токенизации.
- * Поддерживает регулярные выражения для распознавания различных типов токенов.
- * Может быть инициализирован автоматически из грамматики.
+ * Универсальный токенайзер, полностью управляемый грамматикой.
+ * Токенайзер просто создаёт правила для всех терминалов из грамматики,
+ * без каких-либо "волшебных" правил (NUMBER, IDENTIFIER и т.д.).
  */
 public class GrammarTokenizer extends Tokenizer.BaseTokenizer {
 
@@ -100,7 +100,6 @@ public class GrammarTokenizer extends Tokenizer.BaseTokenizer {
     /**
      * Инициализировать токенайзер из грамматики.
      * Автоматически добавляет правила для всех терминалов из грамматики.
-     * Сначала добавляются общие паттерны (числа, идентификаторы), затем специфичные терминалы.
      *
      * @param grammarMap     карта нетерминалов к их продукциям
      * @param allProductions список всех продукций
@@ -110,10 +109,10 @@ public class GrammarTokenizer extends Tokenizer.BaseTokenizer {
         // Собрать все терминалы из грамматики
         Set<String> terminals = extractTerminals(grammarMap, allProductions);
 
-        // Добавить общие паттерны в начало (они более приоритетны)
-        addCommonPatterns();
+        // Добавить только пробелы как общее правило
+        addTokenRule("WHITESPACE", "\\s+");
 
-        // Добавить терминалы из грамматики в специфическом порядке
+        // Добавить терминалы из грамматики в правильном порядке
         addTerminalRules(terminals);
     }
 
@@ -133,7 +132,6 @@ public class GrammarTokenizer extends Tokenizer.BaseTokenizer {
 
         for (Production production : allProductions) {
             for (String symbol : production.getRhs()) {
-                // Если символ не является нетерминалом, это терминал
                 if (!nonTerminals.contains(symbol)) {
                     terminals.add(symbol);
                 }
@@ -144,52 +142,41 @@ public class GrammarTokenizer extends Tokenizer.BaseTokenizer {
     }
 
     /**
-     * Добавить общие паттерны токенизации.
-     * Только пробелы - остальное определяется грамматикой.
-     */
-    private void addCommonPatterns() {
-        // Пробелы и комментарии (должны пропускаться)
-        addTokenRule("WHITESPACE", "\\s+");
-    }
-
-    /**
      * Добавить правила для терминалов из грамматики.
-     * Более длинные терминалы добавляются в начало, чтобы они совпадали в первую очередь.
+     * Порядок приоритета:
+     * 1. Многосимвольные операторы (по длине убывая)
+     * 2. Ключевые слова (с проверкой границ слова)
+     * 3. Одиночные символы
      *
      * @param terminals множество терминалов
      */
     private void addTerminalRules(final Set<String> terminals) {
-        // Отделить по типам терминалов
-        List<String> multiCharOperators = new ArrayList<>();  // Операторы из нескольких символов
-        List<String> singleCharOperators = new ArrayList<>(); // Одиночные символы-операторы
-        List<String> keywordTerminals = new ArrayList<>();    // Ключевые слова (буквы)
+        List<String> multiCharOperators = new ArrayList<>();
+        List<String> singleCharOperators = new ArrayList<>();
+        List<String> keywordTerminals = new ArrayList<>();
 
+        // Классифицировать терминалы
         for (String terminal : terminals) {
-            // Исключить синтетические терминалы (например, '$')
             if ("$".equals(terminal)) {
                 continue;
             }
 
-            // Классифицировать терминал
             if (terminal.length() > 1) {
-                // Многосимвольный терминал - обычно ключевое слово
                 if (isAlphaNumeric(terminal)) {
                     keywordTerminals.add(terminal);
                 } else {
-                    // Многосимвольный оператор
                     multiCharOperators.add(terminal);
                 }
             } else {
-                // Одиночный символ
                 singleCharOperators.add(terminal);
             }
         }
 
-        // Сортировать все группы для консистентности
+        // Сортировать для консистентности
         Collections.sort(multiCharOperators);
         Collections.sort(singleCharOperators);
         Collections.sort(keywordTerminals);
-        // Добавить в порядке приоритета:
+
         // 1. Многосимвольные операторы (по длине убывая)
         Collections.sort(multiCharOperators, new Comparator<String>() {
 
@@ -202,17 +189,17 @@ public class GrammarTokenizer extends Tokenizer.BaseTokenizer {
                 return a.compareTo(b);
             }
         });
+
         for (String op : multiCharOperators) {
             addTokenRule(op, Pattern.quote(op));
         }
 
-        // 2. Ключевые слова (должны быть до IDENTIFIER, если будет)
+        // 2. Ключевые слова (с проверкой границ слова)
         for (String keyword : keywordTerminals) {
-            // Проверяем границы слова, чтобы не совпадать с подстроками
             addTokenRule(keyword, "\\b" + Pattern.quote(keyword) + "\\b");
         }
 
-        // 3. Одиночные символы в конце
+        // 3. Одиночные символы
         for (String op : singleCharOperators) {
             addTokenRule(op, Pattern.quote(op));
         }
@@ -223,7 +210,7 @@ public class GrammarTokenizer extends Tokenizer.BaseTokenizer {
      *
      * @param str строка для проверки
      *
-     * @return true, если это буквы/цифры/подчёркивание
+     * @return true, если это валидный идентификатор
      */
     private boolean isAlphaNumeric(final String str) {
         return str.matches("[a-zA-Z_][a-zA-Z0-9_]*");
@@ -241,7 +228,6 @@ public class GrammarTokenizer extends Tokenizer.BaseTokenizer {
         int column = 1;
 
         while (position < text.length()) {
-            // Попробовать применить каждое правило по порядку
             boolean matched = false;
 
             for (TokenRule rule : tokenRules) {
@@ -252,11 +238,9 @@ public class GrammarTokenizer extends Tokenizer.BaseTokenizer {
                     String matchedText = matcher.group(0);
                     String tokenType = rule.getTokenType();
 
-                    // Создать токен
                     Token token = new Token(tokenType, matchedText, line, column, position);
                     tokens.add(token);
 
-                    // Обновить позицию и координаты
                     position += matchedText.length();
                     for (int i = 0; i < matchedText.length(); i++) {
                         if (matchedText.charAt(i) == '\n') {
@@ -268,12 +252,11 @@ public class GrammarTokenizer extends Tokenizer.BaseTokenizer {
                     }
 
                     matched = true;
-                    break; // Перейти к следующему символу
+                    break;
                 }
             }
 
             if (!matched) {
-                // Неизвестный символ
                 throw new TokenizerException(
                         "Unexpected character: '" + text.charAt(position) + "'",
                         line, column
@@ -281,10 +264,7 @@ public class GrammarTokenizer extends Tokenizer.BaseTokenizer {
             }
         }
 
-        // Отфильтровать пропускаемые токены
         tokens = filterSkipTokens(tokens);
-
-        // Добавить EOF
         tokens = addEOFToken(tokens);
 
         return tokens;
