@@ -194,38 +194,31 @@ public class GrammarTokenizer extends Tokenizer.BaseTokenizer {
 
         // Сортировать операторы по длине (длинные в начало)
 
+        // Сортировать операторы по длине (длинные в начало) и потом лексикографически
         Collections.sort(operators, new Comparator<String>() {
 
             @Override
-
             public int compare(final String a, final String b) {
-
-                return Integer.compare(b.length(), a.length());
-
+                int lenCmp = Integer.compare(b.length(), a.length());
+                if (lenCmp != 0) {
+                    return lenCmp;
+                }
+                // Если длины равны, сортируем по алфавиту для консистентности
+                return a.compareTo(b);
             }
-
         });
 
         // Добавить операторы первыми (они имеют высший приоритет)
-
         for (String op : operators) {
-
             String escapedOp = Pattern.quote(op);
-
             addTokenRule(op, escapedOp);
-
         }
 
         // Добавить остальные терминалы (ключевые слова для функций)
-
         for (String terminal : otherTerminals) {
-
             // Ключевые слова должны быть до IDENTIFIER для корректного совпадения
-
             // Добавляем правило с проверкой границы слова
-
             addTokenRule(terminal, "\\b" + Pattern.quote(terminal) + "\\b");
-
         }
     }
 
