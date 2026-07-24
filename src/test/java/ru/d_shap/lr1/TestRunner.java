@@ -116,7 +116,20 @@ public final class TestRunner {
         GrammarTokenizer grammarTokenizer = new GrammarTokenizer();
         grammarTokenizer.initializeFromGrammar(grammarMap, allProductions);
         List<Token> tokens = grammarTokenizer.tokenize("2 + 3");
+        System.out.println("\n=== TOKENS ===");
         System.out.println(tokens);
+
+        // Debug: print all terminals from productions
+        System.out.println("\n=== TERMINALS FROM GRAMMAR ===");
+        Set<String> allTerminals = new HashSet<>();
+        for (Production prod : allProductions) {
+            for (String symbol : prod.getRhs()) {
+                if (!grammarMap.containsKey(symbol)) {
+                    allTerminals.add(symbol);
+                }
+            }
+        }
+        System.out.println(allTerminals);
 
         LRParser parser = new LRParser(table, allProductions);
         ParseResult result = parser.parse(tokens);
