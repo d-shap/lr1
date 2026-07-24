@@ -58,7 +58,7 @@ public final class TestRunner {
     }
 
     @Test
-    public void runIt() throws Tokenizer.TokenizerException {
+    public void runMath() throws Tokenizer.TokenizerException {
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream("math.ebnf");
         List<EbnfToken> ebnfTokens = EbnfTokenizer.tokenize(inputStream);
         System.out.println("=== TOKENS ===");
