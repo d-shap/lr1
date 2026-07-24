@@ -99,7 +99,7 @@ public class Token {
 
     @Override
     public String toString() {
-        return String.format("Token(%s='%s' at %s)", type, value, getLocationString());
+        return String.format("Token('%s'='%s' at %s)", type, value, getLocationString());
     }
 
     @Override
