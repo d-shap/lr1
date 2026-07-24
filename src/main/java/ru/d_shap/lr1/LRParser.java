@@ -81,11 +81,34 @@ public class LRParser {
                 int state = stateStack.peek();
 
                 // Получить действие из таблицы ACTION
-                ActionGotoTable.Action action = actionGotoTable.getAction(state, currentToken.getType());
+                // EOF токен преобразуется в $ для поиска в таблице
+                String tokenType;
+                if ("EOF".equals(currentToken.getType())) {
+                    tokenType = "$";
+                } else {
+                    tokenType = currentToken.getType();
+                }
+                ActionGotoTable.Action action = actionGotoTable.getAction(state, tokenType);
 
                 if (action == null || action.getType() == ActionGotoTable.ActionType.ERROR) {
+                    if (currentToken.getLine() >= 0) {
+                        if (currentToken.getColumn() >= 0) {
+                            return createErrorResult("Unexpected token: " + currentToken.getType(),
+                                    currentToken.getLine(),
+                                    currentToken.getColumn());
+                        }
+                        return createErrorResult("Unexpected token: " + currentToken.getType(),
+                                currentToken.getLine(),
+                                1);
+                    }
+                    if (currentToken.getColumn() >= 0) {
+                        return createErrorResult("Unexpected token: " + currentToken.getType(),
+                                1,
+                                currentToken.getColumn());
+                    }
                     return createErrorResult("Unexpected token: " + currentToken.getType(),
-                            currentToken.getLine(), currentToken.getColumn());
+                            1,
+                            1);
                 }
 
                 if (action.getType() == ActionGotoTable.ActionType.SHIFT) {
