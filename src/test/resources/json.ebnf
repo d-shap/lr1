@@ -1,0 +1,36 @@
+(* JSON grammar in EBNF format *)
+(* Supports: objects, arrays, strings, numbers, booleans, null *)
+
+json = value ;
+
+value = object | array | string | number | 'true' | 'false' | 'null' ;
+
+object = '{', '}' | '{', members, '}' ;
+
+members = pair | members, ',', pair ;
+
+pair = string, ':', value ;
+
+array = '[', ']' | '[', elements, ']' ;
+
+elements = value | elements, ',', value ;
+
+string = '"', string_content, '"' ;
+
+string_content = | string_content, string_char ;
+
+string_char = letter | digit | symbol | escape_sequence ;
+
+letter = 'a' | 'b' | 'c' | 'd' | 'e' | 'f' | 'g' | 'h' | 'i' | 'j' | 'k' | 'l' | 'm' | 'n' | 'o' | 'p' | 'q' | 'r' | 's' | 't' | 'u' | 'v' | 'w' | 'x' | 'y' | 'z' | 'A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G' | 'H' | 'I' | 'J' | 'K' | 'L' | 'M' | 'N' | 'O' | 'P' | 'Q' | 'R' | 'S' | 'T' | 'U' | 'V' | 'W' | 'X' | 'Y' | 'Z' ;
+
+digit = '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' ;
+
+symbol = '!' | '@' | '#' | '$' | '%' | '^' | '&' | '*' | '(' | ')' | '-' | '_' | '=' | '+' | '[' | ']' | '{' | '}' | ';' | ':' | ',' | '.' | '<' | '>' | '/' | '?' | '~' | '`' | '|' | ' ' ;
+
+escape_sequence = '\\' | '\\' '"' | '\\' '\\' | '\\' '/' | '\\' 'b' | '\\' 'f' | '\\' 'n' | '\\' 'r' | '\\' 't' ;
+
+number = integer_part | integer_part, '.', fractional_part ;
+
+integer_part = digit | '-', digit | integer_part, digit ;
+
+fractional_part = digit | fractional_part, digit ;
