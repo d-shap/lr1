@@ -80,19 +80,13 @@ public class LRParser {
             while (true) {
                 int state = stateStack.peek();
 
-                // Debug
-                System.out.println("Parser: state=" + state + " token=" + currentToken.getType() + " value=" + currentToken.getValue());
-
                 // Получить действие из таблицы ACTION
                 ActionGotoTable.Action action = actionGotoTable.getAction(state, currentToken.getType());
 
                 if (action == null || action.getType() == ActionGotoTable.ActionType.ERROR) {
-                    System.out.println("  -> No action found! Action: " + action);
                     return createErrorResult("Unexpected token: " + currentToken.getType(),
                             currentToken.getLine(), currentToken.getColumn());
                 }
-
-                System.out.println("  -> Action: " + action);
 
                 if (action.getType() == ActionGotoTable.ActionType.SHIFT) {
                     // SHIFT: добавить токен в стек символов и перейти в новое состояние
