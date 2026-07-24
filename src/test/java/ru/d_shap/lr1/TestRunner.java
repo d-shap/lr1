@@ -203,7 +203,14 @@ public final class TestRunner {
 
         GrammarTokenizer grammarTokenizer = new GrammarTokenizer();
         grammarTokenizer.initializeFromGrammar(grammarMap, allProductions);
-        List<Token> tokens = grammarTokenizer.tokenize("{\"name\":[1,2,true],\"value\":\"test\"}");
+        List<Token> tokens = grammarTokenizer.tokenize("{\n" +
+                "  \"name\": [\n" +
+                "    1,\n" +
+                "    2,\n" +
+                "    true\n" +
+                "  ],\n" +
+                "  \"value\": \"test\"\n" +
+                "}\n");
         System.out.println("\n=== TOKENS ===");
         System.out.println(tokens);
 
