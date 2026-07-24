@@ -60,11 +60,11 @@ public final class TestRunner {
     @Test
     public void runIt() throws Tokenizer.TokenizerException {
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream("math.ebnf");
-        List<EbnfToken> tokens = EbnfTokenizer.tokenize(inputStream);
+        List<EbnfToken> ebnfTokens = EbnfTokenizer.tokenize(inputStream);
         System.out.println("=== TOKENS ===");
-        System.out.println(tokens);
+        System.out.println(ebnfTokens);
 
-        EbnfGrammar ebnfGrammar = EbnfParser.parse(tokens);
+        EbnfGrammar ebnfGrammar = EbnfParser.parse(ebnfTokens);
         System.out.println("\n=== EBNF GRAMMAR ===");
         System.out.println(ebnfGrammar);
 
@@ -115,14 +115,18 @@ public final class TestRunner {
 
         GrammarTokenizer grammarTokenizer = new GrammarTokenizer();
         grammarTokenizer.initializeFromGrammar(grammarMap, allProductions);
-        List<Token> ttt = grammarTokenizer.tokenize("2 + 3");
+        List<Token> tokens = grammarTokenizer.tokenize("2 + 3");
+        System.out.println(tokens);
 
         LRParser parser = new LRParser(table, allProductions);
-        ParseResult result = parser.parse(ttt);
+        ParseResult result = parser.parse(tokens);
 
         if (result.isSuccess()) {
             ASTNode ast = result.getAST();
             System.out.println(ASTTreePrinter.print(ast));
+        } else {
+            System.out.println(result.getErrorMessage());
+            System.out.println(result.getErrorLocationString());
         }
     }
 
