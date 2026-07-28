@@ -500,12 +500,24 @@ public final class EbnfValidator {
 
     /**
      * Check if a node can be empty (match zero symbols).
+     * <p>
+     * /**
      *
-     * @param node the node to check.
+     * @param node the EBNF node.
      *
      * @return true if the node can be empty.
      */
     private boolean canBeEmpty(final EbnfNode node) {
+        return canBeEmpty(node, new HashSet<String>());
+    }
+
+    /**
+     * @param node          the EBNF node.
+     * @param visitingRules the set of rules currently being visited to detect cycles.
+     *
+     * @return true if the node can be empty.
+     */
+    private boolean canBeEmpty(final EbnfNode node, final Set<String> visitingRules) {
         if (node == null) {
             return true;
         }
@@ -525,7 +537,7 @@ public final class EbnfValidator {
         if (node instanceof EbnfChoice) {
             EbnfChoice choice = (EbnfChoice) node;
             for (int i = 0; i < choice.getCount(); i++) {
-                if (canBeEmpty(choice.getExpression(i))) {
+                if (canBeEmpty(choice.getExpression(i), visitingRules)) {
                     return true;
                 }
             }
@@ -535,7 +547,7 @@ public final class EbnfValidator {
         if (node instanceof EbnfSequence) {
             EbnfSequence sequence = (EbnfSequence) node;
             for (int i = 0; i < sequence.getCount(); i++) {
-                if (!canBeEmpty(sequence.getExpression(i))) {
+                if (!canBeEmpty(sequence.getExpression(i), visitingRules)) {
                     return false;
                 }
             }
@@ -544,15 +556,24 @@ public final class EbnfValidator {
 
         if (node instanceof EbnfRuleReference) {
             String ruleName = ((EbnfRuleReference) node).getName();
+            if (visitingRules.contains(ruleName)) {
+                // Cycle detected - treat as non-empty to break recursion
+                return false;
+            }
             EbnfRule rule = _definedRules.get(ruleName);
             if (rule != null) {
-                return canBeEmpty(rule.getExpression());
+                visitingRules.add(ruleName);
+                try {
+                    return canBeEmpty(rule.getExpression(), visitingRules);
+                } finally {
+                    visitingRules.remove(ruleName);
+                }
             }
             return false;
         }
 
         if (node instanceof EbnfExcept) {
-            return canBeEmpty(((EbnfExcept) node).getBase());
+            return canBeEmpty(((EbnfExcept) node).getBase(), visitingRules);
         }
 
         return false;
