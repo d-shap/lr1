@@ -50,8 +50,6 @@ public final class EbnfValidator {
 
     private final Map<String, EbnfRule> _definedRules;
 
-    private final Map<String, Boolean> _hasTerminal;
-
     private final Set<String> _reachableRules;
 
     private final List<EbnfValidationException> _errors;
@@ -69,7 +67,6 @@ public final class EbnfValidator {
         super();
         _grammar = grammar;
         _definedRules = new HashMap<>();
-        _hasTerminal = new HashMap<>();
         _reachableRules = new HashSet<>();
         _errors = new ArrayList<>();
         _visitingRules = new HashSet<>();
@@ -83,7 +80,6 @@ public final class EbnfValidator {
     public void validate() {
         _errors.clear();
         _definedRules.clear();
-        _hasTerminal.clear();
         _reachableRules.clear();
         _visitingRules.clear();
         _hasLeftRecursion.clear();
@@ -120,15 +116,6 @@ public final class EbnfValidator {
             EbnfRule rule = rules.get(i);
             if (!_reachableRules.contains(rule.getName())) {
                 _errors.add(new EbnfUnreachableRuleException(rule.getLine(), rule.getColumn(), rule.getName()));
-            }
-        }
-
-        // Check for dead-end rules
-        computeTerminalReachability(rules);
-        for (EbnfRule rule : rules) {
-            Boolean hasTerminal = _hasTerminal.get(rule.getName());
-            if (hasTerminal == null || !hasTerminal) {
-                _errors.add(new EbnfDeadEndRuleException(rule.getLine(), rule.getColumn(), rule.getName()));
             }
         }
 
@@ -242,70 +229,6 @@ public final class EbnfValidator {
             collectReferencedRules(((EbnfExcept) node).getBase());
             collectReferencedRules(((EbnfExcept) node).getException());
         }
-    }
-
-    private void computeTerminalReachability(final List<EbnfRule> rules) {
-        boolean changed = true;
-        while (changed) {
-            changed = false;
-            for (EbnfRule rule : rules) {
-                String ruleName = rule.getName();
-                Boolean hasTerminal = _hasTerminal.get(ruleName);
-                if (hasTerminal == null || !hasTerminal) {
-                    if (nodeHasTerminal(rule.getExpression())) {
-                        _hasTerminal.put(ruleName, true);
-                        changed = true;
-                    }
-                }
-            }
-        }
-    }
-
-    private boolean nodeHasTerminal(final EbnfNode node) {
-        if (node == null) {
-            return false;
-        }
-
-        if (node instanceof EbnfTerminal) {
-            return true;
-        }
-        if (node instanceof EbnfSpecialSequence) {
-            return true;
-        }
-        if (node instanceof EbnfRuleReference) {
-            String ruleName = ((EbnfRuleReference) node).getName();
-            Boolean hasTerminal = _hasTerminal.get(ruleName);
-            return hasTerminal != null && hasTerminal;
-        }
-        if (node instanceof EbnfChoice) {
-            EbnfChoice choice = (EbnfChoice) node;
-            for (int i = 0; i < choice.getCount(); i++) {
-                if (nodeHasTerminal(choice.getExpression(i))) {
-                    return true;
-                }
-            }
-            return false;
-        }
-        if (node instanceof EbnfSequence) {
-            EbnfSequence sequence = (EbnfSequence) node;
-            for (int i = 0; i < sequence.getCount(); i++) {
-                if (!nodeHasTerminal(sequence.getExpression(i))) {
-                    return false;
-                }
-            }
-            return true;
-        }
-        if (node instanceof EbnfOptional) {
-            return true;
-        }
-        if (node instanceof EbnfRepeat) {
-            return true;
-        }
-        if (node instanceof EbnfExcept) {
-            return nodeHasTerminal(((EbnfExcept) node).getBase());
-        }
-
-        return false;
     }
 
     /**
