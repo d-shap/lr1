@@ -117,12 +117,6 @@ public final class TestRunner {
         System.out.println("\n=== ACTION/GOTO TABLES ===");
         System.out.println(table.printTables(allProductions));
 
-        GrammarTokenizer grammarTokenizer = new GrammarTokenizer();
-        grammarTokenizer.initializeFromGrammar(grammarMap, allProductions);
-        List<Token> tokens = grammarTokenizer.tokenize("21+3^2/sin(11.2*0.21)");
-        System.out.println("\n=== TOKENS ===");
-        System.out.println(tokens);
-
         // Debug: print all terminals from productions
         System.out.println("\n=== TERMINALS FROM GRAMMAR ===");
         Set<String> allTerminals = new HashSet<>();
@@ -134,6 +128,12 @@ public final class TestRunner {
             }
         }
         System.out.println(allTerminals);
+
+        GrammarTokenizer grammarTokenizer = new GrammarTokenizer();
+        grammarTokenizer.initializeFromGrammar(grammarMap, allProductions);
+        List<Token> tokens = grammarTokenizer.tokenize("21+3^2/sin(11.2*0.21)");
+        System.out.println("\n=== TOKENS ===");
+        System.out.println(tokens);
 
         LRParser parser = new LRParser(table, allProductions);
         ParseResult result = parser.parse(tokens);
