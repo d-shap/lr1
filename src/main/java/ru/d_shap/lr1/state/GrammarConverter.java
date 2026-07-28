@@ -32,6 +32,7 @@ import ru.d_shap.lr1.ebnf.model.EbnfRepeat;
 import ru.d_shap.lr1.ebnf.model.EbnfRule;
 import ru.d_shap.lr1.ebnf.model.EbnfRuleReference;
 import ru.d_shap.lr1.ebnf.model.EbnfSequence;
+import ru.d_shap.lr1.ebnf.model.EbnfSpecialSequence;
 import ru.d_shap.lr1.ebnf.model.EbnfTerminal;
 
 /**
@@ -168,6 +169,11 @@ public final class GrammarConverter {
             }
 
             rhs.add(auxName);
+
+        } else if (node instanceof EbnfSpecialSequence) {
+            // Special sequence: treat as a terminal (e.g., ?whitespace?)
+            EbnfSpecialSequence special = (EbnfSpecialSequence) node;
+            rhs.add(special.getText());
         }
     }
 
