@@ -109,9 +109,6 @@ public class GrammarTokenizer extends Tokenizer.BaseTokenizer {
         // Собрать все терминалы из грамматики
         Set<String> terminals = extractTerminals(grammarMap, allProductions);
 
-        // Добавить только пробелы как общее правило
-        addTokenRule("WHITESPACE", "\\s+");
-
         // Добавить терминалы из грамматики в правильном порядке
         addTerminalRules(terminals);
     }
