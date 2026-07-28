@@ -113,7 +113,7 @@ public final class EbnfValidator {
         // Build reachability graph from first rule
         String startRule = rules.get(0).getName();
         _reachableRules.add(startRule); // Add start rule first
-        buildReachableRules(startRule);
+        collectReferencedRules(_definedRules.get(startRule).getExpression());
 
         // Check for unreachable rules (skip first rule as it's always reachable)
         for (int i = 1; i < rules.size(); i++) {
@@ -132,10 +132,7 @@ public final class EbnfValidator {
             }
         }
 
-        // Check for circular dependencies
-        detectCircularDependencies(rules);
-
-        // Check for left recursion
+        // Check for left recursion (circular dependencies are allowed if they don't cause left recursion)
         for (EbnfRule rule : rules) {
             detectLeftRecursion(rule);
         }
@@ -308,55 +305,6 @@ public final class EbnfValidator {
             return nodeHasTerminal(((EbnfExcept) node).getBase());
         }
 
-        return false;
-    }
-
-    /**
-     * Detect circular dependencies between rules.
-     *
-     * @param rules the list of rules.
-     */
-    private void detectCircularDependencies(final List<EbnfRule> rules) {
-        for (EbnfRule rule : rules) {
-            List<String> cycle = new ArrayList<>();
-            if (hasCycleDependency(rule.getName(), rule.getName(), cycle)) {
-                EbnfRule cycleRule = _definedRules.get(rule.getName());
-                _errors.add(new EbnfCircularDependencyException(cycleRule.getLine(), cycleRule.getColumn(), cycle));
-            }
-        }
-    }
-
-    /**
-     * Check if a rule has cyclic dependency.
-     *
-     * @param startRule   the starting rule name.
-     * @param currentRule the current rule name.
-     * @param cycle       the list to collect the cycle.
-     *
-     * @return true if cycle is detected.
-     */
-    private boolean hasCycleDependency(final String startRule, final String currentRule, final List<String> cycle) {
-        cycle.add(currentRule);
-        EbnfRule rule = _definedRules.get(currentRule);
-        if (rule == null) {
-            cycle.remove(cycle.size() - 1);
-            return false;
-        }
-
-        List<String> referencedRules = collectDirectReferences(rule.getExpression());
-        for (String referencedRule : referencedRules) {
-            if (referencedRule.equals(startRule) && cycle.size() > 1) {
-                cycle.add(startRule);
-                return true;
-            }
-            if (!cycle.contains(referencedRule)) {
-                if (hasCycleDependency(startRule, referencedRule, cycle)) {
-                    return true;
-                }
-            }
-        }
-
-        cycle.remove(cycle.size() - 1);
         return false;
     }
 
