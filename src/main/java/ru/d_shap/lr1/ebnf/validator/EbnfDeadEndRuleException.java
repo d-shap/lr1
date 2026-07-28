@@ -17,14 +17,16 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 /// ////////////////////////////////////////////////////////////////////////////////////////////////
-package ru.d_shap.lr1.ebnf;
+package ru.d_shap.lr1.ebnf.validator;
+
+import ru.d_shap.lr1.ebnf.EbnfValidationException;
 
 /**
- * The EBNF unreachable rule exception.
+ * The EBNF dead-end rule exception.
  *
  * @author Dmitry Shapovalov
  */
-public class EbnfUnreachableRuleException extends EbnfValidationException {
+public class EbnfDeadEndRuleException extends EbnfValidationException {
 
     private static final long serialVersionUID = 1L;
 
@@ -35,17 +37,17 @@ public class EbnfUnreachableRuleException extends EbnfValidationException {
      *
      * @param line     the line number.
      * @param column   the column number.
-     * @param ruleName the unreachable rule name.
+     * @param ruleName the dead-end rule name.
      */
-    public EbnfUnreachableRuleException(final int line, final int column, final String ruleName) {
-        super(line, column, "Unreachable rule: '" + ruleName + "'");
+    public EbnfDeadEndRuleException(final int line, final int column, final String ruleName) {
+        super(line, column, "Dead-end rule (no terminal productions): '" + ruleName + "'");
         _ruleName = ruleName;
     }
 
     /**
-     * Get the unreachable rule name.
+     * Get the dead-end rule name.
      *
-     * @return the unreachable rule name.
+     * @return the dead-end rule name.
      */
     public String getRuleName() {
         return _ruleName;

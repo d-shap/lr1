@@ -17,51 +17,40 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 /// ////////////////////////////////////////////////////////////////////////////////////////////////
-package ru.d_shap.lr1.ebnf;
+package ru.d_shap.lr1.ebnf.validator;
 
-import java.util.List;
+import ru.d_shap.lr1.ebnf.EbnfValidationException;
 
 /**
- * The EBNF circular dependency exception.
+ * The EBNF unreachable rule exception.
  *
  * @author Dmitry Shapovalov
  */
-public class EbnfCircularDependencyException extends EbnfValidationException {
+public class EbnfUnreachableRuleException extends EbnfValidationException {
 
     private static final long serialVersionUID = 1L;
 
-    private final List<String> _cycle;
+    private final String _ruleName;
 
     /**
      * Create new object.
      *
-     * @param line   the line number.
-     * @param column the column number.
-     * @param cycle  the cycle of rules.
+     * @param line     the line number.
+     * @param column   the column number.
+     * @param ruleName the unreachable rule name.
      */
-    public EbnfCircularDependencyException(final int line, final int column, final List<String> cycle) {
-        super(line, column, "Circular dependency: " + formatCycle(cycle));
-        _cycle = cycle;
+    public EbnfUnreachableRuleException(final int line, final int column, final String ruleName) {
+        super(line, column, "Unreachable rule: '" + ruleName + "'");
+        _ruleName = ruleName;
     }
 
     /**
-     * Get the cycle of rules.
+     * Get the unreachable rule name.
      *
-     * @return the cycle of rules.
+     * @return the unreachable rule name.
      */
-    public List<String> getCycle() {
-        return _cycle;
-    }
-
-    private static String formatCycle(final List<String> cycle) {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < cycle.size(); i++) {
-            if (i > 0) {
-                sb.append(" -> ");
-            }
-            sb.append(cycle.get(i));
-        }
-        return sb.toString();
+    public String getRuleName() {
+        return _ruleName;
     }
 
 }

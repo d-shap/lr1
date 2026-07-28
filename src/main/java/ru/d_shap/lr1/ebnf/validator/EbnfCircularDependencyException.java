@@ -17,38 +17,53 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 /// ////////////////////////////////////////////////////////////////////////////////////////////////
-package ru.d_shap.lr1.ebnf;
+package ru.d_shap.lr1.ebnf.validator;
+
+import java.util.List;
+
+import ru.d_shap.lr1.ebnf.EbnfValidationException;
 
 /**
- * The EBNF left recursion exception.
+ * The EBNF circular dependency exception.
  *
  * @author Dmitry Shapovalov
  */
-public class EbnfLeftRecursionException extends EbnfValidationException {
+public class EbnfCircularDependencyException extends EbnfValidationException {
 
     private static final long serialVersionUID = 1L;
 
-    private final String _ruleName;
+    private final List<String> _cycle;
 
     /**
      * Create new object.
      *
-     * @param line     the line number.
-     * @param column   the column number.
-     * @param ruleName the rule name with left recursion.
+     * @param line   the line number.
+     * @param column the column number.
+     * @param cycle  the cycle of rules.
      */
-    public EbnfLeftRecursionException(final int line, final int column, final String ruleName) {
-        super(line, column, "Left recursion detected in rule: '" + ruleName + "'");
-        _ruleName = ruleName;
+    public EbnfCircularDependencyException(final int line, final int column, final List<String> cycle) {
+        super(line, column, "Circular dependency: " + formatCycle(cycle));
+        _cycle = cycle;
     }
 
     /**
-     * Get the rule name with left recursion.
+     * Get the cycle of rules.
      *
-     * @return the rule name with left recursion.
+     * @return the cycle of rules.
      */
-    public String getRuleName() {
-        return _ruleName;
+    public List<String> getCycle() {
+        return _cycle;
+    }
+
+    private static String formatCycle(final List<String> cycle) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < cycle.size(); i++) {
+            if (i > 0) {
+                sb.append(" -> ");
+            }
+            sb.append(cycle.get(i));
+        }
+        return sb.toString();
     }
 
 }

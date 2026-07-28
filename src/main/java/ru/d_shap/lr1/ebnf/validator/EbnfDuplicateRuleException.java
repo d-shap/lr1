@@ -17,14 +17,16 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 /// ////////////////////////////////////////////////////////////////////////////////////////////////
-package ru.d_shap.lr1.ebnf;
+package ru.d_shap.lr1.ebnf.validator;
+
+import ru.d_shap.lr1.ebnf.EbnfValidationException;
 
 /**
- * The EBNF dead-end rule exception.
+ * The EBNF duplicate rule exception.
  *
  * @author Dmitry Shapovalov
  */
-public class EbnfDeadEndRuleException extends EbnfValidationException {
+public class EbnfDuplicateRuleException extends EbnfValidationException {
 
     private static final long serialVersionUID = 1L;
 
@@ -35,17 +37,17 @@ public class EbnfDeadEndRuleException extends EbnfValidationException {
      *
      * @param line     the line number.
      * @param column   the column number.
-     * @param ruleName the dead-end rule name.
+     * @param ruleName the duplicate rule name.
      */
-    public EbnfDeadEndRuleException(final int line, final int column, final String ruleName) {
-        super(line, column, "Dead-end rule (no terminal productions): '" + ruleName + "'");
+    public EbnfDuplicateRuleException(final int line, final int column, final String ruleName) {
+        super(line, column, "Duplicate rule: '" + ruleName + "'");
         _ruleName = ruleName;
     }
 
     /**
-     * Get the dead-end rule name.
+     * Get the duplicate rule name.
      *
-     * @return the dead-end rule name.
+     * @return the duplicate rule name.
      */
     public String getRuleName() {
         return _ruleName;

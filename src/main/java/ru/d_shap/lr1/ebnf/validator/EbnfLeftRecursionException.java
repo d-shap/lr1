@@ -17,14 +17,16 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 /// ////////////////////////////////////////////////////////////////////////////////////////////////
-package ru.d_shap.lr1.ebnf;
+package ru.d_shap.lr1.ebnf.validator;
+
+import ru.d_shap.lr1.ebnf.EbnfValidationException;
 
 /**
- * The EBNF duplicate rule exception.
+ * The EBNF left recursion exception.
  *
  * @author Dmitry Shapovalov
  */
-public class EbnfDuplicateRuleException extends EbnfValidationException {
+public class EbnfLeftRecursionException extends EbnfValidationException {
 
     private static final long serialVersionUID = 1L;
 
@@ -35,17 +37,17 @@ public class EbnfDuplicateRuleException extends EbnfValidationException {
      *
      * @param line     the line number.
      * @param column   the column number.
-     * @param ruleName the duplicate rule name.
+     * @param ruleName the rule name with left recursion.
      */
-    public EbnfDuplicateRuleException(final int line, final int column, final String ruleName) {
-        super(line, column, "Duplicate rule: '" + ruleName + "'");
+    public EbnfLeftRecursionException(final int line, final int column, final String ruleName) {
+        super(line, column, "Left recursion detected in rule: '" + ruleName + "'");
         _ruleName = ruleName;
     }
 
     /**
-     * Get the duplicate rule name.
+     * Get the rule name with left recursion.
      *
-     * @return the duplicate rule name.
+     * @return the rule name with left recursion.
      */
     public String getRuleName() {
         return _ruleName;
