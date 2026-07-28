@@ -33,23 +33,25 @@ public final class LR1Item implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private final Production _production;
+
     private final int _dotPosition;
+
     private final String _lookahead;
 
     /**
      * Create new LR(1) item.
      *
-     * @param production the production rule.
+     * @param production  the production rule.
      * @param dotPosition the position of the dot (0 to production.getRhs().size()).
-     * @param lookahead the lookahead symbol.
+     * @param lookahead   the lookahead symbol.
      */
     public LR1Item(final Production production, final int dotPosition, final String lookahead) {
         super();
         _production = Objects.requireNonNull(production, "production cannot be null");
         if (dotPosition < 0 || dotPosition > production.getRhs().size()) {
             throw new IllegalArgumentException(
-                String.format("dotPosition must be between 0 and %d, but got %d",
-                    production.getRhs().size(), dotPosition));
+                    String.format("dotPosition must be between 0 and %d, but got %d",
+                            production.getRhs().size(), dotPosition));
         }
         _dotPosition = dotPosition;
         _lookahead = Objects.requireNonNull(lookahead, "lookahead cannot be null");
@@ -107,6 +109,7 @@ public final class LR1Item implements Serializable {
      * Create a new item with the dot advanced by one position.
      *
      * @return a new LR1Item with the dot moved forward.
+     *
      * @throws IllegalStateException if the item is already complete.
      */
     public LR1Item advance() {
@@ -126,8 +129,8 @@ public final class LR1Item implements Serializable {
         }
         LR1Item item = (LR1Item) o;
         return _dotPosition == item._dotPosition &&
-               _production.equals(item._production) &&
-               _lookahead.equals(item._lookahead);
+                _production.equals(item._production) &&
+                _lookahead.equals(item._lookahead);
     }
 
     @Override

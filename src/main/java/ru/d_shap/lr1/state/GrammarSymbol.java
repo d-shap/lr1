@@ -32,17 +32,24 @@ public final class GrammarSymbol implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private final String _name;
+
     private final SymbolType _type;
 
     /**
      * Symbol type.
      */
     public enum SymbolType {
-        /** Terminal symbol (token) */
+        /**
+         * Terminal symbol (token)
+         */
         TERMINAL,
-        /** Non-terminal symbol (rule) */
+        /**
+         * Non-terminal symbol (rule)
+         */
         NON_TERMINAL,
-        /** End of input symbol */
+        /**
+         * End of input symbol
+         */
         EOF
     }
 
@@ -62,6 +69,7 @@ public final class GrammarSymbol implements Serializable {
      * Create a terminal symbol.
      *
      * @param name the terminal name.
+     *
      * @return the terminal symbol.
      */
     public static GrammarSymbol terminal(final String name) {
@@ -72,6 +80,7 @@ public final class GrammarSymbol implements Serializable {
      * Create a non-terminal symbol.
      *
      * @param name the non-terminal name.
+     *
      * @return the non-terminal symbol.
      */
     public static GrammarSymbol nonTerminal(final String name) {

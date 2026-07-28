@@ -35,23 +35,33 @@ public final class LRAction implements Serializable {
      * Action type.
      */
     public enum ActionType {
-        /** Shift action: push token and goto next state */
+        /**
+         * Shift action: push token and goto next state
+         */
         SHIFT,
-        /** Reduce action: pop symbols and reduce by production */
+        /**
+         * Reduce action: pop symbols and reduce by production
+         */
         REDUCE,
-        /** Accept action: parsing completed successfully */
+        /**
+         * Accept action: parsing completed successfully
+         */
         ACCEPT,
-        /** Error action: parsing error */
+        /**
+         * Error action: parsing error
+         */
         ERROR
     }
 
     private final ActionType _type;
+
     private final int _stateOrRuleNumber;
 
     /**
      * Create a shift action.
      *
      * @param nextState the next state number to push.
+     *
      * @return the shift action.
      */
     public static LRAction shift(final int nextState) {
@@ -65,6 +75,7 @@ public final class LRAction implements Serializable {
      * Create a reduce action.
      *
      * @param ruleNumber the production rule number to reduce by.
+     *
      * @return the reduce action.
      */
     public static LRAction reduce(final int ruleNumber) {
@@ -95,7 +106,7 @@ public final class LRAction implements Serializable {
     /**
      * Create new action.
      *
-     * @param type the action type.
+     * @param type              the action type.
      * @param stateOrRuleNumber the state number (for shift) or rule number (for reduce).
      */
     private LRAction(final ActionType type, final int stateOrRuleNumber) {
@@ -168,7 +179,7 @@ public final class LRAction implements Serializable {
         }
         LRAction action = (LRAction) o;
         return _stateOrRuleNumber == action._stateOrRuleNumber &&
-               _type == action._type;
+                _type == action._type;
     }
 
     @Override
