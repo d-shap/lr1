@@ -35,8 +35,8 @@ public class EbnfValidationException extends EbnfException {
     /**
      * Create new object.
      *
-     * @param line the line number.
-     * @param column the column number.
+     * @param line    the line number.
+     * @param column  the column number.
      * @param message the message.
      */
     public EbnfValidationException(final int line, final int column, final String message) {
