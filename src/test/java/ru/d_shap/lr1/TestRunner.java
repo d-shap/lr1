@@ -34,6 +34,7 @@ import ru.d_shap.lr1.ebnf.EbnfParser;
 import ru.d_shap.lr1.ebnf.EbnfToken;
 import ru.d_shap.lr1.ebnf.EbnfTokenizer;
 import ru.d_shap.lr1.ebnf.model.EbnfGrammar;
+import ru.d_shap.lr1.ebnf.validator.EbnfValidator;
 import ru.d_shap.lr1.state.ActionGotoTable;
 import ru.d_shap.lr1.state.FirstSetComputer;
 import ru.d_shap.lr1.state.GrammarConverter;
@@ -67,6 +68,9 @@ public final class TestRunner {
         EbnfGrammar ebnfGrammar = EbnfParser.parse(ebnfTokens);
         System.out.println("\n=== EBNF GRAMMAR ===");
         System.out.println(ebnfGrammar);
+
+        EbnfValidator ebnfValidator = new EbnfValidator(ebnfGrammar);
+        ebnfValidator.validate();
 
         // Convert EBNF grammar to Production rules
         GrammarConverter grammarConverter = new GrammarConverter(ebnfGrammar);
