@@ -54,10 +54,6 @@ public final class EbnfValidator {
 
     private final List<EbnfValidationException> _errors;
 
-    private final Set<String> _visitingRules;
-
-    private final Map<String, Boolean> _hasLeftRecursion;
-
     /**
      * Create new object.
      *
@@ -69,8 +65,6 @@ public final class EbnfValidator {
         _definedRules = new HashMap<>();
         _reachableRules = new HashSet<>();
         _errors = new ArrayList<>();
-        _visitingRules = new HashSet<>();
-        _hasLeftRecursion = new HashMap<>();
     }
 
     /**
@@ -81,8 +75,6 @@ public final class EbnfValidator {
         _errors.clear();
         _definedRules.clear();
         _reachableRules.clear();
-        _visitingRules.clear();
-        _hasLeftRecursion.clear();
 
         List<EbnfRule> rules = _grammar.getRules();
 
@@ -117,11 +109,6 @@ public final class EbnfValidator {
             if (!_reachableRules.contains(rule.getName())) {
                 _errors.add(new EbnfUnreachableRuleException(rule.getLine(), rule.getColumn(), rule.getName()));
             }
-        }
-
-        // Check for left recursion (circular dependencies are allowed if they don't cause left recursion)
-        for (EbnfRule rule : rules) {
-            detectLeftRecursion(rule);
         }
 
         // If there are errors, throw the first one
@@ -272,101 +259,6 @@ public final class EbnfValidator {
             collectDirectReferencesHelper(((EbnfExcept) node).getBase(), references);
             collectDirectReferencesHelper(((EbnfExcept) node).getException(), references);
         }
-    }
-
-    /**
-     * Detect left recursion in a rule.
-     *
-     * @param rule the rule to check.
-     */
-    private void detectLeftRecursion(final EbnfRule rule) {
-        String ruleName = rule.getName();
-        Boolean hasLeftRecursion = _hasLeftRecursion.get(ruleName);
-        if (hasLeftRecursion != null) {
-            if (hasLeftRecursion) {
-                _errors.add(new EbnfLeftRecursionException(rule.getLine(), rule.getColumn(), ruleName));
-            }
-            return;
-        }
-
-        _visitingRules.clear();
-        if (checkLeftRecursion(ruleName, rule.getExpression())) {
-            _hasLeftRecursion.put(ruleName, true);
-            _errors.add(new EbnfLeftRecursionException(rule.getLine(), rule.getColumn(), ruleName));
-        } else {
-            _hasLeftRecursion.put(ruleName, false);
-        }
-    }
-
-    /**
-     * Check if a node starts with a reference to the given rule (left recursion).
-     *
-     * @param ruleName the rule name to check for.
-     * @param node     the node to analyze.
-     *
-     * @return true if left recursion is detected.
-     */
-    private boolean checkLeftRecursion(final String ruleName, final EbnfNode node) {
-        if (node == null) {
-            return false;
-        }
-
-        if (node instanceof EbnfTerminal || node instanceof EbnfSpecialSequence) {
-            return false;
-        }
-
-        if (node instanceof EbnfRuleReference) {
-            String referencedRule = ((EbnfRuleReference) node).getName();
-            if (referencedRule.equals(ruleName)) {
-                return true;
-            }
-            // Check if the referenced rule itself has left recursion
-            if (!_visitingRules.contains(referencedRule)) {
-                _visitingRules.add(referencedRule);
-                EbnfRule refRule = _definedRules.get(referencedRule);
-                if (refRule != null && checkLeftRecursion(ruleName, refRule.getExpression())) {
-                    return true;
-                }
-                _visitingRules.remove(referencedRule);
-            }
-            return false;
-        }
-
-        if (node instanceof EbnfChoice) {
-            EbnfChoice choice = (EbnfChoice) node;
-            for (int i = 0; i < choice.getCount(); i++) {
-                if (checkLeftRecursion(ruleName, choice.getExpression(i))) {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        if (node instanceof EbnfSequence) {
-            EbnfSequence sequence = (EbnfSequence) node;
-            for (int i = 0; i < sequence.getCount(); i++) {
-                EbnfNode expr = sequence.getExpression(i);
-                if (checkLeftRecursion(ruleName, expr)) {
-                    return true;
-                }
-                // If current expression doesn't contain optional/repeat, stop checking
-                if (!canBeEmpty(expr)) {
-                    return false;
-                }
-            }
-            return false;
-        }
-
-        if (node instanceof EbnfOptional || node instanceof EbnfRepeat) {
-            // Optional and repeat don't cause left recursion at this position
-            return false;
-        }
-
-        if (node instanceof EbnfExcept) {
-            return checkLeftRecursion(ruleName, ((EbnfExcept) node).getBase());
-        }
-
-        return false;
     }
 
     /**
