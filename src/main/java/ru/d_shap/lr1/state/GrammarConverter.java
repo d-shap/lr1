@@ -173,7 +173,7 @@ public final class GrammarConverter {
         } else if (node instanceof EbnfSpecialSequence) {
             // Special sequence: treat as a terminal (e.g., ?whitespace?)
             EbnfSpecialSequence special = (EbnfSpecialSequence) node;
-            rhs.add(special.getText());
+            rhs.add("?" + special.getText() + "?");
         }
     }
 
