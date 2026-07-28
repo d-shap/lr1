@@ -17,7 +17,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 /// ////////////////////////////////////////////////////////////////////////////////////////////////
-package ru.d_shap.lr1.ebnf;
+package ru.d_shap.lr1.ebnf.validator;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import ru.d_shap.lr1.ebnf.EbnfValidationException;
 import ru.d_shap.lr1.ebnf.model.EbnfChoice;
 import ru.d_shap.lr1.ebnf.model.EbnfExcept;
 import ru.d_shap.lr1.ebnf.model.EbnfGrammar;
