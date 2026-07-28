@@ -264,20 +264,9 @@ public class GrammarTokenizer extends Tokenizer.BaseTokenizer {
             }
         }
 
-        tokens = filterSkipTokens(tokens);
         tokens = addEOFToken(tokens);
 
         return tokens;
-    }
-
-    @Override
-    protected List<String> getSkipTokenTypes() {
-        List<String> skipTypes = new ArrayList<>();
-        skipTypes.add("WHITESPACE");
-        skipTypes.add("COMMENT");
-        skipTypes.add("LINE_COMMENT");
-        skipTypes.add("BLOCK_COMMENT");
-        return skipTypes;
     }
 
 }

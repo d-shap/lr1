@@ -19,7 +19,6 @@
 /// ////////////////////////////////////////////////////////////////////////////////////////////////
 package ru.d_shap.lr1;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -81,36 +80,6 @@ public interface Tokenizer {
      * Может быть переопределена для поддержки специальных правил лексического анализа.
      */
     abstract class BaseTokenizer implements Tokenizer {
-
-        /**
-         * Получить список типов токенов, которые нужно пропускать (например, пробелы).
-         *
-         * @return список типов токенов для пропуска
-         */
-        protected List<String> getSkipTokenTypes() {
-            List<String> skipTypes = new ArrayList<>();
-            skipTypes.add("WHITESPACE");
-            skipTypes.add("COMMENT");
-            return skipTypes;
-        }
-
-        /**
-         * Отфильтровать токены, исключая те, что нужно пропускать.
-         *
-         * @param tokens исходный список токенов
-         *
-         * @return отфильтрованный список
-         */
-        protected List<Token> filterSkipTokens(final List<Token> tokens) {
-            List<String> skipTypes = getSkipTokenTypes();
-            List<Token> filtered = new ArrayList<>();
-            for (Token token : tokens) {
-                if (!skipTypes.contains(token.getType())) {
-                    filtered.add(token);
-                }
-            }
-            return filtered;
-        }
 
         /**
          * Добавить специальный токен конца файла (EOF).
