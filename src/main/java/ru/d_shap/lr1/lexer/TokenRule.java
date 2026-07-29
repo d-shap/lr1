@@ -17,34 +17,38 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 /// ////////////////////////////////////////////////////////////////////////////////////////////////
-package ru.d_shap.lr1;
+package ru.d_shap.lr1.lexer;
+
+import java.io.Serializable;
 
 /**
- * The parser exception.
+ * The token rule.
  *
  * @author Dmitry Shapovalov
  */
-public class ParserException extends RuntimeException {
+public abstract class TokenRule implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    /**
-     * Create new object.
-     *
-     * @param message the message.
-     */
-    protected ParserException(final String message) {
-        super(message);
-    }
+    private final String _tokenType;
 
     /**
      * Create new object.
      *
-     * @param message the message.
-     * @param cause   the cause.
+     * @param tokenType the token type.
      */
-    protected ParserException(final String message, final Throwable cause) {
-        super(message, cause);
+    protected TokenRule(final String tokenType) {
+        super();
+        _tokenType = tokenType;
+    }
+
+    /**
+     * Get the token type.
+     *
+     * @return the token type.
+     */
+    public String getTokenType() {
+        return _tokenType;
     }
 
 }
