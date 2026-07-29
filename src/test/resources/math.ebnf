@@ -13,8 +13,6 @@ primary = number | '(', expr, ')' | function_name, '(', expr, ')' | '-', primary
 
 number = digits | digits, '.', digits ;
 
-digits = digit | digits, digit ;
-
-digit = ? digit ? ;
+digits = ? digit ? | digits, ? digit ? ;
 
 function_name = 'sin' | 'cos' | 'tan' | 'arcsin' | 'arccos' | 'arctan' | 'sinh' | 'cosh' | 'tanh' | 'ln' | 'log' | 'log10' | 'sqrt' | 'abs' | 'exp' | 'floor' | 'ceil' | 'round' ;
