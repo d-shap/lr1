@@ -176,16 +176,7 @@ public class GrammarTokenizer extends Tokenizer.BaseTokenizer {
         }
 
         if (specialTerminals.contains("?digit?")) {
-            addTokenRule("?digit?", "0");
-            addTokenRule("?digit?", "1");
-            addTokenRule("?digit?", "2");
-            addTokenRule("?digit?", "3");
-            addTokenRule("?digit?", "4");
-            addTokenRule("?digit?", "5");
-            addTokenRule("?digit?", "6");
-            addTokenRule("?digit?", "7");
-            addTokenRule("?digit?", "8");
-            addTokenRule("?digit?", "9");
+            addTokenRule("?digit?", "[0-9]");
         }
 
         // 3. Одиночные символы
