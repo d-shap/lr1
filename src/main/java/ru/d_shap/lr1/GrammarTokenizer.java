@@ -73,39 +73,13 @@ public class GrammarTokenizer extends Tokenizer.BaseTokenizer {
     }
 
     /**
-     * Добавить правило для распознавания токена.
-     * Порядок добавления важен - правила проверяются по порядку!
-     *
-     * @param tokenType тип токена
-     * @param regex     регулярное выражение для распознавания
-     */
-    public void addTokenRule(final String tokenType, final String regex) {
-        tokenRules.add(new TokenRule(tokenType, regex));
-    }
-
-    /**
-     * Добавить несколько правил сразу.
-     *
-     * @param rules пары (тип, регулярное выражение)
-     */
-    public void addTokenRules(final String... rules) {
-        if (rules.length % 2 != 0) {
-            throw new IllegalArgumentException("Rules must come in pairs: type, regex, type, regex, ...");
-        }
-        for (int i = 0; i < rules.length; i += 2) {
-            addTokenRule(rules[i], rules[i + 1]);
-        }
-    }
-
-    /**
      * Инициализировать токенайзер из грамматики.
      * Автоматически добавляет правила для всех терминалов из грамматики.
      *
      * @param grammarMap     карта нетерминалов к их продукциям
      * @param allProductions список всех продукций
      */
-    public void initializeFromGrammar(final Map<String, List<Production>> grammarMap,
-                                      final List<Production> allProductions) {
+    public void initializeFromGrammar(final Map<String, List<Production>> grammarMap, final List<Production> allProductions) {
         // Собрать все терминалы из грамматики
         Set<String> terminals = extractTerminals(grammarMap, allProductions);
 
@@ -113,17 +87,7 @@ public class GrammarTokenizer extends Tokenizer.BaseTokenizer {
         addTerminalRules(terminals);
     }
 
-    /**
-     * Извлечь все терминалы из грамматики.
-     * Терминал - это символ, который не является нетерминалом.
-     *
-     * @param grammarMap     карта нетерминалов
-     * @param allProductions все продукции
-     *
-     * @return множество терминалов
-     */
-    private Set<String> extractTerminals(final Map<String, List<Production>> grammarMap,
-                                         final List<Production> allProductions) {
+    private Set<String> extractTerminals(final Map<String, List<Production>> grammarMap, final List<Production> allProductions) {
         Set<String> terminals = new HashSet<>();
         Set<String> nonTerminals = grammarMap.keySet();
 
@@ -202,15 +166,12 @@ public class GrammarTokenizer extends Tokenizer.BaseTokenizer {
         }
     }
 
-    /**
-     * Проверить, состоит ли строка из букв, цифр и подчёркивания.
-     *
-     * @param str строка для проверки
-     *
-     * @return true, если это валидный идентификатор
-     */
     private boolean isAlphaNumeric(final String str) {
         return str.matches("[a-zA-Z_][a-zA-Z0-9_]*");
+    }
+
+    private void addTokenRule(final String tokenType, final String regex) {
+        tokenRules.add(new TokenRule(tokenType, regex));
     }
 
     @Override
