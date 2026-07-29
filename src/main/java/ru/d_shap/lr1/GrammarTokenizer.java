@@ -124,6 +124,7 @@ public class GrammarTokenizer extends Tokenizer.BaseTokenizer {
         List<String> multiCharOperators = new ArrayList<>();
         List<String> singleCharOperators = new ArrayList<>();
         List<String> keywordTerminals = new ArrayList<>();
+        List<String> specialTerminals = new ArrayList<>();
 
         // Классифицировать терминалы
         for (String terminal : terminals) {
@@ -135,7 +136,11 @@ public class GrammarTokenizer extends Tokenizer.BaseTokenizer {
                 if (isAlphaNumeric(terminal)) {
                     keywordTerminals.add(terminal);
                 } else {
-                    multiCharOperators.add(terminal);
+                    if (terminal.startsWith("?") && terminal.endsWith("?")) {
+                        specialTerminals.add(terminal);
+                    } else {
+                        multiCharOperators.add(terminal);
+                    }
                 }
             } else {
                 singleCharOperators.add(terminal);
@@ -146,6 +151,7 @@ public class GrammarTokenizer extends Tokenizer.BaseTokenizer {
         Collections.sort(multiCharOperators);
         Collections.sort(singleCharOperators);
         Collections.sort(keywordTerminals);
+        Collections.sort(specialTerminals);
 
         // 1. Многосимвольные операторы (по длине убывая)
         Collections.sort(multiCharOperators, new Comparator<String>() {
@@ -167,6 +173,19 @@ public class GrammarTokenizer extends Tokenizer.BaseTokenizer {
         // 2. Ключевые слова (с проверкой границ слова)
         for (String keyword : keywordTerminals) {
             addTokenRule(keyword, "\\b" + Pattern.quote(keyword) + "\\b");
+        }
+
+        if (specialTerminals.contains("?digit?")) {
+            addTokenRule("?digit?", "0");
+            addTokenRule("?digit?", "1");
+            addTokenRule("?digit?", "2");
+            addTokenRule("?digit?", "3");
+            addTokenRule("?digit?", "4");
+            addTokenRule("?digit?", "5");
+            addTokenRule("?digit?", "6");
+            addTokenRule("?digit?", "7");
+            addTokenRule("?digit?", "8");
+            addTokenRule("?digit?", "9");
         }
 
         // 3. Одиночные символы
