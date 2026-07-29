@@ -17,7 +17,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 /// ////////////////////////////////////////////////////////////////////////////////////////////////
-package ru.d_shap.lr1.state;
+package ru.d_shap.lr1.parser;
 
 import java.io.Serializable;
 import java.util.ArrayList;

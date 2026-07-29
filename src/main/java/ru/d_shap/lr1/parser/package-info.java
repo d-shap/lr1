@@ -16,8 +16,8 @@
 //
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
-///////////////////////////////////////////////////////////////////////////////////////////////////
+/// ////////////////////////////////////////////////////////////////////////////////////////////////
 /**
- * Package contains parser state machine classes.
+ * Package contains LR(1) parser classes.
  */
-package ru.d_shap.lr1.state;
+package ru.d_shap.lr1.parser;
