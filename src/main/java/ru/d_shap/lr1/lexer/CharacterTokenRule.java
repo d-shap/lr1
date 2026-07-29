@@ -53,4 +53,9 @@ public final class CharacterTokenRule extends TokenRule {
         }
     }
 
+    @Override
+    public String toString() {
+        return "TokenRule{tokenType='" + getTokenType() + "', character='" + _character + "'}";
+    }
+
 }
