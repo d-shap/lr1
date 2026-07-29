@@ -28,6 +28,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+import ru.d_shap.lr1.lexer.CharacterTokenRule;
 import ru.d_shap.lr1.lexer.PatternTokenRule;
 import ru.d_shap.lr1.lexer.TokenRule;
 import ru.d_shap.lr1.parser.Production;
@@ -144,12 +145,21 @@ public class GrammarTokenizer extends Tokenizer.BaseTokenizer {
         }
 
         if (specialTerminals.contains("?digit?")) {
-            tokenRules.add(new PatternTokenRule("?digit?", "^" + "[0-9]"));
+            tokenRules.add(new CharacterTokenRule("?digit?", '0'));
+            tokenRules.add(new CharacterTokenRule("?digit?", '1'));
+            tokenRules.add(new CharacterTokenRule("?digit?", '2'));
+            tokenRules.add(new CharacterTokenRule("?digit?", '3'));
+            tokenRules.add(new CharacterTokenRule("?digit?", '4'));
+            tokenRules.add(new CharacterTokenRule("?digit?", '5'));
+            tokenRules.add(new CharacterTokenRule("?digit?", '6'));
+            tokenRules.add(new CharacterTokenRule("?digit?", '7'));
+            tokenRules.add(new CharacterTokenRule("?digit?", '8'));
+            tokenRules.add(new CharacterTokenRule("?digit?", '9'));
         }
 
         // 3. Одиночные символы
         for (String op : singleCharOperators) {
-            tokenRules.add(new PatternTokenRule(op, "^" + Pattern.quote(op)));
+            tokenRules.add(new CharacterTokenRule(op, op.charAt(0)));
         }
     }
 
