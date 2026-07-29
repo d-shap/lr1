@@ -54,4 +54,9 @@ public final class PatternTokenRule extends TokenRule {
         }
     }
 
+    @Override
+    public String toString() {
+        return "TokenRule{tokenType='" + getTokenType() + "', pattern='" + _pattern + "'}";
+    }
+
 }
