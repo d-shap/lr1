@@ -28,8 +28,8 @@ import ru.d_shap.lr1.ast.ASTBuilder;
 import ru.d_shap.lr1.ast.ASTNode;
 import ru.d_shap.lr1.ast.RuleNode;
 import ru.d_shap.lr1.ast.TerminalNode;
-import ru.d_shap.lr1.state.ActionGotoTable;
-import ru.d_shap.lr1.state.Production;
+import ru.d_shap.lr1.parser.ActionGotoTable;
+import ru.d_shap.lr1.parser.Production;
 
 /**
  * Основной движок LR(1) парсера.

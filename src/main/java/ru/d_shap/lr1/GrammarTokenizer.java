@@ -29,7 +29,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import ru.d_shap.lr1.state.Production;
+import ru.d_shap.lr1.parser.Production;
 
 /**
  * Универсальный токенайзер, полностью управляемый грамматикой.
