@@ -21,7 +21,6 @@ package ru.d_shap.lr1;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -90,7 +89,6 @@ public class GrammarTokenizer extends Tokenizer.BaseTokenizer {
      * @param terminals множество терминалов
      */
     private void addTerminalRules(final Set<String> terminals) {
-        List<String> multiCharOperators = new ArrayList<>();
         List<String> singleCharOperators = new ArrayList<>();
         List<String> keywordTerminals = new ArrayList<>();
         List<String> specialTerminals = new ArrayList<>();
@@ -102,14 +100,10 @@ public class GrammarTokenizer extends Tokenizer.BaseTokenizer {
             }
 
             if (terminal.length() > 1) {
-                if (isAlphaNumeric(terminal)) {
-                    keywordTerminals.add(terminal);
+                if (terminal.startsWith("?") && terminal.endsWith("?")) {
+                    specialTerminals.add(terminal);
                 } else {
-                    if (terminal.startsWith("?") && terminal.endsWith("?")) {
-                        specialTerminals.add(terminal);
-                    } else {
-                        multiCharOperators.add(terminal);
-                    }
+                    keywordTerminals.add(terminal);
                 }
             } else {
                 singleCharOperators.add(terminal);
@@ -117,27 +111,9 @@ public class GrammarTokenizer extends Tokenizer.BaseTokenizer {
         }
 
         // Сортировать для консистентности
-        Collections.sort(multiCharOperators);
         Collections.sort(singleCharOperators);
         Collections.sort(keywordTerminals);
         Collections.sort(specialTerminals);
-
-        // 1. Многосимвольные операторы (по длине убывая)
-        Collections.sort(multiCharOperators, new Comparator<String>() {
-
-            @Override
-            public int compare(final String a, final String b) {
-                int lenCmp = Integer.compare(b.length(), a.length());
-                if (lenCmp != 0) {
-                    return lenCmp;
-                }
-                return a.compareTo(b);
-            }
-        });
-
-        for (String op : multiCharOperators) {
-            tokenRules.add(new PatternTokenRule(op, "^" + Pattern.quote(op)));
-        }
 
         // 2. Ключевые слова (с проверкой границ слова)
         for (String keyword : keywordTerminals) {
