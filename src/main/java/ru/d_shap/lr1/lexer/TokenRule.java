@@ -51,4 +51,13 @@ public abstract class TokenRule implements Serializable {
         return _tokenType;
     }
 
+    /**
+     * Check if the text matches the rule.
+     *
+     * @param text the text.
+     *
+     * @return the matched text, or null if no match.
+     */
+    public abstract String match(String text);
+
 }
