@@ -135,30 +135,26 @@ public class GrammarTokenizer extends Tokenizer.BaseTokenizer {
         });
 
         for (String op : multiCharOperators) {
-            addTokenRule(op, Pattern.quote(op));
+            tokenRules.add(new PatternTokenRule(op, "^" + Pattern.quote(op)));
         }
 
         // 2. Ключевые слова (с проверкой границ слова)
         for (String keyword : keywordTerminals) {
-            addTokenRule(keyword, "\\b" + Pattern.quote(keyword) + "\\b");
+            tokenRules.add(new PatternTokenRule(keyword, "^" + "\\b" + Pattern.quote(keyword) + "\\b"));
         }
 
         if (specialTerminals.contains("?digit?")) {
-            addTokenRule("?digit?", "[0-9]");
+            tokenRules.add(new PatternTokenRule("?digit?", "^" + "[0-9]"));
         }
 
         // 3. Одиночные символы
         for (String op : singleCharOperators) {
-            addTokenRule(op, Pattern.quote(op));
+            tokenRules.add(new PatternTokenRule(op, "^" + Pattern.quote(op)));
         }
     }
 
     private boolean isAlphaNumeric(final String str) {
         return str.matches("[a-zA-Z_][a-zA-Z0-9_]*");
-    }
-
-    private void addTokenRule(final String tokenType, final String regex) {
-        tokenRules.add(new PatternTokenRule(tokenType, "^" + regex));
     }
 
     @Override
