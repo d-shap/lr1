@@ -26,9 +26,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import ru.d_shap.lr1.lexer.PatternTokenRule;
+import ru.d_shap.lr1.lexer.TokenRule;
 import ru.d_shap.lr1.parser.Production;
 
 /**
@@ -37,39 +38,6 @@ import ru.d_shap.lr1.parser.Production;
  * без каких-либо "волшебных" правил (NUMBER, IDENTIFIER и т.д.).
  */
 public class GrammarTokenizer extends Tokenizer.BaseTokenizer {
-
-    /**
-     * Правило для распознавания токена (паттерн + тип).
-     */
-    public static class TokenRule {
-
-        private final String tokenType;
-
-        private final Pattern pattern;
-
-        public TokenRule(final String tokenType, final String regex) {
-            super();
-            this.tokenType = tokenType;
-            pattern = Pattern.compile("^" + regex);
-        }
-
-        public String getTokenType() {
-            return tokenType;
-        }
-
-        public Pattern getPattern() {
-            return pattern;
-        }
-
-        @Override
-        public String toString() {
-            return "TokenRule{" +
-                    "tokenType='" + tokenType + '\'' +
-                    ", pattern=" + pattern +
-                    '}';
-        }
-
-    }
 
     private final List<TokenRule> tokenRules;
 
@@ -190,7 +158,7 @@ public class GrammarTokenizer extends Tokenizer.BaseTokenizer {
     }
 
     private void addTokenRule(final String tokenType, final String regex) {
-        tokenRules.add(new TokenRule(tokenType, regex));
+        tokenRules.add(new PatternTokenRule(tokenType, "^" + regex));
     }
 
     @Override
@@ -209,10 +177,9 @@ public class GrammarTokenizer extends Tokenizer.BaseTokenizer {
 
             for (TokenRule rule : tokenRules) {
                 String remaining = text.substring(position);
-                Matcher matcher = rule.getPattern().matcher(remaining);
+                String matchedText = rule.match(remaining);
 
-                if (matcher.find()) {
-                    String matchedText = matcher.group(0);
+                if (matchedText != null) {
                     String tokenType = rule.getTokenType();
 
                     Token token = new Token(tokenType, matchedText, line, column, position);
