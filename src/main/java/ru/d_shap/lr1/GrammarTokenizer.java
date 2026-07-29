@@ -60,6 +60,15 @@ public class GrammarTokenizer extends Tokenizer.BaseTokenizer {
         public Pattern getPattern() {
             return pattern;
         }
+
+        @Override
+        public String toString() {
+            return "TokenRule{" +
+                    "tokenType='" + tokenType + '\'' +
+                    ", pattern=" + pattern +
+                    '}';
+        }
+
     }
 
     private final List<TokenRule> tokenRules;
