@@ -35,14 +35,14 @@ import ru.d_shap.lr1.ebnf.EbnfToken;
 import ru.d_shap.lr1.ebnf.EbnfTokenizer;
 import ru.d_shap.lr1.ebnf.model.EbnfGrammar;
 import ru.d_shap.lr1.ebnf.validator.EbnfValidator;
-import ru.d_shap.lr1.state.ActionGotoTable;
-import ru.d_shap.lr1.state.FirstSetComputer;
-import ru.d_shap.lr1.state.GrammarConverter;
-import ru.d_shap.lr1.state.LR1Item;
-import ru.d_shap.lr1.state.LR1ItemSet;
-import ru.d_shap.lr1.state.LR1StateBuilder;
-import ru.d_shap.lr1.state.LR1TableBuilder;
-import ru.d_shap.lr1.state.Production;
+import ru.d_shap.lr1.parser.ActionGotoTable;
+import ru.d_shap.lr1.parser.FirstSetComputer;
+import ru.d_shap.lr1.parser.GrammarConverter;
+import ru.d_shap.lr1.parser.LR1Item;
+import ru.d_shap.lr1.parser.LR1ItemSet;
+import ru.d_shap.lr1.parser.LR1StateBuilder;
+import ru.d_shap.lr1.parser.LR1TableBuilder;
+import ru.d_shap.lr1.parser.Production;
 
 /**
  * The test runner.
