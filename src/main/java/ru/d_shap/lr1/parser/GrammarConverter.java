@@ -24,16 +24,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import ru.d_shap.lr1.ebnf.model.EbnfChoice;
-import ru.d_shap.lr1.ebnf.model.EbnfGrammar;
-import ru.d_shap.lr1.ebnf.model.EbnfNode;
-import ru.d_shap.lr1.ebnf.model.EbnfOptional;
-import ru.d_shap.lr1.ebnf.model.EbnfRepeat;
-import ru.d_shap.lr1.ebnf.model.EbnfRule;
-import ru.d_shap.lr1.ebnf.model.EbnfRuleReference;
-import ru.d_shap.lr1.ebnf.model.EbnfSequence;
-import ru.d_shap.lr1.ebnf.model.EbnfSpecialSequence;
-import ru.d_shap.lr1.ebnf.model.EbnfTerminal;
+import ru.d_shap.lr1.model.EbnfChoice;
+import ru.d_shap.lr1.model.EbnfGrammar;
+import ru.d_shap.lr1.model.EbnfNode;
+import ru.d_shap.lr1.model.EbnfOptional;
+import ru.d_shap.lr1.model.EbnfRepeat;
+import ru.d_shap.lr1.model.EbnfRule;
+import ru.d_shap.lr1.model.EbnfRuleReference;
+import ru.d_shap.lr1.model.EbnfSequence;
+import ru.d_shap.lr1.model.EbnfSpecialSequence;
+import ru.d_shap.lr1.model.EbnfTerminal;
 
 /**
  * Converts EBNF grammar to LR(1) Production rules.
