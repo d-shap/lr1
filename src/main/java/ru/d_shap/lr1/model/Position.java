@@ -70,4 +70,9 @@ public final class Position implements Serializable {
         return _column;
     }
 
+    @Override
+    public String toString() {
+        return String.format(" at line %s, column %s", _line, _column);
+    }
+
 }
