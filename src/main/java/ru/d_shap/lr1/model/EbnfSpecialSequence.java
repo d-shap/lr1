@@ -1,4 +1,4 @@
-/// ////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////
 // LR(1) parser implementation.
 // Copyright (C) 2026 Dmitry Shapovalov.
 //
@@ -16,39 +16,39 @@
 //
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
-/// ////////////////////////////////////////////////////////////////////////////////////////////////
-package ru.d_shap.lr1.ebnf.model;
+///////////////////////////////////////////////////////////////////////////////////////////////////
+package ru.d_shap.lr1.model;
 
 /**
- * The EBNF terminal.
+ * The EBNF special sequence.
  *
  * @author Dmitry Shapovalov
  */
-public final class EbnfTerminal extends EbnfNode {
+public final class EbnfSpecialSequence extends EbnfNode {
 
     private static final long serialVersionUID = 1L;
 
-    private final String _value;
+    private final String _text;
 
     /**
      * Create new object.
      *
-     * @param line the line number.
+     * @param line   the line number.
      * @param column the column number.
-     * @param value the value of the EBNF terminal.
+     * @param text   the text of the EBNF special sequence.
      */
-    public EbnfTerminal(final int line, final int column, final String value) {
+    public EbnfSpecialSequence(final int line, final int column, final String text) {
         super(line, column);
-        _value = value;
+        _text = text;
     }
 
     /**
-     * Get the value of the EBNF terminal.
+     * Get the text of the EBNF special sequence.
      *
-     * @return the value of the EBNF terminal.
+     * @return the text of the EBNF special sequence.
      */
-    public String getValue() {
-        return _value;
+    public String getText() {
+        return _text;
     }
 
 }

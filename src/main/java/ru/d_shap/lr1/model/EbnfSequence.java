@@ -1,4 +1,4 @@
-/// ////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////
 // LR(1) parser implementation.
 // Copyright (C) 2026 Dmitry Shapovalov.
 //
@@ -16,18 +16,18 @@
 //
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
-/// ////////////////////////////////////////////////////////////////////////////////////////////////
-package ru.d_shap.lr1.ebnf.model;
+///////////////////////////////////////////////////////////////////////////////////////////////////
+package ru.d_shap.lr1.model;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The EBNF choice.
+ * The EBNF sequence.
  *
  * @author Dmitry Shapovalov
  */
-public final class EbnfChoice extends EbnfNode {
+public final class EbnfSequence extends EbnfNode {
 
     private static final long serialVersionUID = 1L;
 
@@ -36,11 +36,11 @@ public final class EbnfChoice extends EbnfNode {
     /**
      * Create new object.
      *
-     * @param line the line number.
-     * @param column the column number.
-     * @param expressions the expressions of the EBNF choice.
+     * @param line        the line number.
+     * @param column      the column number.
+     * @param expressions the expressions of the EBNF sequence.
      */
-    public EbnfChoice(final int line, final int column, final List<EbnfNode> expressions) {
+    public EbnfSequence(final int line, final int column, final List<EbnfNode> expressions) {
         super(line, column);
         if (expressions == null) {
             _expressions = null;
@@ -50,9 +50,9 @@ public final class EbnfChoice extends EbnfNode {
     }
 
     /**
-     * Get the number of the expressions in the EBNF choice.
+     * Get the number of the expressions in the EBNF sequence.
      *
-     * @return the number of the expressions in the EBNF choice.
+     * @return the number of the expressions in the EBNF sequence.
      */
     public int getCount() {
         if (_expressions == null) {
@@ -63,11 +63,11 @@ public final class EbnfChoice extends EbnfNode {
     }
 
     /**
-     * Get the expression of the EBNF choice at the specified index.
+     * Get the expression of the EBNF sequence at the specified index.
      *
      * @param index the specified index.
      *
-     * @return the expression of the EBNF choice at the specified index.
+     * @return the expression of the EBNF sequence at the specified index.
      */
     public EbnfNode getExpression(final int index) {
         if (_expressions == null) {

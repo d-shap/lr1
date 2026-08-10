@@ -1,4 +1,4 @@
-/// ////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////
 // LR(1) parser implementation.
 // Copyright (C) 2026 Dmitry Shapovalov.
 //
@@ -16,52 +16,39 @@
 //
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
-/// ////////////////////////////////////////////////////////////////////////////////////////////////
-package ru.d_shap.lr1.ebnf.model;
-
-import java.io.Serializable;
+///////////////////////////////////////////////////////////////////////////////////////////////////
+package ru.d_shap.lr1.model;
 
 /**
- * The EBNF node.
+ * The EBNF optional.
  *
  * @author Dmitry Shapovalov
  */
-public abstract class EbnfNode implements Serializable {
+public final class EbnfOptional extends EbnfNode {
 
     private static final long serialVersionUID = 1L;
 
-    private final int _line;
-
-    private final int _column;
+    private final EbnfNode _expression;
 
     /**
      * Create new object.
      *
-     * @param line the line number.
-     * @param column the column number.
+     * @param line       the line number.
+     * @param column     the column number.
+     * @param expression the expression of the EBNF optional.
      */
-    protected EbnfNode(final int line, final int column) {
-        super();
-        _line = line;
-        _column = column;
+    public EbnfOptional(final int line, final int column, final EbnfNode expression) {
+        super(line, column);
+        _expression = expression;
     }
 
     /**
-     * Get the line number.
+     * Get the expression of the EBNF optional.
      *
-     * @return the line number.
+     * @return the expression of the EBNF optional.
      */
-    public int getLine() {
-        return _line;
-    }
-
-    /**
-     * Get the column number.
-     *
-     * @return the column number.
-     */
-    public int getColumn() {
-        return _column;
+    public EbnfNode getExpression() {
+        return _expression;
     }
 
 }

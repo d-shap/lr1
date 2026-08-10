@@ -1,4 +1,4 @@
-/// ////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////
 // LR(1) parser implementation.
 // Copyright (C) 2026 Dmitry Shapovalov.
 //
@@ -16,39 +16,39 @@
 //
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
-/// ////////////////////////////////////////////////////////////////////////////////////////////////
-package ru.d_shap.lr1.ebnf.model;
+///////////////////////////////////////////////////////////////////////////////////////////////////
+package ru.d_shap.lr1.model;
 
 /**
- * The EBNF optional.
+ * The EBNF terminal.
  *
  * @author Dmitry Shapovalov
  */
-public final class EbnfOptional extends EbnfNode {
+public final class EbnfTerminal extends EbnfNode {
 
     private static final long serialVersionUID = 1L;
 
-    private final EbnfNode _expression;
+    private final String _value;
 
     /**
      * Create new object.
      *
-     * @param line       the line number.
-     * @param column     the column number.
-     * @param expression the expression of the EBNF optional.
+     * @param line   the line number.
+     * @param column the column number.
+     * @param value  the value of the EBNF terminal.
      */
-    public EbnfOptional(final int line, final int column, final EbnfNode expression) {
+    public EbnfTerminal(final int line, final int column, final String value) {
         super(line, column);
-        _expression = expression;
+        _value = value;
     }
 
     /**
-     * Get the expression of the EBNF optional.
+     * Get the value of the EBNF terminal.
      *
-     * @return the expression of the EBNF optional.
+     * @return the value of the EBNF terminal.
      */
-    public EbnfNode getExpression() {
-        return _expression;
+    public String getValue() {
+        return _value;
     }
 
 }

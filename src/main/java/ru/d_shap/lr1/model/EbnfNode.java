@@ -1,4 +1,4 @@
-/// ////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////
 // LR(1) parser implementation.
 // Copyright (C) 2026 Dmitry Shapovalov.
 //
@@ -16,39 +16,52 @@
 //
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
-/// ////////////////////////////////////////////////////////////////////////////////////////////////
-package ru.d_shap.lr1.ebnf.model;
+///////////////////////////////////////////////////////////////////////////////////////////////////
+package ru.d_shap.lr1.model;
+
+import java.io.Serializable;
 
 /**
- * The EBNF special sequence.
+ * The EBNF node.
  *
  * @author Dmitry Shapovalov
  */
-public final class EbnfSpecialSequence extends EbnfNode {
+public abstract class EbnfNode implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private final String _text;
+    private final int _line;
+
+    private final int _column;
 
     /**
      * Create new object.
      *
      * @param line   the line number.
      * @param column the column number.
-     * @param text   the text of the EBNF special sequence.
      */
-    public EbnfSpecialSequence(final int line, final int column, final String text) {
-        super(line, column);
-        _text = text;
+    protected EbnfNode(final int line, final int column) {
+        super();
+        _line = line;
+        _column = column;
     }
 
     /**
-     * Get the text of the EBNF special sequence.
+     * Get the line number.
      *
-     * @return the text of the EBNF special sequence.
+     * @return the line number.
      */
-    public String getText() {
-        return _text;
+    public int getLine() {
+        return _line;
+    }
+
+    /**
+     * Get the column number.
+     *
+     * @return the column number.
+     */
+    public int getColumn() {
+        return _column;
     }
 
 }
