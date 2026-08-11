@@ -72,4 +72,35 @@ public final class PositionTest {
         }
     }
 
+    /**
+     * {@link Position} class test.
+     */
+    @Test
+    public void getLineTest() {
+        Assertions.assertThat(new Position(1, 1).getLine()).isEqualTo(1);
+        Assertions.assertThat(new Position(2, 1).getLine()).isEqualTo(2);
+        Assertions.assertThat(new Position(3, 1).getLine()).isEqualTo(3);
+    }
+
+    /**
+     * {@link Position} class test.
+     */
+    @Test
+    public void getColumnTest() {
+        Assertions.assertThat(new Position(1, 1).getColumn()).isEqualTo(1);
+        Assertions.assertThat(new Position(1, 2).getColumn()).isEqualTo(2);
+        Assertions.assertThat(new Position(1, 3).getColumn()).isEqualTo(3);
+    }
+
+    /**
+     * {@link Position} class test.
+     */
+    @Test
+    public void toStringTest() {
+        Assertions.assertThat(new Position(1, 1)).hasToString(" at (line 1; column 1)");
+        Assertions.assertThat(new Position(2, 1)).hasToString(" at (line 2; column 1)");
+        Assertions.assertThat(new Position(1, 2)).hasToString(" at (line 1; column 2)");
+        Assertions.assertThat(new Position(3, 3)).hasToString(" at (line 3; column 3)");
+    }
+
 }
