@@ -86,7 +86,7 @@ public final class EbnfValidator {
         // Collect all defined rules
         for (EbnfRule rule : rules) {
             if (_definedRules.containsKey(rule.getName())) {
-                _errors.add(new EbnfDuplicateRuleException(rule.getLine(), rule.getColumn(), rule.getName()));
+                _errors.add(new EbnfDuplicateRuleException(rule.getPosition().getLine(), rule.getPosition().getColumn(), rule.getName()));
             } else {
                 _definedRules.put(rule.getName(), rule);
             }
@@ -106,7 +106,7 @@ public final class EbnfValidator {
         for (int i = 1; i < rules.size(); i++) {
             EbnfRule rule = rules.get(i);
             if (!_reachableRules.contains(rule.getName())) {
-                _errors.add(new EbnfUnreachableRuleException(rule.getLine(), rule.getColumn(), rule.getName()));
+                _errors.add(new EbnfUnreachableRuleException(rule.getPosition().getLine(), rule.getPosition().getColumn(), rule.getName()));
             }
         }
 
@@ -148,7 +148,7 @@ public final class EbnfValidator {
     private void validateRuleReference(final EbnfRuleReference node) {
         String ruleName = node.getName();
         if (!_definedRules.containsKey(ruleName)) {
-            _errors.add(new EbnfUndefinedRuleException(node.getLine(), node.getColumn(), ruleName));
+            _errors.add(new EbnfUndefinedRuleException(node.getPosition().getLine(), node.getPosition().getColumn(), ruleName));
         }
     }
 
