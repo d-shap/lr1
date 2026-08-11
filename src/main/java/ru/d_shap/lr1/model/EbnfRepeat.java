@@ -39,13 +39,12 @@ public final class EbnfRepeat extends EbnfNode {
     /**
      * Create new object.
      *
-     * @param line       the line number.
-     * @param column     the column number.
+     * @param position   the position.
      * @param expression the expression of the EBNF repeat.
      * @param operator   the repeat operator ("*" or "+").
      */
-    public EbnfRepeat(final int line, final int column, final EbnfNode expression, final String operator) {
-        super(line, column);
+    public EbnfRepeat(final Position position, final EbnfNode expression, final String operator) {
+        super(position);
         _expression = expression;
         if ("*".equals(operator) || "+".equals(operator)) {
             _operator = operator;

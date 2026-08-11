@@ -35,13 +35,12 @@ public final class EbnfExcept extends EbnfNode {
     /**
      * Create new object.
      *
-     * @param line      the line number.
-     * @param column    the column number.
+     * @param position  the position.
      * @param base      the base expression of the EBNF exception.
      * @param exception the exception expression (to exclude) of the EBNF exception.
      */
-    public EbnfExcept(final int line, final int column, final EbnfNode base, final EbnfNode exception) {
-        super(line, column);
+    public EbnfExcept(final Position position, final EbnfNode base, final EbnfNode exception) {
+        super(position);
         _base = base;
         _exception = exception;
     }

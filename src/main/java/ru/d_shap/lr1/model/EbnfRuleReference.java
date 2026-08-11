@@ -33,12 +33,11 @@ public final class EbnfRuleReference extends EbnfNode {
     /**
      * Create new object.
      *
-     * @param line   the line number.
-     * @param column the column number.
-     * @param name   the name of the EBNF rule.
+     * @param position the position.
+     * @param name     the name of the EBNF rule.
      */
-    public EbnfRuleReference(final int line, final int column, final String name) {
-        super(line, column);
+    public EbnfRuleReference(final Position position, final String name) {
+        super(position);
         _name = name;
     }
 

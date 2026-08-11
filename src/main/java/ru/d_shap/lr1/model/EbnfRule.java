@@ -35,13 +35,12 @@ public final class EbnfRule extends EbnfNode {
     /**
      * Create new object.
      *
-     * @param line       the line number.
-     * @param column     the column number.
+     * @param position   the position.
      * @param name       the name of the EBNF rule.
      * @param expression the expression of the EBNF rule.
      */
-    public EbnfRule(final int line, final int column, final String name, final EbnfNode expression) {
-        super(line, column);
+    public EbnfRule(final Position position, final String name, final EbnfNode expression) {
+        super(position);
         _name = name;
         _expression = expression;
     }

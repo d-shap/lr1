@@ -36,12 +36,11 @@ public final class EbnfChoice extends EbnfNode {
     /**
      * Create new object.
      *
-     * @param line        the line number.
-     * @param column      the column number.
+     * @param position    the position.
      * @param expressions the expressions of the EBNF choice.
      */
-    public EbnfChoice(final int line, final int column, final List<EbnfNode> expressions) {
-        super(line, column);
+    public EbnfChoice(final Position position, final List<EbnfNode> expressions) {
+        super(position);
         if (expressions == null) {
             _expressions = null;
         } else {

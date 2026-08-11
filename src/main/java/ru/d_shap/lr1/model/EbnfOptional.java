@@ -33,12 +33,11 @@ public final class EbnfOptional extends EbnfNode {
     /**
      * Create new object.
      *
-     * @param line       the line number.
-     * @param column     the column number.
+     * @param position   the position.
      * @param expression the expression of the EBNF optional.
      */
-    public EbnfOptional(final int line, final int column, final EbnfNode expression) {
-        super(line, column);
+    public EbnfOptional(final Position position, final EbnfNode expression) {
+        super(position);
         _expression = expression;
     }
 

@@ -33,12 +33,11 @@ public final class EbnfTerminal extends EbnfNode {
     /**
      * Create new object.
      *
-     * @param line   the line number.
-     * @param column the column number.
-     * @param value  the value of the EBNF terminal.
+     * @param position the position.
+     * @param value    the value of the EBNF terminal.
      */
-    public EbnfTerminal(final int line, final int column, final String value) {
-        super(line, column);
+    public EbnfTerminal(final Position position, final String value) {
+        super(position);
         _value = value;
     }
 

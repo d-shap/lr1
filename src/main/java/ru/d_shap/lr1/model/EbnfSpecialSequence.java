@@ -33,12 +33,11 @@ public final class EbnfSpecialSequence extends EbnfNode {
     /**
      * Create new object.
      *
-     * @param line   the line number.
-     * @param column the column number.
-     * @param text   the text of the EBNF special sequence.
+     * @param position the position.
+     * @param text     the text of the EBNF special sequence.
      */
-    public EbnfSpecialSequence(final int line, final int column, final String text) {
-        super(line, column);
+    public EbnfSpecialSequence(final Position position, final String text) {
+        super(position);
         _text = text;
     }
 
