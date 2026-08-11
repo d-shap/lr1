@@ -26,42 +26,32 @@ import java.io.Serializable;
  *
  * @author Dmitry Shapovalov
  */
-public abstract class EbnfNode implements Serializable {
+public class EbnfNode implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private final int _line;
-
-    private final int _column;
+    private final Position _position;
 
     /**
      * Create new object.
      *
-     * @param line   the line number.
-     * @param column the column number.
+     * @param position the position.
      */
-    protected EbnfNode(final int line, final int column) {
+    protected EbnfNode(final Position position) {
         super();
-        _line = line;
-        _column = column;
+        if (position == null) {
+            throw new NullPointerException("Position should not be null");
+        }
+        _position = position;
     }
 
     /**
-     * Get the line number.
+     * Get the position.
      *
-     * @return the line number.
+     * @return the position.
      */
-    public int getLine() {
-        return _line;
-    }
-
-    /**
-     * Get the column number.
-     *
-     * @return the column number.
-     */
-    public int getColumn() {
-        return _column;
+    public final Position getPosition() {
+        return _position;
     }
 
 }
