@@ -22,6 +22,7 @@ package ru.d_shap.lr1.model;
 import org.junit.Test;
 
 import ru.d_shap.assertions.Assertions;
+import ru.d_shap.assertions.util.SerializationHelper;
 
 /**
  * Tests for {@link Position}.
@@ -101,6 +102,17 @@ public final class PositionTest {
         Assertions.assertThat(new Position(2, 1)).hasToString(" at (line 2; column 1)");
         Assertions.assertThat(new Position(1, 2)).hasToString(" at (line 1; column 2)");
         Assertions.assertThat(new Position(3, 3)).hasToString(" at (line 3; column 3)");
+    }
+
+    /**
+     * {@link Position} class test.
+     */
+    @Test
+    public void serializationTest() {
+        Position position = new Position(10, 20);
+        Position deserialized = SerializationHelper.serializeAndDeserialize(position);
+        Assertions.assertThat(deserialized.getLine()).isEqualTo(10);
+        Assertions.assertThat(deserialized.getColumn()).isEqualTo(20);
     }
 
 }
