@@ -37,43 +37,35 @@ public final class EbnfChoice extends EbnfNode {
      * Create new object.
      *
      * @param position    the position.
-     * @param expressions the expressions of the EBNF choice.
+     * @param expressions the expressions.
      */
     public EbnfChoice(final Position position, final List<EbnfNode> expressions) {
         super(position);
         if (expressions == null) {
-            _expressions = null;
-        } else {
-            _expressions = new ArrayList<>(expressions);
+            throw new NullPointerException("Expressions should not be null");
         }
+        _expressions = new ArrayList<>(expressions);
     }
 
     /**
-     * Get the number of the expressions in the EBNF choice.
+     * Get the number of the expressions.
      *
-     * @return the number of the expressions in the EBNF choice.
+     * @return the number of the expressions.
      */
     public int getCount() {
-        if (_expressions == null) {
-            return 0;
-        } else {
-            return _expressions.size();
-        }
+        return _expressions.size();
     }
 
     /**
-     * Get the expression of the EBNF choice at the specified index.
+     * Get the expression at the specified index.
      *
      * @param index the specified index.
      *
-     * @return the expression of the EBNF choice at the specified index.
+     * @return the expression at the specified index.
      */
     public EbnfNode getExpression(final int index) {
-        if (_expressions == null) {
-            return null;
-        }
         if (index < 0 || index >= _expressions.size()) {
-            return null;
+            throw new IndexOutOfBoundsException("Index should be in bounds");
         }
         return _expressions.get(index);
     }
