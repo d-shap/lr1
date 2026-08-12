@@ -65,8 +65,7 @@ public final class EbnfRule extends EbnfNode {
 
     @Override
     public String toString() {
-        Position position = getPosition();
-        return String.format("Rule(%s=%s) %s", _name, _expression, position);
+        return String.format("Rule(%s=%s)", _name, _expression);
     }
 
 }

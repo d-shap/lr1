@@ -80,8 +80,7 @@ public final class EbnfChoice extends EbnfNode {
 
     @Override
     public String toString() {
-        Position position = getPosition();
-        return String.format("Choice(%s) %s", _expressions, position);
+        return String.format("Choice(%s)", _expressions);
     }
 
 }

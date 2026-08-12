@@ -65,8 +65,7 @@ public final class EbnfExcept extends EbnfNode {
 
     @Override
     public String toString() {
-        Position position = getPosition();
-        return String.format("Except(%s-%s) %s", _base, _exception, position);
+        return String.format("Except(%s-%s)", _base, _exception);
     }
 
 }

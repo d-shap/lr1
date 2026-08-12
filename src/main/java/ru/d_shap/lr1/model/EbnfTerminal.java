@@ -52,8 +52,7 @@ public final class EbnfTerminal extends EbnfNode {
 
     @Override
     public String toString() {
-        Position position = getPosition();
-        return String.format("Terminal(%s) %s", _value, position);
+        return String.format("Terminal(%s)", _value);
     }
 
 }

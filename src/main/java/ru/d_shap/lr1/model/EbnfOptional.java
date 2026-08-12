@@ -52,8 +52,7 @@ public final class EbnfOptional extends EbnfNode {
 
     @Override
     public String toString() {
-        Position position = getPosition();
-        return String.format("Optional(%s) %s", _expression, position);
+        return String.format("Optional(%s)", _expression);
     }
 
 }
