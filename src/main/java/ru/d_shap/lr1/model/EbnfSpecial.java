@@ -20,11 +20,11 @@
 package ru.d_shap.lr1.model;
 
 /**
- * The EBNF special sequence.
+ * The EBNF special.
  *
  * @author Dmitry Shapovalov
  */
-public final class EbnfSpecialSequence extends EbnfNode {
+public final class EbnfSpecial extends EbnfNode {
 
     private static final long serialVersionUID = 1L;
 
@@ -36,7 +36,7 @@ public final class EbnfSpecialSequence extends EbnfNode {
      * @param position the position.
      * @param text     the text of the EBNF special sequence.
      */
-    public EbnfSpecialSequence(final Position position, final String text) {
+    public EbnfSpecial(final Position position, final String text) {
         super(position);
         _text = text;
     }
