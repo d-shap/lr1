@@ -98,10 +98,10 @@ public final class PositionTest {
      */
     @Test
     public void toStringTest() {
-        Assertions.assertThat(new Position(1, 1)).hasToString("at (line 1; column 1)");
-        Assertions.assertThat(new Position(2, 1)).hasToString("at (line 2; column 1)");
-        Assertions.assertThat(new Position(1, 2)).hasToString("at (line 1; column 2)");
-        Assertions.assertThat(new Position(3, 3)).hasToString("at (line 3; column 3)");
+        Assertions.assertThat(new Position(1, 1)).hasToString("(line 1; column 1)");
+        Assertions.assertThat(new Position(2, 1)).hasToString("(line 2; column 1)");
+        Assertions.assertThat(new Position(1, 2)).hasToString("(line 1; column 2)");
+        Assertions.assertThat(new Position(3, 3)).hasToString("(line 3; column 3)");
     }
 
     /**
