@@ -50,4 +50,10 @@ public final class EbnfSpecial extends EbnfNode {
         return _text;
     }
 
+    @Override
+    public String toString() {
+        Position position = getPosition();
+        return String.format("Special(%s) %s", _text, position);
+    }
+
 }

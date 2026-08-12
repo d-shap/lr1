@@ -71,4 +71,10 @@ public final class EbnfRepeat extends EbnfNode {
         return _operator;
     }
 
+    @Override
+    public String toString() {
+        Position position = getPosition();
+        return String.format("Repeat(%s%s) %s", _expression, _operator, position);
+    }
+
 }

@@ -50,4 +50,10 @@ public final class EbnfReference extends EbnfNode {
         return _name;
     }
 
+    @Override
+    public String toString() {
+        Position position = getPosition();
+        return String.format("Reference(%s) %s", _name, position);
+    }
+
 }

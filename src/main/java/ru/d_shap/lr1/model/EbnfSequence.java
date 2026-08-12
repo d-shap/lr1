@@ -78,4 +78,10 @@ public final class EbnfSequence extends EbnfNode {
         return _expressions.get(index);
     }
 
+    @Override
+    public String toString() {
+        Position position = getPosition();
+        return String.format("Sequence(%s) %s", _expressions, position);
+    }
+
 }
