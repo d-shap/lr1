@@ -20,11 +20,11 @@
 package ru.d_shap.lr1.model;
 
 /**
- * The EBNF rule reference.
+ * The EBNF reference.
  *
  * @author Dmitry Shapovalov
  */
-public final class EbnfRuleReference extends EbnfNode {
+public final class EbnfReference extends EbnfNode {
 
     private static final long serialVersionUID = 1L;
 
@@ -36,7 +36,7 @@ public final class EbnfRuleReference extends EbnfNode {
      * @param position the position.
      * @param name     the name of the EBNF rule.
      */
-    public EbnfRuleReference(final Position position, final String name) {
+    public EbnfReference(final Position position, final String name) {
         super(position);
         _name = name;
     }
