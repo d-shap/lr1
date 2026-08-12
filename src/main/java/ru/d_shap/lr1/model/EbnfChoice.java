@@ -20,6 +20,7 @@
 package ru.d_shap.lr1.model;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -74,7 +75,20 @@ public final class EbnfChoice extends EbnfNode {
 
     @Override
     public String toString() {
-        return String.format("Choice(%s)", _expressions);
+        StringBuilder stringBuilder = new StringBuilder();
+        Iterator<EbnfNode> iterator = _expressions.iterator();
+        while (true) {
+            if (iterator.hasNext()) {
+                EbnfNode node = iterator.next();
+                stringBuilder.append(node);
+            }
+            if (iterator.hasNext()) {
+                stringBuilder.append(", ");
+            } else {
+                break;
+            }
+        }
+        return String.format("Choice(%s)", stringBuilder);
     }
 
 }
