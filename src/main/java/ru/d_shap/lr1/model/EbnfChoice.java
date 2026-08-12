@@ -64,8 +64,10 @@ public final class EbnfChoice extends EbnfNode {
      * @return the expression at the specified index.
      */
     public EbnfNode getExpression(final int index) {
-        if (index < 0 || index >= _expressions.size()) {
-            throw new IndexOutOfBoundsException("Index should be in bounds");
+        int size = _expressions.size();
+        if (index < 0 || index >= size) {
+            String message = String.format("Index %s should be in bounds (0, %s)", index, size);
+            throw new IndexOutOfBoundsException(message);
         }
         return _expressions.get(index);
     }
