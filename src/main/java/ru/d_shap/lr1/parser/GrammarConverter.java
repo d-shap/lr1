@@ -28,11 +28,11 @@ import ru.d_shap.lr1.model.EbnfChoice;
 import ru.d_shap.lr1.model.EbnfGrammar;
 import ru.d_shap.lr1.model.EbnfNode;
 import ru.d_shap.lr1.model.EbnfOptional;
+import ru.d_shap.lr1.model.EbnfReference;
 import ru.d_shap.lr1.model.EbnfRepeat;
 import ru.d_shap.lr1.model.EbnfRule;
-import ru.d_shap.lr1.model.EbnfRuleReference;
 import ru.d_shap.lr1.model.EbnfSequence;
-import ru.d_shap.lr1.model.EbnfSpecialSequence;
+import ru.d_shap.lr1.model.EbnfSpecial;
 import ru.d_shap.lr1.model.EbnfTerminal;
 
 /**
@@ -105,8 +105,8 @@ public final class GrammarConverter {
             EbnfTerminal terminal = (EbnfTerminal) node;
             rhs.add(terminal.getValue());
 
-        } else if (node instanceof EbnfRuleReference) {
-            EbnfRuleReference ref = (EbnfRuleReference) node;
+        } else if (node instanceof EbnfReference) {
+            EbnfReference ref = (EbnfReference) node;
             rhs.add(ref.getName());
 
         } else if (node instanceof EbnfSequence) {
@@ -170,9 +170,9 @@ public final class GrammarConverter {
 
             rhs.add(auxName);
 
-        } else if (node instanceof EbnfSpecialSequence) {
+        } else if (node instanceof EbnfSpecial) {
             // Special sequence: treat as a terminal (e.g., ?whitespace?)
-            EbnfSpecialSequence special = (EbnfSpecialSequence) node;
+            EbnfSpecial special = (EbnfSpecial) node;
             rhs.add("?" + special.getText() + "?");
         }
     }

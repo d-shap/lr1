@@ -32,11 +32,11 @@ import ru.d_shap.lr1.model.EbnfExcept;
 import ru.d_shap.lr1.model.EbnfGrammar;
 import ru.d_shap.lr1.model.EbnfNode;
 import ru.d_shap.lr1.model.EbnfOptional;
+import ru.d_shap.lr1.model.EbnfReference;
 import ru.d_shap.lr1.model.EbnfRepeat;
 import ru.d_shap.lr1.model.EbnfRule;
-import ru.d_shap.lr1.model.EbnfRuleReference;
 import ru.d_shap.lr1.model.EbnfSequence;
-import ru.d_shap.lr1.model.EbnfSpecialSequence;
+import ru.d_shap.lr1.model.EbnfSpecial;
 import ru.d_shap.lr1.model.EbnfTerminal;
 
 /**
@@ -130,8 +130,8 @@ public final class EbnfValidator {
             return;
         }
 
-        if (node instanceof EbnfRuleReference) {
-            validateRuleReference((EbnfRuleReference) node);
+        if (node instanceof EbnfReference) {
+            validateRuleReference((EbnfReference) node);
         } else if (node instanceof EbnfChoice) {
             validateChoice((EbnfChoice) node);
         } else if (node instanceof EbnfSequence) {
@@ -145,7 +145,7 @@ public final class EbnfValidator {
         }
     }
 
-    private void validateRuleReference(final EbnfRuleReference node) {
+    private void validateRuleReference(final EbnfReference node) {
         String ruleName = node.getName();
         if (!_definedRules.containsKey(ruleName)) {
             _errors.add(new EbnfUndefinedRuleException(node.getPosition().getLine(), node.getPosition().getColumn(), ruleName));
@@ -194,8 +194,8 @@ public final class EbnfValidator {
             return;
         }
 
-        if (node instanceof EbnfRuleReference) {
-            String referencedRule = ((EbnfRuleReference) node).getName();
+        if (node instanceof EbnfReference) {
+            String referencedRule = ((EbnfReference) node).getName();
             buildReachableRules(referencedRule);
         } else if (node instanceof EbnfChoice) {
             EbnfChoice choice = (EbnfChoice) node;
@@ -235,8 +235,8 @@ public final class EbnfValidator {
             return;
         }
 
-        if (node instanceof EbnfRuleReference) {
-            String ruleName = ((EbnfRuleReference) node).getName();
+        if (node instanceof EbnfReference) {
+            String ruleName = ((EbnfReference) node).getName();
             if (!references.contains(ruleName)) {
                 references.add(ruleName);
             }
@@ -284,7 +284,7 @@ public final class EbnfValidator {
             return true;
         }
 
-        if (node instanceof EbnfTerminal || node instanceof EbnfSpecialSequence) {
+        if (node instanceof EbnfTerminal || node instanceof EbnfSpecial) {
             return false;
         }
 
@@ -316,8 +316,8 @@ public final class EbnfValidator {
             return true;
         }
 
-        if (node instanceof EbnfRuleReference) {
-            String ruleName = ((EbnfRuleReference) node).getName();
+        if (node instanceof EbnfReference) {
+            String ruleName = ((EbnfReference) node).getName();
             if (visitingRules.contains(ruleName)) {
                 // Cycle detected - treat as non-empty to break recursion
                 return false;

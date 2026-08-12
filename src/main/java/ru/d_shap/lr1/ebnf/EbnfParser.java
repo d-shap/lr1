@@ -27,11 +27,11 @@ import ru.d_shap.lr1.model.EbnfExcept;
 import ru.d_shap.lr1.model.EbnfGrammar;
 import ru.d_shap.lr1.model.EbnfNode;
 import ru.d_shap.lr1.model.EbnfOptional;
+import ru.d_shap.lr1.model.EbnfReference;
 import ru.d_shap.lr1.model.EbnfRepeat;
 import ru.d_shap.lr1.model.EbnfRule;
-import ru.d_shap.lr1.model.EbnfRuleReference;
 import ru.d_shap.lr1.model.EbnfSequence;
-import ru.d_shap.lr1.model.EbnfSpecialSequence;
+import ru.d_shap.lr1.model.EbnfSpecial;
 import ru.d_shap.lr1.model.EbnfTerminal;
 import ru.d_shap.lr1.model.Position;
 
@@ -145,7 +145,7 @@ public final class EbnfParser {
         int column = token.getColumn();
         if (tokenType == EbnfTokenType.IDENTIFIER) {
             consume();
-            return new EbnfRuleReference(new Position(line, column), tokenText);
+            return new EbnfReference(new Position(line, column), tokenText);
         }
         if (tokenType == EbnfTokenType.STRING) {
             consume();
@@ -159,7 +159,7 @@ public final class EbnfParser {
                 consume();
             }
             expect(EbnfTokenType.QUESTION);
-            return new EbnfSpecialSequence(new Position(line, column), text.toString().trim());
+            return new EbnfSpecial(new Position(line, column), text.toString().trim());
         }
         if (tokenType == EbnfTokenType.LPAREN) {
             consume();
