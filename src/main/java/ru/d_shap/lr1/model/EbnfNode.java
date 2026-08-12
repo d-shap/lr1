@@ -54,4 +54,22 @@ public class EbnfNode implements Serializable {
         return _position;
     }
 
+    /**
+     * Get the line.
+     *
+     * @return the line.
+     */
+    public final int getLine() {
+        return _position.getLine();
+    }
+
+    /**
+     * Get the column.
+     *
+     * @return the column.
+     */
+    public final int getColumn() {
+        return _position.getColumn();
+    }
+
 }
