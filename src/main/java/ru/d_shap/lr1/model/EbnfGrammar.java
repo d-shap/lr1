@@ -82,4 +82,9 @@ public final class EbnfGrammar implements Serializable {
         }
     }
 
+    @Override
+    public String toString() {
+        return _rules.toString();
+    }
+
 }
