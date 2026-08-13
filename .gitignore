@@ -8,10 +8,10 @@
 **/target/
 
 .gigaide/
+.idea/.gigateam/
 .idea/artifacts/
 .idea/copyright/
 .idea/dictionaries/
-.idea/gigateam/
 .idea/libraries/
 .idea/compiler.xml
 .idea/dataSources.xml
@@ -19,6 +19,7 @@
 .idea/misc.xml
 .idea/modules.xml
 .idea/runConfigurations.xml
+.idea/TestModelPromoPluginState.xml
 .idea/uiDesigner.xml
 .idea/vcs.xml
 .idea/workspace.xml
