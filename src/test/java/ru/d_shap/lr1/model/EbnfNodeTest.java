@@ -22,6 +22,7 @@ package ru.d_shap.lr1.model;
 import org.junit.Test;
 
 import ru.d_shap.assertions.Assertions;
+import ru.d_shap.assertions.util.SerializationHelper;
 
 /**
  * Tests for {@link EbnfNode}.
@@ -78,6 +79,17 @@ public final class EbnfNodeTest {
     public void getColumnTest() {
         Assertions.assertThat(new EbnfNode(new Position(1, 1)).getColumn()).isEqualTo(1);
         Assertions.assertThat(new EbnfNode(new Position(10, 20)).getColumn()).isEqualTo(20);
+    }
+
+    /**
+     * {@link EbnfNode} class test.
+     */
+    @Test
+    public void serializationTest() {
+        EbnfNode node = new EbnfNode(new Position(10, 20));
+        EbnfNode deserialized = SerializationHelper.serializeAndDeserialize(node);
+        Assertions.assertThat(deserialized.getLine()).isEqualTo(10);
+        Assertions.assertThat(deserialized.getColumn()).isEqualTo(20);
     }
 
 }
