@@ -60,4 +60,36 @@ public final class EbnfChoiceTest {
         }
     }
 
+    /**
+     * {@link EbnfChoice} class test.
+     */
+    @Test
+    public void getCountTest() {
+        // TODO
+    }
+
+    /**
+     * {@link EbnfChoice} class test.
+     */
+    @Test
+    public void getExpressionTest() {
+        // TODO
+    }
+
+    /**
+     * {@link EbnfChoice} class test.
+     */
+    @Test
+    public void toStringTest() {
+        // TODO
+    }
+
+    /**
+     * {@link EbnfChoice} class test.
+     */
+    @Test
+    public void serializationTest() {
+        // TODO
+    }
+
 }
