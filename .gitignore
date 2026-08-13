@@ -7,9 +7,11 @@
 **/gen/
 **/target/
 
+.gigaide/
 .idea/artifacts/
 .idea/copyright/
 .idea/dictionaries/
+.idea/gigateam/
 .idea/libraries/
 .idea/compiler.xml
 .idea/dataSources.xml
