@@ -45,4 +45,14 @@ public final class EbnfRepeatOperatorTest {
         Assertions.assertThat(EbnfRepeatOperator.class).asEnum().hasValueCount(3);
     }
 
+    /**
+     * {@link EbnfRepeatOperator} class test.
+     */
+    @Test
+    public void getOperatorTest() {
+        Assertions.assertThat(EbnfRepeatOperator.ZERO_OR_ONE.getOperator()).isEqualTo("?");
+        Assertions.assertThat(EbnfRepeatOperator.ZERO_OR_MANY.getOperator()).isEqualTo("*");
+        Assertions.assertThat(EbnfRepeatOperator.ONE_OR_MANY.getOperator()).isEqualTo("+");
+    }
+
 }
