@@ -52,4 +52,32 @@ public final class EbnfNodeTest {
         }
     }
 
+    /**
+     * {@link EbnfNode} class test.
+     */
+    @Test
+    public void getPositionTest() {
+        Position position = new Position(10, 20);
+        EbnfNode node = new EbnfNode(position);
+        Assertions.assertThat(node.getPosition()).isSameAs(position);
+    }
+
+    /**
+     * {@link EbnfNode} class test.
+     */
+    @Test
+    public void getLineTest() {
+        Assertions.assertThat(new EbnfNode(new Position(1, 1)).getLine()).isEqualTo(1);
+        Assertions.assertThat(new EbnfNode(new Position(10, 20)).getLine()).isEqualTo(10);
+    }
+
+    /**
+     * {@link EbnfNode} class test.
+     */
+    @Test
+    public void getColumnTest() {
+        Assertions.assertThat(new EbnfNode(new Position(1, 1)).getColumn()).isEqualTo(1);
+        Assertions.assertThat(new EbnfNode(new Position(10, 20)).getColumn()).isEqualTo(20);
+    }
+
 }
