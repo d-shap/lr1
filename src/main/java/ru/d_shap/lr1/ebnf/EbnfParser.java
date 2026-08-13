@@ -29,6 +29,7 @@ import ru.d_shap.lr1.model.EbnfNode;
 import ru.d_shap.lr1.model.EbnfOptional;
 import ru.d_shap.lr1.model.EbnfReference;
 import ru.d_shap.lr1.model.EbnfRepeat;
+import ru.d_shap.lr1.model.EbnfRepeatOperator;
 import ru.d_shap.lr1.model.EbnfRule;
 import ru.d_shap.lr1.model.EbnfSequence;
 import ru.d_shap.lr1.model.EbnfSpecial;
@@ -128,11 +129,15 @@ public final class EbnfParser {
         EbnfNode node = parseFactor();
         if (match(EbnfTokenType.ASTERISK)) {
             Position position = node.getPosition();
-            return new EbnfRepeat(position, node, "*");
+            return new EbnfRepeat(position, node, EbnfRepeatOperator.ZERO_OR_MANY);
         }
         if (match(EbnfTokenType.PLUS)) {
             Position position = node.getPosition();
-            return new EbnfRepeat(position, node, "+");
+            return new EbnfRepeat(position, node, EbnfRepeatOperator.ONE_OR_MANY);
+        }
+        if (match(EbnfTokenType.QUESTION)) {
+            Position position = node.getPosition();
+            return new EbnfRepeat(position, node, EbnfRepeatOperator.ZERO_OR_ONE);
         }
         return node;
     }
@@ -177,7 +182,7 @@ public final class EbnfParser {
             consume();
             EbnfNode node = parseExpression();
             expect(EbnfTokenType.RBRACE);
-            return new EbnfRepeat(new Position(line, column), node, "*");
+            return new EbnfRepeat(new Position(line, column), node, EbnfRepeatOperator.ZERO_OR_MANY);
         }
         throw new EbnfParseException("Unexpected token: " + tokenType + " (" + tokenText + ")");
     }
