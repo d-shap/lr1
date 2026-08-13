@@ -38,8 +38,12 @@ public enum EbnfRepeatOperator {
         _operator = operator;
     }
 
-    @Override
-    public String toString() {
+    /**
+     * Get the operator.
+     *
+     * @return the operator.
+     */
+    public String getOperator() {
         return _operator;
     }
 
