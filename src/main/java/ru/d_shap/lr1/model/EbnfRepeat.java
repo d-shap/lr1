@@ -34,7 +34,7 @@ public final class EbnfRepeat extends EbnfNode {
 
     private final EbnfNode _expression;
 
-    private final String _operator;
+    private final EbnfRepeatOperator _operator;
 
     /**
      * Create new object.
@@ -43,14 +43,10 @@ public final class EbnfRepeat extends EbnfNode {
      * @param expression the expression of the EBNF repeat.
      * @param operator   the repeat operator ("*" or "+").
      */
-    public EbnfRepeat(final Position position, final EbnfNode expression, final String operator) {
+    public EbnfRepeat(final Position position, final EbnfNode expression, final EbnfRepeatOperator operator) {
         super(position);
         _expression = expression;
-        if ("*".equals(operator) || "+".equals(operator)) {
-            _operator = operator;
-        } else {
-            _operator = "*"; // Default to "*" if invalid operator
-        }
+        _operator = operator;
     }
 
     /**
@@ -67,7 +63,7 @@ public final class EbnfRepeat extends EbnfNode {
      *
      * @return "*" for zero or more, "+" for one or more.
      */
-    public String getOperator() {
+    public EbnfRepeatOperator getOperator() {
         return _operator;
     }
 
