@@ -20,6 +20,7 @@
 package ru.d_shap.lr1.ebnf;
 
 import java.util.Arrays;
+import java.util.List;
 
 import org.junit.Test;
 
@@ -45,16 +46,20 @@ public final class EbnfChoiceTest {
      */
     @Test
     public void constructorTest() {
-        new EbnfChoice(new Position(1, 1), Arrays.asList(new EbnfTerminal(new Position(1, 1), "a"), new EbnfReference(new Position(1, 1), "b")));
+        Position position = new Position(1, 1);
+        EbnfNode node1 = new EbnfTerminal(position, "a");
+        EbnfNode node2 = new EbnfReference(position, "b");
+        List<EbnfNode> nodes = Arrays.asList(node1, node2);
+        new EbnfChoice(new Position(1, 1), nodes);
 
         try {
-            new EbnfChoice(null, Arrays.asList(new EbnfTerminal(new Position(1, 1), "a"), new EbnfReference(new Position(1, 1), "b")));
+            new EbnfChoice(null, nodes);
             Assertions.fail("EbnfChoice test fail");
         } catch (NullPointerException ex) {
             Assertions.assertThat(ex).hasMessage("Position should not be null");
         }
         try {
-            new EbnfChoice(new Position(1, 1), null);
+            new EbnfChoice(position, null);
             Assertions.fail("EbnfChoice test fail");
         } catch (NullPointerException ex) {
             Assertions.assertThat(ex).hasMessage("Expressions should not be null");
