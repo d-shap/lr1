@@ -18,6 +18,6 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 /**
- * Package contains model classes.
+ * Package contains EBNF classes.
  */
-package ru.d_shap.lr1.model;
+package ru.d_shap.lr1.ebnf;
