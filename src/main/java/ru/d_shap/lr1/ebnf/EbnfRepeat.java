@@ -71,7 +71,7 @@ public final class EbnfRepeat extends EbnfNode {
 
     @Override
     public String toString() {
-        return String.format("Repeat(%s%s)", _expression, _operator);
+        return String.format("Repeat(%s%s)", _expression, _operator.getOperator());
     }
 
 }
