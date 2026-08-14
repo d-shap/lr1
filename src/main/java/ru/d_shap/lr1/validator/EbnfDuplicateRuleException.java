@@ -17,24 +17,40 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 /// ////////////////////////////////////////////////////////////////////////////////////////////////
-package ru.d_shap.lr1.ebnf.validator;
+package ru.d_shap.lr1.validator;
 
 import ru.d_shap.lr1.ebnf.EbnfValidationException;
 
 /**
- * The EBNF empty grammar exception.
+ * The EBNF duplicate rule exception.
  *
  * @author Dmitry Shapovalov
  */
-public class EbnfEmptyGrammarException extends EbnfValidationException {
+public class EbnfDuplicateRuleException extends EbnfValidationException {
 
     private static final long serialVersionUID = 1L;
 
+    private final String _ruleName;
+
     /**
      * Create new object.
+     *
+     * @param line     the line number.
+     * @param column   the column number.
+     * @param ruleName the duplicate rule name.
      */
-    public EbnfEmptyGrammarException() {
-        super(0, 0, "Grammar is empty (no rules defined)");
+    public EbnfDuplicateRuleException(final int line, final int column, final String ruleName) {
+        super(line, column, "Duplicate rule: '" + ruleName + "'");
+        _ruleName = ruleName;
+    }
+
+    /**
+     * Get the duplicate rule name.
+     *
+     * @return the duplicate rule name.
+     */
+    public String getRuleName() {
+        return _ruleName;
     }
 
 }

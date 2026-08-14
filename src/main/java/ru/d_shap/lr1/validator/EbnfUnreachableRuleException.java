@@ -17,7 +17,40 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 /// ////////////////////////////////////////////////////////////////////////////////////////////////
+package ru.d_shap.lr1.validator;
+
+import ru.d_shap.lr1.ebnf.EbnfValidationException;
+
 /**
- * Package contains EBNF validator classes.
+ * The EBNF unreachable rule exception.
+ *
+ * @author Dmitry Shapovalov
  */
-package ru.d_shap.lr1.ebnf.validator;
+public class EbnfUnreachableRuleException extends EbnfValidationException {
+
+    private static final long serialVersionUID = 1L;
+
+    private final String _ruleName;
+
+    /**
+     * Create new object.
+     *
+     * @param line     the line number.
+     * @param column   the column number.
+     * @param ruleName the unreachable rule name.
+     */
+    public EbnfUnreachableRuleException(final int line, final int column, final String ruleName) {
+        super(line, column, "Unreachable rule: '" + ruleName + "'");
+        _ruleName = ruleName;
+    }
+
+    /**
+     * Get the unreachable rule name.
+     *
+     * @return the unreachable rule name.
+     */
+    public String getRuleName() {
+        return _ruleName;
+    }
+
+}
