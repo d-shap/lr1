@@ -21,6 +21,8 @@ package ru.d_shap.lr1.ebnf;
 
 import java.io.Serializable;
 
+import ru.d_shap.lr1.Position;
+
 /**
  * The EBNF node.
  *

@@ -22,6 +22,8 @@ package ru.d_shap.lr1.ebnf;
 import java.util.ArrayList;
 import java.util.List;
 
+import ru.d_shap.lr1.Position;
+
 /**
  * The EBNF sequence.
  *
