@@ -20,4 +20,4 @@
 /**
  * Tests for project classes.
  */
-package ru.d_shap.lr1.model;
+package ru.d_shap.lr1.ebnf;

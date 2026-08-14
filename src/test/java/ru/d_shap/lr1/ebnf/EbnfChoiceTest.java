@@ -17,79 +17,80 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-package ru.d_shap.lr1.model;
+package ru.d_shap.lr1.ebnf;
+
+import java.util.Arrays;
 
 import org.junit.Test;
 
 import ru.d_shap.assertions.Assertions;
-import ru.d_shap.assertions.util.SerializationHelper;
+import ru.d_shap.lr1.Position;
 
 /**
- * Tests for {@link EbnfNode}.
+ * Tests for {@link EbnfChoice}.
  *
  * @author Dmitry Shapovalov
  */
-public final class EbnfNodeTest {
+public final class EbnfChoiceTest {
 
     /**
      * Test class constructor.
      */
-    public EbnfNodeTest() {
+    public EbnfChoiceTest() {
         super();
     }
 
     /**
-     * {@link EbnfNode} class test.
+     * {@link EbnfChoice} class test.
      */
     @Test
     public void constructorTest() {
-        new EbnfNode(new Position(1, 1));
+        new EbnfChoice(new Position(1, 1), Arrays.asList(new EbnfTerminal(new Position(1, 1), "a"), new EbnfReference(new Position(1, 1), "b")));
 
         try {
-            new EbnfNode(null);
-            Assertions.fail("EbnfNode test fail");
+            new EbnfChoice(null, Arrays.asList(new EbnfTerminal(new Position(1, 1), "a"), new EbnfReference(new Position(1, 1), "b")));
+            Assertions.fail("EbnfChoice test fail");
         } catch (NullPointerException ex) {
             Assertions.assertThat(ex).hasMessage("Position should not be null");
+        }
+        try {
+            new EbnfChoice(new Position(1, 1), null);
+            Assertions.fail("EbnfChoice test fail");
+        } catch (NullPointerException ex) {
+            Assertions.assertThat(ex).hasMessage("Expressions should not be null");
         }
     }
 
     /**
-     * {@link EbnfNode} class test.
+     * {@link EbnfChoice} class test.
      */
     @Test
-    public void getPositionTest() {
-        Position position = new Position(10, 20);
-        EbnfNode node = new EbnfNode(position);
-        Assertions.assertThat(node.getPosition()).isSameAs(position);
+    public void getCountTest() {
+        // TODO
     }
 
     /**
-     * {@link EbnfNode} class test.
+     * {@link EbnfChoice} class test.
      */
     @Test
-    public void getLineTest() {
-        Assertions.assertThat(new EbnfNode(new Position(1, 1)).getLine()).isEqualTo(1);
-        Assertions.assertThat(new EbnfNode(new Position(10, 20)).getLine()).isEqualTo(10);
+    public void getExpressionTest() {
+        // TODO
     }
 
     /**
-     * {@link EbnfNode} class test.
+     * {@link EbnfChoice} class test.
      */
     @Test
-    public void getColumnTest() {
-        Assertions.assertThat(new EbnfNode(new Position(1, 1)).getColumn()).isEqualTo(1);
-        Assertions.assertThat(new EbnfNode(new Position(10, 20)).getColumn()).isEqualTo(20);
+    public void toStringTest() {
+        // TODO
     }
 
     /**
-     * {@link EbnfNode} class test.
+     * {@link EbnfChoice} class test.
      */
     @Test
     public void serializationTest() {
-        EbnfNode node = new EbnfNode(new Position(10, 20));
-        EbnfNode deserialized = SerializationHelper.serializeAndDeserialize(node);
-        Assertions.assertThat(deserialized.getLine()).isEqualTo(10);
-        Assertions.assertThat(deserialized.getColumn()).isEqualTo(20);
+        // TODO
     }
 
 }
