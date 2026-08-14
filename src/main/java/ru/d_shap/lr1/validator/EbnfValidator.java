@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import ru.d_shap.lr1.ebnf.EbnfValidationException;
+import ru.d_shap.lr1.EbnfValidationException;
 import ru.d_shap.lr1.model.EbnfChoice;
 import ru.d_shap.lr1.model.EbnfExcept;
 import ru.d_shap.lr1.model.EbnfGrammar;

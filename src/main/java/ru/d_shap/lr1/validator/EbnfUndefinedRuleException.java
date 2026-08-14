@@ -19,7 +19,7 @@
 /// ////////////////////////////////////////////////////////////////////////////////////////////////
 package ru.d_shap.lr1.validator;
 
-import ru.d_shap.lr1.ebnf.EbnfValidationException;
+import ru.d_shap.lr1.EbnfValidationException;
 
 /**
  * The EBNF undefined rule exception.
