@@ -19,7 +19,9 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 package ru.d_shap.lr1.ebnf;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.junit.Test;
@@ -72,7 +74,22 @@ public final class EbnfSequenceTest {
      */
     @Test
     public void getCountTest() {
-        // TODO
+        Position position = new Position(1, 1);
+        EbnfNode node1 = new EbnfTerminal(position, "a");
+        EbnfNode node2 = new EbnfReference(position, "b");
+        EbnfNode node3 = new EbnfSpecial(position, "c");
+
+        EbnfSequence sequence0 = new EbnfSequence(position, new ArrayList<EbnfNode>());
+        Assertions.assertThat(sequence0.getCount()).isEqualTo(0);
+
+        EbnfSequence sequence1 = new EbnfSequence(position, Collections.singletonList(node1));
+        Assertions.assertThat(sequence1.getCount()).isEqualTo(1);
+
+        EbnfSequence sequence2 = new EbnfSequence(position, Arrays.asList(node1, node2));
+        Assertions.assertThat(sequence2.getCount()).isEqualTo(2);
+
+        EbnfSequence sequence3 = new EbnfSequence(position, Arrays.asList(node1, node2, node3));
+        Assertions.assertThat(sequence3.getCount()).isEqualTo(3);
     }
 
     /**
