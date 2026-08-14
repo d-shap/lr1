@@ -24,16 +24,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import ru.d_shap.lr1.model.EbnfChoice;
-import ru.d_shap.lr1.model.EbnfGrammar;
-import ru.d_shap.lr1.model.EbnfNode;
-import ru.d_shap.lr1.model.EbnfOptional;
-import ru.d_shap.lr1.model.EbnfReference;
-import ru.d_shap.lr1.model.EbnfRepeat;
-import ru.d_shap.lr1.model.EbnfRule;
-import ru.d_shap.lr1.model.EbnfSequence;
-import ru.d_shap.lr1.model.EbnfSpecial;
-import ru.d_shap.lr1.model.EbnfTerminal;
+import ru.d_shap.lr1.ebnf.EbnfChoice;
+import ru.d_shap.lr1.ebnf.EbnfGrammar;
+import ru.d_shap.lr1.ebnf.EbnfNode;
+import ru.d_shap.lr1.ebnf.EbnfOptional;
+import ru.d_shap.lr1.ebnf.EbnfReference;
+import ru.d_shap.lr1.ebnf.EbnfRepeat;
+import ru.d_shap.lr1.ebnf.EbnfRepeatOperator;
+import ru.d_shap.lr1.ebnf.EbnfRule;
+import ru.d_shap.lr1.ebnf.EbnfSequence;
+import ru.d_shap.lr1.ebnf.EbnfSpecial;
+import ru.d_shap.lr1.ebnf.EbnfTerminal;
 
 /**
  * Converts EBNF grammar to LR(1) Production rules.
@@ -158,7 +159,7 @@ public final class GrammarConverter {
             recursive.add(auxName);
             addProduction(auxName, recursive);
 
-            if ("+".equals(repeat.getOperator())) {
+            if (repeat.getOperator() == EbnfRepeatOperator.ONE_OR_MANY) {
                 // For A+: also add base case A → innerExpr
                 List<String> base = new ArrayList<>();
                 convertNode(repeat.getExpression(), base, auxName);

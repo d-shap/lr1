@@ -23,21 +23,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ru.d_shap.lr1.EbnfParseException;
+import ru.d_shap.lr1.Position;
+import ru.d_shap.lr1.ebnf.EbnfChoice;
+import ru.d_shap.lr1.ebnf.EbnfExcept;
+import ru.d_shap.lr1.ebnf.EbnfGrammar;
+import ru.d_shap.lr1.ebnf.EbnfNode;
+import ru.d_shap.lr1.ebnf.EbnfOptional;
+import ru.d_shap.lr1.ebnf.EbnfReference;
+import ru.d_shap.lr1.ebnf.EbnfRepeat;
+import ru.d_shap.lr1.ebnf.EbnfRepeatOperator;
+import ru.d_shap.lr1.ebnf.EbnfRule;
+import ru.d_shap.lr1.ebnf.EbnfSequence;
+import ru.d_shap.lr1.ebnf.EbnfSpecial;
+import ru.d_shap.lr1.ebnf.EbnfTerminal;
 import ru.d_shap.lr1.lexer.EbnfToken;
 import ru.d_shap.lr1.lexer.EbnfTokenType;
-import ru.d_shap.lr1.model.EbnfChoice;
-import ru.d_shap.lr1.model.EbnfExcept;
-import ru.d_shap.lr1.model.EbnfGrammar;
-import ru.d_shap.lr1.model.EbnfNode;
-import ru.d_shap.lr1.model.EbnfOptional;
-import ru.d_shap.lr1.model.EbnfReference;
-import ru.d_shap.lr1.model.EbnfRepeat;
-import ru.d_shap.lr1.model.EbnfRepeatOperator;
-import ru.d_shap.lr1.model.EbnfRule;
-import ru.d_shap.lr1.model.EbnfSequence;
-import ru.d_shap.lr1.model.EbnfSpecial;
-import ru.d_shap.lr1.model.EbnfTerminal;
-import ru.d_shap.lr1.model.Position;
 
 /**
  * The EBNF parser.
