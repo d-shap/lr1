@@ -115,6 +115,12 @@ public final class EbnfChoiceTest {
         } catch (IndexOutOfBoundsException ex) {
             Assertions.assertThat(ex).hasMessage("Index 0 should be in bounds [0, 0)");
         }
+        try {
+            choice0.getExpression(1);
+            Assertions.fail("EbnfChoice test fail");
+        } catch (IndexOutOfBoundsException ex) {
+            Assertions.assertThat(ex).hasMessage("Index 1 should be in bounds [0, 0)");
+        }
 
         EbnfChoice choice1 = new EbnfChoice(position, Collections.singletonList(node1));
         Assertions.assertThat(choice1.getExpression(0)).isSameAs(node1);
@@ -129,6 +135,12 @@ public final class EbnfChoiceTest {
             Assertions.fail("EbnfChoice test fail");
         } catch (IndexOutOfBoundsException ex) {
             Assertions.assertThat(ex).hasMessage("Index 1 should be in bounds [0, 1)");
+        }
+        try {
+            choice1.getExpression(2);
+            Assertions.fail("EbnfChoice test fail");
+        } catch (IndexOutOfBoundsException ex) {
+            Assertions.assertThat(ex).hasMessage("Index 2 should be in bounds [0, 1)");
         }
 
         EbnfChoice choice2 = new EbnfChoice(position, Arrays.asList(node1, node2));
@@ -146,6 +158,12 @@ public final class EbnfChoiceTest {
         } catch (IndexOutOfBoundsException ex) {
             Assertions.assertThat(ex).hasMessage("Index 2 should be in bounds [0, 2)");
         }
+        try {
+            choice2.getExpression(3);
+            Assertions.fail("EbnfChoice test fail");
+        } catch (IndexOutOfBoundsException ex) {
+            Assertions.assertThat(ex).hasMessage("Index 3 should be in bounds [0, 2)");
+        }
 
         EbnfChoice choice3 = new EbnfChoice(position, Arrays.asList(node1, node2, node3));
         Assertions.assertThat(choice3.getExpression(0)).isSameAs(node1);
@@ -162,6 +180,12 @@ public final class EbnfChoiceTest {
             Assertions.fail("EbnfChoice test fail");
         } catch (IndexOutOfBoundsException ex) {
             Assertions.assertThat(ex).hasMessage("Index 3 should be in bounds [0, 3)");
+        }
+        try {
+            choice3.getExpression(4);
+            Assertions.fail("EbnfChoice test fail");
+        } catch (IndexOutOfBoundsException ex) {
+            Assertions.assertThat(ex).hasMessage("Index 4 should be in bounds [0, 3)");
         }
     }
 
