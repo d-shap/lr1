@@ -30,12 +30,11 @@ import org.junit.Test;
 
 import ru.d_shap.lr1.ast.ASTNode;
 import ru.d_shap.lr1.ast.ASTTreePrinter;
-import ru.d_shap.lr1.ebnf.EbnfParser;
-import ru.d_shap.lr1.ebnf.EbnfToken;
-import ru.d_shap.lr1.ebnf.EbnfTokenizer;
-import ru.d_shap.lr1.ebnf.validator.EbnfValidator;
+import ru.d_shap.lr1.lexer.EbnfToken;
+import ru.d_shap.lr1.lexer.EbnfTokenizer;
 import ru.d_shap.lr1.model.EbnfGrammar;
 import ru.d_shap.lr1.parser.ActionGotoTable;
+import ru.d_shap.lr1.parser.EbnfParser;
 import ru.d_shap.lr1.parser.FirstSetComputer;
 import ru.d_shap.lr1.parser.GrammarConverter;
 import ru.d_shap.lr1.parser.LR1Item;
@@ -43,6 +42,7 @@ import ru.d_shap.lr1.parser.LR1ItemSet;
 import ru.d_shap.lr1.parser.LR1StateBuilder;
 import ru.d_shap.lr1.parser.LR1TableBuilder;
 import ru.d_shap.lr1.parser.Production;
+import ru.d_shap.lr1.validator.EbnfValidator;
 
 /**
  * The test runner.
