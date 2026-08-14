@@ -20,6 +20,7 @@
 package ru.d_shap.lr1.ebnf;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import ru.d_shap.lr1.Position;
@@ -76,7 +77,20 @@ public final class EbnfSequence extends EbnfNode {
 
     @Override
     public String toString() {
-        return String.format("Sequence(%s)", _expressions);
+        StringBuilder stringBuilder = new StringBuilder();
+        Iterator<EbnfNode> iterator = _expressions.iterator();
+        while (true) {
+            if (iterator.hasNext()) {
+                EbnfNode node = iterator.next();
+                stringBuilder.append(node);
+            }
+            if (iterator.hasNext()) {
+                stringBuilder.append(", ");
+            } else {
+                break;
+            }
+        }
+        return String.format("Sequence(%s)", stringBuilder);
     }
 
 }
