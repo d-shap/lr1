@@ -17,9 +17,7 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 /// ////////////////////////////////////////////////////////////////////////////////////////////////
-package ru.d_shap.lr1.ebnf;
-
-import ru.d_shap.lr1.ParserException;
+package ru.d_shap.lr1;
 
 /**
  * The EBNF exception.
@@ -35,7 +33,7 @@ public class EbnfException extends ParserException {
      *
      * @param message the message.
      */
-    protected EbnfException(final String message) {
+    public EbnfException(final String message) {
         super(message);
     }
 
@@ -45,7 +43,7 @@ public class EbnfException extends ParserException {
      * @param message the message.
      * @param cause   the cause.
      */
-    protected EbnfException(final String message, final Throwable cause) {
+    public EbnfException(final String message, final Throwable cause) {
         super(message, cause);
     }
 
