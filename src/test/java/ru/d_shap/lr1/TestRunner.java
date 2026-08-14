@@ -30,9 +30,9 @@ import org.junit.Test;
 
 import ru.d_shap.lr1.ast.ASTNode;
 import ru.d_shap.lr1.ast.ASTTreePrinter;
+import ru.d_shap.lr1.ebnf.EbnfGrammar;
 import ru.d_shap.lr1.lexer.EbnfToken;
 import ru.d_shap.lr1.lexer.EbnfTokenizer;
-import ru.d_shap.lr1.model.EbnfGrammar;
 import ru.d_shap.lr1.parser.ActionGotoTable;
 import ru.d_shap.lr1.parser.EbnfParser;
 import ru.d_shap.lr1.parser.FirstSetComputer;
