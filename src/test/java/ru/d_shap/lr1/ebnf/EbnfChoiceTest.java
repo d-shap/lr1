@@ -194,7 +194,22 @@ public final class EbnfChoiceTest {
      */
     @Test
     public void toStringTest() {
-        // TODO
+        Position position = new Position(1, 1);
+        EbnfNode node1 = new EbnfTerminal(position, "a");
+        EbnfNode node2 = new EbnfReference(position, "b");
+        EbnfNode node3 = new EbnfSpecial(position, "c");
+
+        EbnfChoice choice0 = new EbnfChoice(position, new ArrayList<EbnfNode>());
+        Assertions.assertThat(choice0).hasToString("Choice()");
+
+        EbnfChoice choice1 = new EbnfChoice(position, Collections.singletonList(node1));
+        Assertions.assertThat(choice1).hasToString("Choice(Terminal(a))");
+
+        EbnfChoice choice2 = new EbnfChoice(position, Arrays.asList(node1, node2));
+        Assertions.assertThat(choice2).hasToString("Choice(Terminal(a), Reference(b))");
+
+        EbnfChoice choice3 = new EbnfChoice(position, Arrays.asList(node1, node2, node3));
+        Assertions.assertThat(choice3).hasToString("Choice(Terminal(a), Reference(b), Special(c))");
     }
 
     /**
