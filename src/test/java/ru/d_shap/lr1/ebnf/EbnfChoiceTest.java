@@ -19,7 +19,9 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 package ru.d_shap.lr1.ebnf;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.junit.Test;
@@ -49,8 +51,9 @@ public final class EbnfChoiceTest {
         Position position = new Position(1, 1);
         EbnfNode node1 = new EbnfTerminal(position, "a");
         EbnfNode node2 = new EbnfReference(position, "b");
-        List<EbnfNode> nodes = Arrays.asList(node1, node2);
-        new EbnfChoice(new Position(1, 1), nodes);
+        EbnfNode node3 = new EbnfSpecial(position, "c");
+        List<EbnfNode> nodes = Arrays.asList(node1, node2, node3);
+        new EbnfChoice(position, nodes);
 
         try {
             new EbnfChoice(null, nodes);
@@ -71,7 +74,22 @@ public final class EbnfChoiceTest {
      */
     @Test
     public void getCountTest() {
-        // TODO
+        Position position = new Position(1, 1);
+        EbnfNode node1 = new EbnfTerminal(position, "a");
+        EbnfNode node2 = new EbnfReference(position, "b");
+        EbnfNode node3 = new EbnfSpecial(position, "c");
+
+        EbnfChoice choice1 = new EbnfChoice(position, new ArrayList<EbnfNode>());
+        Assertions.assertThat(choice1.getCount()).isEqualTo(0);
+
+        EbnfChoice choice2 = new EbnfChoice(position, Collections.singletonList(node1));
+        Assertions.assertThat(choice2.getCount()).isEqualTo(1);
+
+        EbnfChoice choice3 = new EbnfChoice(position, Arrays.asList(node1, node2));
+        Assertions.assertThat(choice3.getCount()).isEqualTo(2);
+
+        EbnfChoice choice4 = new EbnfChoice(position, Arrays.asList(node1, node2, node3));
+        Assertions.assertThat(choice4.getCount()).isEqualTo(3);
     }
 
     /**
