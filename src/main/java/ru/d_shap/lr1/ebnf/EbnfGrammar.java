@@ -17,9 +17,10 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-package ru.d_shap.lr1.model;
+package ru.d_shap.lr1.ebnf;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -76,9 +77,9 @@ public final class EbnfGrammar implements Serializable {
      */
     public List<EbnfRule> getRules() {
         if (_rules == null) {
-            return new java.util.ArrayList<>();
+            return new ArrayList<>();
         } else {
-            return new java.util.ArrayList<>(_rules.values());
+            return new ArrayList<>(_rules.values());
         }
     }
 

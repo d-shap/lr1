@@ -17,55 +17,59 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-package ru.d_shap.lr1.model;
+package ru.d_shap.lr1.ebnf;
+
+import java.io.Serializable;
 
 /**
- * The EBNF exception (set difference).
+ * The EBNF node.
  *
  * @author Dmitry Shapovalov
  */
-public final class EbnfExcept extends EbnfNode {
+public class EbnfNode implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private final EbnfNode _base;
-
-    private final EbnfNode _exception;
+    private final Position _position;
 
     /**
      * Create new object.
      *
-     * @param position  the position.
-     * @param base      the base expression of the EBNF exception.
-     * @param exception the exception expression (to exclude) of the EBNF exception.
+     * @param position the position.
      */
-    public EbnfExcept(final Position position, final EbnfNode base, final EbnfNode exception) {
-        super(position);
-        _base = base;
-        _exception = exception;
+    protected EbnfNode(final Position position) {
+        super();
+        if (position == null) {
+            throw new NullPointerException("Position should not be null");
+        }
+        _position = position;
     }
 
     /**
-     * Get the base expression of the EBNF exception.
+     * Get the position.
      *
-     * @return the base expression of the EBNF exception.
+     * @return the position.
      */
-    public EbnfNode getBase() {
-        return _base;
+    public final Position getPosition() {
+        return _position;
     }
 
     /**
-     * Get the exception expression of the EBNF exception.
+     * Get the line.
      *
-     * @return the exception expression of the EBNF exception.
+     * @return the line.
      */
-    public EbnfNode getException() {
-        return _exception;
+    public final int getLine() {
+        return _position.getLine();
     }
 
-    @Override
-    public String toString() {
-        return String.format("Except(%s-%s)", _base, _exception);
+    /**
+     * Get the column.
+     *
+     * @return the column.
+     */
+    public final int getColumn() {
+        return _position.getColumn();
     }
 
 }

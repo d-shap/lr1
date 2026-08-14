@@ -17,62 +17,59 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-package ru.d_shap.lr1.model;
-
-import java.io.Serializable;
+package ru.d_shap.lr1.ebnf;
 
 /**
- * The position.
+ * The EBNF repeat.
+ * <p>
+ * Supports:
+ * - "*" (zero or more repetitions)
+ * - "+" (one or more repetitions)
  *
  * @author Dmitry Shapovalov
  */
-public final class Position implements Serializable {
+public final class EbnfRepeat extends EbnfNode {
 
     private static final long serialVersionUID = 1L;
 
-    private final int _line;
+    private final EbnfNode _expression;
 
-    private final int _column;
+    private final EbnfRepeatOperator _operator;
 
     /**
      * Create new object.
      *
-     * @param line   the line.
-     * @param column the column.
+     * @param position   the position.
+     * @param expression the expression of the EBNF repeat.
+     * @param operator   the repeat operator ("*" or "+").
      */
-    public Position(final int line, final int column) {
-        super();
-        if (line <= 0) {
-            throw new IllegalArgumentException("Line should be positive");
-        }
-        _line = line;
-        if (column <= 0) {
-            throw new IllegalArgumentException("Column should be positive");
-        }
-        _column = column;
+    public EbnfRepeat(final Position position, final EbnfNode expression, final EbnfRepeatOperator operator) {
+        super(position);
+        _expression = expression;
+        _operator = operator;
     }
 
     /**
-     * Get the line.
+     * Get the expression of the EBNF repeat.
      *
-     * @return the line.
+     * @return the expression of the EBNF repeat.
      */
-    public int getLine() {
-        return _line;
+    public EbnfNode getExpression() {
+        return _expression;
     }
 
     /**
-     * Get the column.
+     * Get the repeat operator.
      *
-     * @return the column.
+     * @return "*" for zero or more, "+" for one or more.
      */
-    public int getColumn() {
-        return _column;
+    public EbnfRepeatOperator getOperator() {
+        return _operator;
     }
 
     @Override
     public String toString() {
-        return String.format("line %s; column %s", _line, _column);
+        return String.format("Repeat(%s%s)", _expression, _operator);
     }
 
 }

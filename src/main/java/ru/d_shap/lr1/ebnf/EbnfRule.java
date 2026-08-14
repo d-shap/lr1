@@ -17,34 +17,55 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-package ru.d_shap.lr1.model;
+package ru.d_shap.lr1.ebnf;
 
 /**
- * The EBNF repeat operator.
+ * The EBNF rule.
  *
  * @author Dmitry Shapovalov
  */
-public enum EbnfRepeatOperator {
+public final class EbnfRule extends EbnfNode {
 
-    ZERO_OR_ONE("?"),
+    private static final long serialVersionUID = 1L;
 
-    ZERO_OR_MANY("*"),
+    private final String _name;
 
-    ONE_OR_MANY("+");
+    private final EbnfNode _expression;
 
-    private final String _operator;
-
-    EbnfRepeatOperator(final String operator) {
-        _operator = operator;
+    /**
+     * Create new object.
+     *
+     * @param position   the position.
+     * @param name       the name of the EBNF rule.
+     * @param expression the expression of the EBNF rule.
+     */
+    public EbnfRule(final Position position, final String name, final EbnfNode expression) {
+        super(position);
+        _name = name;
+        _expression = expression;
     }
 
     /**
-     * Get the operator.
+     * Get the name of the EBNF rule.
      *
-     * @return the operator.
+     * @return the name of the EBNF rule.
      */
-    public String getOperator() {
-        return _operator;
+    public String getName() {
+        return _name;
+    }
+
+    /**
+     * Get the expression of the EBNF rule.
+     *
+     * @return the expression of the EBNF rule.
+     */
+    public EbnfNode getExpression() {
+        return _expression;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("Rule(%s=%s)", _name, _expression);
     }
 
 }

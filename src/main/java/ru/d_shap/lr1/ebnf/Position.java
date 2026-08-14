@@ -17,55 +17,62 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-package ru.d_shap.lr1.model;
+package ru.d_shap.lr1.ebnf;
+
+import java.io.Serializable;
 
 /**
- * The EBNF rule.
+ * The position.
  *
  * @author Dmitry Shapovalov
  */
-public final class EbnfRule extends EbnfNode {
+public final class Position implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private final String _name;
+    private final int _line;
 
-    private final EbnfNode _expression;
+    private final int _column;
 
     /**
      * Create new object.
      *
-     * @param position   the position.
-     * @param name       the name of the EBNF rule.
-     * @param expression the expression of the EBNF rule.
+     * @param line   the line.
+     * @param column the column.
      */
-    public EbnfRule(final Position position, final String name, final EbnfNode expression) {
-        super(position);
-        _name = name;
-        _expression = expression;
+    public Position(final int line, final int column) {
+        super();
+        if (line <= 0) {
+            throw new IllegalArgumentException("Line should be positive");
+        }
+        _line = line;
+        if (column <= 0) {
+            throw new IllegalArgumentException("Column should be positive");
+        }
+        _column = column;
     }
 
     /**
-     * Get the name of the EBNF rule.
+     * Get the line.
      *
-     * @return the name of the EBNF rule.
+     * @return the line.
      */
-    public String getName() {
-        return _name;
+    public int getLine() {
+        return _line;
     }
 
     /**
-     * Get the expression of the EBNF rule.
+     * Get the column.
      *
-     * @return the expression of the EBNF rule.
+     * @return the column.
      */
-    public EbnfNode getExpression() {
-        return _expression;
+    public int getColumn() {
+        return _column;
     }
 
     @Override
     public String toString() {
-        return String.format("Rule(%s=%s)", _name, _expression);
+        return String.format("line %s; column %s", _line, _column);
     }
 
 }

@@ -17,59 +17,55 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-package ru.d_shap.lr1.model;
+package ru.d_shap.lr1.ebnf;
 
 /**
- * The EBNF repeat.
- * <p>
- * Supports:
- * - "*" (zero or more repetitions)
- * - "+" (one or more repetitions)
+ * The EBNF exception (set difference).
  *
  * @author Dmitry Shapovalov
  */
-public final class EbnfRepeat extends EbnfNode {
+public final class EbnfExcept extends EbnfNode {
 
     private static final long serialVersionUID = 1L;
 
-    private final EbnfNode _expression;
+    private final EbnfNode _base;
 
-    private final EbnfRepeatOperator _operator;
+    private final EbnfNode _exception;
 
     /**
      * Create new object.
      *
-     * @param position   the position.
-     * @param expression the expression of the EBNF repeat.
-     * @param operator   the repeat operator ("*" or "+").
+     * @param position  the position.
+     * @param base      the base expression of the EBNF exception.
+     * @param exception the exception expression (to exclude) of the EBNF exception.
      */
-    public EbnfRepeat(final Position position, final EbnfNode expression, final EbnfRepeatOperator operator) {
+    public EbnfExcept(final Position position, final EbnfNode base, final EbnfNode exception) {
         super(position);
-        _expression = expression;
-        _operator = operator;
+        _base = base;
+        _exception = exception;
     }
 
     /**
-     * Get the expression of the EBNF repeat.
+     * Get the base expression of the EBNF exception.
      *
-     * @return the expression of the EBNF repeat.
+     * @return the base expression of the EBNF exception.
      */
-    public EbnfNode getExpression() {
-        return _expression;
+    public EbnfNode getBase() {
+        return _base;
     }
 
     /**
-     * Get the repeat operator.
+     * Get the exception expression of the EBNF exception.
      *
-     * @return "*" for zero or more, "+" for one or more.
+     * @return the exception expression of the EBNF exception.
      */
-    public EbnfRepeatOperator getOperator() {
-        return _operator;
+    public EbnfNode getException() {
+        return _exception;
     }
 
     @Override
     public String toString() {
-        return String.format("Repeat(%s%s)", _expression, _operator);
+        return String.format("Except(%s-%s)", _base, _exception);
     }
 
 }

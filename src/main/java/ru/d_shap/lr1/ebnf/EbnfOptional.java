@@ -17,42 +17,42 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-package ru.d_shap.lr1.model;
+package ru.d_shap.lr1.ebnf;
 
 /**
- * The EBNF special.
+ * The EBNF optional.
  *
  * @author Dmitry Shapovalov
  */
-public final class EbnfSpecial extends EbnfNode {
+public final class EbnfOptional extends EbnfNode {
 
     private static final long serialVersionUID = 1L;
 
-    private final String _text;
+    private final EbnfNode _expression;
 
     /**
      * Create new object.
      *
-     * @param position the position.
-     * @param text     the text of the EBNF special sequence.
+     * @param position   the position.
+     * @param expression the expression of the EBNF optional.
      */
-    public EbnfSpecial(final Position position, final String text) {
+    public EbnfOptional(final Position position, final EbnfNode expression) {
         super(position);
-        _text = text;
+        _expression = expression;
     }
 
     /**
-     * Get the text of the EBNF special sequence.
+     * Get the expression of the EBNF optional.
      *
-     * @return the text of the EBNF special sequence.
+     * @return the expression of the EBNF optional.
      */
-    public String getText() {
-        return _text;
+    public EbnfNode getExpression() {
+        return _expression;
     }
 
     @Override
     public String toString() {
-        return String.format("Special(%s)", _text);
+        return String.format("Optional(%s)", _expression);
     }
 
 }

@@ -1,4 +1,4 @@
-////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////
 // LR(1) parser implementation.
 // Copyright (C) 2026 Dmitry Shapovalov.
 //
@@ -17,18 +17,17 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-package ru.d_shap.lr1.model;
+package ru.d_shap.lr1.ebnf;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
- * The EBNF choice.
+ * The EBNF sequence.
  *
  * @author Dmitry Shapovalov
  */
-public final class EbnfChoice extends EbnfNode {
+public final class EbnfSequence extends EbnfNode {
 
     private static final long serialVersionUID = 1L;
 
@@ -38,57 +37,50 @@ public final class EbnfChoice extends EbnfNode {
      * Create new object.
      *
      * @param position    the position.
-     * @param expressions the expressions.
+     * @param expressions the expressions of the EBNF sequence.
      */
-    public EbnfChoice(final Position position, final List<EbnfNode> expressions) {
+    public EbnfSequence(final Position position, final List<EbnfNode> expressions) {
         super(position);
         if (expressions == null) {
-            throw new NullPointerException("Expressions should not be null");
+            _expressions = null;
+        } else {
+            _expressions = new ArrayList<>(expressions);
         }
-        _expressions = new ArrayList<>(expressions);
     }
 
     /**
-     * Get the number of the expressions.
+     * Get the number of the expressions in the EBNF sequence.
      *
-     * @return the number of the expressions.
+     * @return the number of the expressions in the EBNF sequence.
      */
     public int getCount() {
-        return _expressions.size();
+        if (_expressions == null) {
+            return 0;
+        } else {
+            return _expressions.size();
+        }
     }
 
     /**
-     * Get the expression at the specified index.
+     * Get the expression of the EBNF sequence at the specified index.
      *
      * @param index the specified index.
      *
-     * @return the expression at the specified index.
+     * @return the expression of the EBNF sequence at the specified index.
      */
     public EbnfNode getExpression(final int index) {
-        int size = _expressions.size();
-        if (index < 0 || index >= size) {
-            String message = String.format("Index %s should be in bounds (0, %s)", index, size);
-            throw new IndexOutOfBoundsException(message);
+        if (_expressions == null) {
+            return null;
+        }
+        if (index < 0 || index >= _expressions.size()) {
+            return null;
         }
         return _expressions.get(index);
     }
 
     @Override
     public String toString() {
-        StringBuilder stringBuilder = new StringBuilder();
-        Iterator<EbnfNode> iterator = _expressions.iterator();
-        while (true) {
-            if (iterator.hasNext()) {
-                EbnfNode node = iterator.next();
-                stringBuilder.append(node);
-            }
-            if (iterator.hasNext()) {
-                stringBuilder.append(", ");
-            } else {
-                break;
-            }
-        }
-        return String.format("Choice(%s)", stringBuilder);
+        return String.format("Sequence(%s)", _expressions);
     }
 
 }

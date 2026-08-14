@@ -17,59 +17,34 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-package ru.d_shap.lr1.model;
-
-import java.io.Serializable;
+package ru.d_shap.lr1.ebnf;
 
 /**
- * The EBNF node.
+ * The EBNF repeat operator.
  *
  * @author Dmitry Shapovalov
  */
-public class EbnfNode implements Serializable {
+public enum EbnfRepeatOperator {
 
-    private static final long serialVersionUID = 1L;
+    ZERO_OR_ONE("?"),
 
-    private final Position _position;
+    ZERO_OR_MANY("*"),
 
-    /**
-     * Create new object.
-     *
-     * @param position the position.
-     */
-    protected EbnfNode(final Position position) {
-        super();
-        if (position == null) {
-            throw new NullPointerException("Position should not be null");
-        }
-        _position = position;
+    ONE_OR_MANY("+");
+
+    private final String _operator;
+
+    EbnfRepeatOperator(final String operator) {
+        _operator = operator;
     }
 
     /**
-     * Get the position.
+     * Get the operator.
      *
-     * @return the position.
+     * @return the operator.
      */
-    public final Position getPosition() {
-        return _position;
-    }
-
-    /**
-     * Get the line.
-     *
-     * @return the line.
-     */
-    public final int getLine() {
-        return _position.getLine();
-    }
-
-    /**
-     * Get the column.
-     *
-     * @return the column.
-     */
-    public final int getColumn() {
-        return _position.getColumn();
+    public String getOperator() {
+        return _operator;
     }
 
 }
