@@ -36,17 +36,20 @@ public final class EbnfReference extends EbnfNode {
      * Create new object.
      *
      * @param position the position.
-     * @param name     the name of the EBNF rule.
+     * @param name     the name.
      */
     public EbnfReference(final Position position, final String name) {
         super(position);
+        if (name == null) {
+            throw new NullPointerException("Name should not be null");
+        }
         _name = name;
     }
 
     /**
-     * Get the name of the EBNF rule.
+     * Get the name.
      *
-     * @return the name of the EBNF rule.
+     * @return the name.
      */
     public String getName() {
         return _name;
