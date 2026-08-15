@@ -27,6 +27,7 @@ import java.util.List;
 import org.junit.Test;
 
 import ru.d_shap.assertions.Assertions;
+import ru.d_shap.assertions.util.SerializationHelper;
 import ru.d_shap.lr1.Position;
 
 /**
@@ -217,7 +218,17 @@ public final class EbnfSequenceTest {
      */
     @Test
     public void serializationTest() {
-        // TODO
+        Position position = new Position(10, 20);
+        EbnfNode node1 = new EbnfTerminal(position, "a");
+        EbnfNode node2 = new EbnfReference(position, "b");
+        EbnfNode node3 = new EbnfSpecial(position, "c");
+        List<EbnfNode> nodes = Arrays.asList(node1, node2, node3);
+        EbnfSequence sequence = new EbnfSequence(position, nodes);
+        EbnfSequence deserialized = SerializationHelper.serializeAndDeserialize(sequence);
+        Assertions.assertThat(deserialized.getLine()).isEqualTo(10);
+        Assertions.assertThat(deserialized.getColumn()).isEqualTo(20);
+        Assertions.assertThat(deserialized.getCount()).isEqualTo(3);
+        Assertions.assertThat(deserialized).hasToString("Sequence(Terminal(a), Reference(b), Special(c))");
     }
 
 }
