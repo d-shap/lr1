@@ -68,14 +68,14 @@ public final class EbnfTerminalTest {
     public void getValueTest() {
         Position position = new Position(1, 1);
 
-        EbnfTerminal terminal1 = new EbnfTerminal(position, "");
-        Assertions.assertThat(terminal1.getValue()).isEqualTo("");
+        EbnfTerminal terminal0 = new EbnfTerminal(position, "");
+        Assertions.assertThat(terminal0.getValue()).isEqualTo("");
 
-        EbnfTerminal terminal2 = new EbnfTerminal(position, "a");
-        Assertions.assertThat(terminal2.getValue()).isEqualTo("a");
+        EbnfTerminal terminal1 = new EbnfTerminal(position, "a");
+        Assertions.assertThat(terminal1.getValue()).isEqualTo("a");
 
-        EbnfTerminal terminal3 = new EbnfTerminal(position, "b");
-        Assertions.assertThat(terminal3.getValue()).isEqualTo("b");
+        EbnfTerminal terminal2 = new EbnfTerminal(position, "b12");
+        Assertions.assertThat(terminal2.getValue()).isEqualTo("b12");
     }
 
     /**
@@ -85,14 +85,14 @@ public final class EbnfTerminalTest {
     public void toStringTest() {
         Position position = new Position(1, 1);
 
-        EbnfTerminal terminal1 = new EbnfTerminal(position, "");
-        Assertions.assertThat(terminal1).hasToString("Terminal()");
+        EbnfTerminal terminal0 = new EbnfTerminal(position, "");
+        Assertions.assertThat(terminal0).hasToString("Terminal()");
 
-        EbnfTerminal terminal2 = new EbnfTerminal(position, "a");
-        Assertions.assertThat(terminal2).hasToString("Terminal(a)");
+        EbnfTerminal terminal1 = new EbnfTerminal(position, "a");
+        Assertions.assertThat(terminal1).hasToString("Terminal(a)");
 
-        EbnfTerminal terminal3 = new EbnfTerminal(position, "b");
-        Assertions.assertThat(terminal3).hasToString("Terminal(b)");
+        EbnfTerminal terminal2 = new EbnfTerminal(position, "b12");
+        Assertions.assertThat(terminal2).hasToString("Terminal(b12)");
     }
 
     /**
