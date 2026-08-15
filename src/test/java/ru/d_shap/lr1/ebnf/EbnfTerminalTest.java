@@ -82,7 +82,16 @@ public final class EbnfTerminalTest {
      */
     @Test
     public void toStringTest() {
-        // TODO
+        Position position = new Position(1, 1);
+
+        EbnfTerminal terminal1 = new EbnfTerminal(position, "");
+        Assertions.assertThat(terminal1).hasToString("Terminal()");
+
+        EbnfTerminal terminal2 = new EbnfTerminal(position, "a");
+        Assertions.assertThat(terminal2).hasToString("Terminal(a)");
+
+        EbnfTerminal terminal3 = new EbnfTerminal(position, "b");
+        Assertions.assertThat(terminal3).hasToString("Terminal(b)");
     }
 
     /**
