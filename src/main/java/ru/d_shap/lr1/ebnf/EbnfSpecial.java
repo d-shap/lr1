@@ -30,31 +30,34 @@ public final class EbnfSpecial extends EbnfNode {
 
     private static final long serialVersionUID = 1L;
 
-    private final String _text;
+    private final String _value;
 
     /**
      * Create new object.
      *
      * @param position the position.
-     * @param text     the text of the EBNF special sequence.
+     * @param value    the value.
      */
-    public EbnfSpecial(final Position position, final String text) {
+    public EbnfSpecial(final Position position, final String value) {
         super(position);
-        _text = text;
+        if (value == null) {
+            throw new NullPointerException("Value should not be null");
+        }
+        _value = value;
     }
 
     /**
-     * Get the text of the EBNF special sequence.
+     * Get the value.
      *
-     * @return the text of the EBNF special sequence.
+     * @return the value.
      */
-    public String getText() {
-        return _text;
+    public String getValue() {
+        return _value;
     }
 
     @Override
     public String toString() {
-        return String.format("Special(%s)", _text);
+        return String.format("Special(%s)", _value);
     }
 
 }
