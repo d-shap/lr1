@@ -36,17 +36,20 @@ public final class EbnfOptional extends EbnfNode {
      * Create new object.
      *
      * @param position   the position.
-     * @param expression the expression of the EBNF optional.
+     * @param expression the expression.
      */
     public EbnfOptional(final Position position, final EbnfNode expression) {
         super(position);
+        if (expression == null) {
+            throw new NullPointerException("Expression should not be null");
+        }
         _expression = expression;
     }
 
     /**
-     * Get the expression of the EBNF optional.
+     * Get the expression.
      *
-     * @return the expression of the EBNF optional.
+     * @return the expression.
      */
     public EbnfNode getExpression() {
         return _expression;
