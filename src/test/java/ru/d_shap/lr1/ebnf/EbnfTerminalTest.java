@@ -65,7 +65,16 @@ public final class EbnfTerminalTest {
      */
     @Test
     public void getValueTest() {
-        // TODO
+        Position position = new Position(1, 1);
+
+        EbnfTerminal terminal1 = new EbnfTerminal(position, "");
+        Assertions.assertThat(terminal1.getValue()).isEqualTo("");
+
+        EbnfTerminal terminal2 = new EbnfTerminal(position, "a");
+        Assertions.assertThat(terminal2.getValue()).isEqualTo("a");
+
+        EbnfTerminal terminal3 = new EbnfTerminal(position, "b");
+        Assertions.assertThat(terminal3.getValue()).isEqualTo("b");
     }
 
     /**
