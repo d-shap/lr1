@@ -36,17 +36,20 @@ public final class EbnfTerminal extends EbnfNode {
      * Create new object.
      *
      * @param position the position.
-     * @param value    the value of the EBNF terminal.
+     * @param value    the value.
      */
     public EbnfTerminal(final Position position, final String value) {
         super(position);
+        if (value == null) {
+            throw new NullPointerException("Value should not be null");
+        }
         _value = value;
     }
 
     /**
-     * Get the value of the EBNF terminal.
+     * Get the value.
      *
-     * @return the value of the EBNF terminal.
+     * @return the value.
      */
     public String getValue() {
         return _value;
