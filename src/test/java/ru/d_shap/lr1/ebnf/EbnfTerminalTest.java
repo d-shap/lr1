@@ -22,6 +22,7 @@ package ru.d_shap.lr1.ebnf;
 import org.junit.Test;
 
 import ru.d_shap.assertions.Assertions;
+import ru.d_shap.assertions.util.SerializationHelper;
 import ru.d_shap.lr1.Position;
 
 /**
@@ -99,7 +100,13 @@ public final class EbnfTerminalTest {
      */
     @Test
     public void serializationTest() {
-        // TODO
+        Position position = new Position(10, 20);
+        EbnfTerminal terminal = new EbnfTerminal(position, "a");
+        EbnfTerminal deserialized = SerializationHelper.serializeAndDeserialize(terminal);
+        Assertions.assertThat(deserialized.getLine()).isEqualTo(10);
+        Assertions.assertThat(deserialized.getColumn()).isEqualTo(20);
+        Assertions.assertThat(deserialized.getValue()).isEqualTo("a");
+        Assertions.assertThat(deserialized).hasToString("Terminal(a)");
     }
 
 }
