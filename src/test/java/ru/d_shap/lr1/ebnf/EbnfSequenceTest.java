@@ -194,7 +194,22 @@ public final class EbnfSequenceTest {
      */
     @Test
     public void toStringTest() {
-        // TODO
+        Position position = new Position(1, 1);
+        EbnfNode node1 = new EbnfTerminal(position, "a");
+        EbnfNode node2 = new EbnfReference(position, "b");
+        EbnfNode node3 = new EbnfSpecial(position, "c");
+
+        EbnfSequence sequence0 = new EbnfSequence(position, new ArrayList<EbnfNode>());
+        Assertions.assertThat(sequence0).hasToString("Sequence()");
+
+        EbnfSequence sequence1 = new EbnfSequence(position, Collections.singletonList(node1));
+        Assertions.assertThat(sequence1).hasToString("Sequence(Terminal(a))");
+
+        EbnfSequence sequence2 = new EbnfSequence(position, Arrays.asList(node1, node2));
+        Assertions.assertThat(sequence2).hasToString("Sequence(Terminal(a), Reference(b))");
+
+        EbnfSequence sequence3 = new EbnfSequence(position, Arrays.asList(node1, node2, node3));
+        Assertions.assertThat(sequence3).hasToString("Sequence(Terminal(a), Reference(b), Special(c))");
     }
 
     /**
