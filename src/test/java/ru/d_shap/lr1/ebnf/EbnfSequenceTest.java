@@ -97,7 +97,96 @@ public final class EbnfSequenceTest {
      */
     @Test
     public void getExpressionTest() {
-        // TODO
+        Position position = new Position(1, 1);
+        EbnfNode node1 = new EbnfTerminal(position, "a");
+        EbnfNode node2 = new EbnfReference(position, "b");
+        EbnfNode node3 = new EbnfSpecial(position, "c");
+
+        EbnfSequence sequence0 = new EbnfSequence(position, new ArrayList<EbnfNode>());
+        try {
+            sequence0.getExpression(-1);
+            Assertions.fail("EbnfSequence test fail");
+        } catch (IndexOutOfBoundsException ex) {
+            Assertions.assertThat(ex).hasMessage("Index -1 should be in bounds [0, 0)");
+        }
+        try {
+            sequence0.getExpression(0);
+            Assertions.fail("EbnfSequence test fail");
+        } catch (IndexOutOfBoundsException ex) {
+            Assertions.assertThat(ex).hasMessage("Index 0 should be in bounds [0, 0)");
+        }
+        try {
+            sequence0.getExpression(1);
+            Assertions.fail("EbnfSequence test fail");
+        } catch (IndexOutOfBoundsException ex) {
+            Assertions.assertThat(ex).hasMessage("Index 1 should be in bounds [0, 0)");
+        }
+
+        EbnfSequence sequence1 = new EbnfSequence(position, Collections.singletonList(node1));
+        Assertions.assertThat(sequence1.getExpression(0)).isSameAs(node1);
+        try {
+            sequence1.getExpression(-1);
+            Assertions.fail("EbnfSequence test fail");
+        } catch (IndexOutOfBoundsException ex) {
+            Assertions.assertThat(ex).hasMessage("Index -1 should be in bounds [0, 1)");
+        }
+        try {
+            sequence1.getExpression(1);
+            Assertions.fail("EbnfSequence test fail");
+        } catch (IndexOutOfBoundsException ex) {
+            Assertions.assertThat(ex).hasMessage("Index 1 should be in bounds [0, 1)");
+        }
+        try {
+            sequence1.getExpression(2);
+            Assertions.fail("EbnfSequence test fail");
+        } catch (IndexOutOfBoundsException ex) {
+            Assertions.assertThat(ex).hasMessage("Index 2 should be in bounds [0, 1)");
+        }
+
+        EbnfSequence sequence2 = new EbnfSequence(position, Arrays.asList(node1, node2));
+        Assertions.assertThat(sequence2.getExpression(0)).isSameAs(node1);
+        Assertions.assertThat(sequence2.getExpression(1)).isSameAs(node2);
+        try {
+            sequence2.getExpression(-1);
+            Assertions.fail("EbnfSequence test fail");
+        } catch (IndexOutOfBoundsException ex) {
+            Assertions.assertThat(ex).hasMessage("Index -1 should be in bounds [0, 2)");
+        }
+        try {
+            sequence2.getExpression(2);
+            Assertions.fail("EbnfSequence test fail");
+        } catch (IndexOutOfBoundsException ex) {
+            Assertions.assertThat(ex).hasMessage("Index 2 should be in bounds [0, 2)");
+        }
+        try {
+            sequence2.getExpression(3);
+            Assertions.fail("EbnfSequence test fail");
+        } catch (IndexOutOfBoundsException ex) {
+            Assertions.assertThat(ex).hasMessage("Index 3 should be in bounds [0, 2)");
+        }
+
+        EbnfSequence sequence3 = new EbnfSequence(position, Arrays.asList(node1, node2, node3));
+        Assertions.assertThat(sequence3.getExpression(0)).isSameAs(node1);
+        Assertions.assertThat(sequence3.getExpression(1)).isSameAs(node2);
+        Assertions.assertThat(sequence3.getExpression(2)).isSameAs(node3);
+        try {
+            sequence3.getExpression(-1);
+            Assertions.fail("EbnfSequence test fail");
+        } catch (IndexOutOfBoundsException ex) {
+            Assertions.assertThat(ex).hasMessage("Index -1 should be in bounds [0, 3)");
+        }
+        try {
+            sequence3.getExpression(3);
+            Assertions.fail("EbnfSequence test fail");
+        } catch (IndexOutOfBoundsException ex) {
+            Assertions.assertThat(ex).hasMessage("Index 3 should be in bounds [0, 3)");
+        }
+        try {
+            sequence3.getExpression(4);
+            Assertions.fail("EbnfSequence test fail");
+        } catch (IndexOutOfBoundsException ex) {
+            Assertions.assertThat(ex).hasMessage("Index 4 should be in bounds [0, 3)");
+        }
     }
 
     /**
