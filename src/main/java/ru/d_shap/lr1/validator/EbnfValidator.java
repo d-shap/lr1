@@ -75,16 +75,17 @@ public final class EbnfValidator {
         _definedRules.clear();
         _reachableRules.clear();
 
-        List<EbnfRule> rules = _grammar.getRules();
+        int count = _grammar.getCount();
 
         // Check for empty grammar
-        if (rules.isEmpty()) {
+        if (count == 0) {
             _errors.add(new EbnfEmptyGrammarException());
             throw _errors.get(0);
         }
 
         // Collect all defined rules
-        for (EbnfRule rule : rules) {
+        for (int i = 0; i < count; i++) {
+            EbnfRule rule = _grammar.getRule(i);
             if (_definedRules.containsKey(rule.getName())) {
                 _errors.add(new EbnfDuplicateRuleException(rule.getPosition().getLine(), rule.getPosition().getColumn(), rule.getName()));
             } else {
@@ -93,18 +94,19 @@ public final class EbnfValidator {
         }
 
         // Check for undefined rule references and analyze terminal reachability
-        for (EbnfRule rule : rules) {
+        for (int i = 0; i < count; i++) {
+            EbnfRule rule = _grammar.getRule(i);
             validateNode(rule.getExpression());
         }
 
         // Build reachability graph from first rule
-        String startRule = rules.get(0).getName();
+        String startRule = _grammar.getRule(0).getName();
         _reachableRules.add(startRule); // Add start rule first
         collectReferencedRules(_definedRules.get(startRule).getExpression());
 
         // Check for unreachable rules (skip first rule as it's always reachable)
-        for (int i = 1; i < rules.size(); i++) {
-            EbnfRule rule = rules.get(i);
+        for (int i = 0; i < count; i++) {
+            EbnfRule rule = _grammar.getRule(i);
             if (!_reachableRules.contains(rule.getName())) {
                 _errors.add(new EbnfUnreachableRuleException(rule.getPosition().getLine(), rule.getPosition().getColumn(), rule.getName()));
             }
