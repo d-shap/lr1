@@ -22,7 +22,7 @@ package ru.d_shap.lr1.ebnf;
 import ru.d_shap.lr1.Position;
 
 /**
- * The EBNF exception (set difference).
+ * The EBNF except.
  *
  * @author Dmitry Shapovalov
  */
@@ -30,36 +30,42 @@ public final class EbnfExcept extends EbnfNode {
 
     private static final long serialVersionUID = 1L;
 
-    private final EbnfNode _base;
+    private final EbnfNode _expression;
 
     private final EbnfNode _exception;
 
     /**
      * Create new object.
      *
-     * @param position  the position.
-     * @param base      the base expression of the EBNF exception.
-     * @param exception the exception expression (to exclude) of the EBNF exception.
+     * @param position   the position.
+     * @param expression the expression.
+     * @param exception  the exception.
      */
-    public EbnfExcept(final Position position, final EbnfNode base, final EbnfNode exception) {
+    public EbnfExcept(final Position position, final EbnfNode expression, final EbnfNode exception) {
         super(position);
-        _base = base;
+        if (expression == null) {
+            throw new NullPointerException("Expression should not be null");
+        }
+        _expression = expression;
+        if (exception == null) {
+            throw new NullPointerException("Exception should not be null");
+        }
         _exception = exception;
     }
 
     /**
-     * Get the base expression of the EBNF exception.
+     * Get the expression.
      *
-     * @return the base expression of the EBNF exception.
+     * @return the expression.
      */
-    public EbnfNode getBase() {
-        return _base;
+    public EbnfNode getExpression() {
+        return _expression;
     }
 
     /**
-     * Get the exception expression of the EBNF exception.
+     * Get the exception.
      *
-     * @return the exception expression of the EBNF exception.
+     * @return the exception.
      */
     public EbnfNode getException() {
         return _exception;
@@ -67,7 +73,7 @@ public final class EbnfExcept extends EbnfNode {
 
     @Override
     public String toString() {
-        return String.format("Except(%s-%s)", _base, _exception);
+        return String.format("Except(%s-%s)", _expression, _exception);
     }
 
 }
