@@ -73,7 +73,11 @@ public final class EbnfExceptTest {
      */
     @Test
     public void getExpressionTest() {
-        // TODO
+        Position position = new Position(1, 1);
+        EbnfNode node1 = new EbnfTerminal(position, "a");
+        EbnfNode node2 = new EbnfSpecial(position, "b");
+        EbnfExcept except = new EbnfExcept(position, node1, node2);
+        Assertions.assertThat(except.getExpression()).isSameAs(node1);
     }
 
     /**
@@ -81,7 +85,11 @@ public final class EbnfExceptTest {
      */
     @Test
     public void getExceptionTest() {
-        // TODO
+        Position position = new Position(1, 1);
+        EbnfNode node1 = new EbnfTerminal(position, "a");
+        EbnfNode node2 = new EbnfSpecial(position, "b");
+        EbnfExcept except = new EbnfExcept(position, node1, node2);
+        Assertions.assertThat(except.getException()).isSameAs(node2);
     }
 
     /**
