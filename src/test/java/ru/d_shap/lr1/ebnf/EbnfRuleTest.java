@@ -101,7 +101,17 @@ public final class EbnfRuleTest {
      */
     @Test
     public void toStringTest() {
-        // TODO
+        Position position = new Position(1, 1);
+        EbnfNode node = new EbnfTerminal(position, "a");
+
+        EbnfRule rule0 = new EbnfRule(position, "", node);
+        Assertions.assertThat(rule0).hasToString("Rule(=Terminal(a))");
+
+        EbnfRule rule1 = new EbnfRule(position, "n", node);
+        Assertions.assertThat(rule1).hasToString("Rule(n=Terminal(a))");
+
+        EbnfRule rule2 = new EbnfRule(position, "n12", node);
+        Assertions.assertThat(rule2).hasToString("Rule(n12=Terminal(a))");
     }
 
     /**
