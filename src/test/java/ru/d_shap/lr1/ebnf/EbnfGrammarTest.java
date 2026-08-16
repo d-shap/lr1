@@ -19,7 +19,9 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 package ru.d_shap.lr1.ebnf;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 
 import org.junit.Test;
 
@@ -85,7 +87,25 @@ public final class EbnfGrammarTest {
      */
     @Test
     public void getCountTest() {
-        // TODO
+        Position position = new Position(1, 1);
+        EbnfNode node1 = new EbnfTerminal(position, "a");
+        EbnfRule rule1 = new EbnfRule(position, "n1", node1);
+        EbnfNode node2 = new EbnfReference(position, "b");
+        EbnfRule rule2 = new EbnfRule(position, "n2", node2);
+        EbnfNode node3 = new EbnfSpecial(position, "c");
+        EbnfRule rule3 = new EbnfRule(position, "n3", node3);
+
+        EbnfGrammar grammar0 = new EbnfGrammar(new ArrayList<EbnfRule>());
+        Assertions.assertThat(grammar0.getCount()).isEqualTo(0);
+
+        EbnfGrammar grammar1 = new EbnfGrammar(Collections.singletonList(rule1));
+        Assertions.assertThat(grammar1.getCount()).isEqualTo(1);
+
+        EbnfGrammar grammar2 = new EbnfGrammar(Arrays.asList(rule1, rule2));
+        Assertions.assertThat(grammar2.getCount()).isEqualTo(2);
+
+        EbnfGrammar grammar3 = new EbnfGrammar(Arrays.asList(rule1, rule2, rule3));
+        Assertions.assertThat(grammar3.getCount()).isEqualTo(3);
     }
 
     /**
