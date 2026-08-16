@@ -22,6 +22,7 @@ package ru.d_shap.lr1.ebnf;
 import org.junit.Test;
 
 import ru.d_shap.assertions.Assertions;
+import ru.d_shap.assertions.util.SerializationHelper;
 import ru.d_shap.lr1.Position;
 
 /**
@@ -105,7 +106,14 @@ public final class EbnfRepeatTest {
      */
     @Test
     public void serializationTest() {
-        // TODO
+        Position position = new Position(10, 20);
+        EbnfNode node = new EbnfTerminal(position, "a");
+        EbnfRepeat repeat = new EbnfRepeat(position, node, EbnfRepeatOperator.ZERO_OR_MANY);
+        EbnfRepeat deserialized = SerializationHelper.serializeAndDeserialize(repeat);
+        Assertions.assertThat(deserialized.getLine()).isEqualTo(10);
+        Assertions.assertThat(deserialized.getColumn()).isEqualTo(20);
+        Assertions.assertThat(deserialized.getRepeatOperator()).isEqualTo(EbnfRepeatOperator.ZERO_OR_MANY);
+        Assertions.assertThat(deserialized).hasToString("Repeat(Terminal(a)*)");
     }
 
 }
