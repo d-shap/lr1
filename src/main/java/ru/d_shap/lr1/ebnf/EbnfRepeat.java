@@ -54,9 +54,9 @@ public final class EbnfRepeat extends EbnfNode {
     }
 
     /**
-     * Get the expression of the EBNF repeat.
+     * Get the expression.
      *
-     * @return the expression of the EBNF repeat.
+     * @return the expression.
      */
     public EbnfNode getExpression() {
         return _expression;
@@ -65,9 +65,9 @@ public final class EbnfRepeat extends EbnfNode {
     /**
      * Get the repeat operator.
      *
-     * @return "*" for zero or more, "+" for one or more.
+     * @return the repeat operator.
      */
-    public EbnfRepeatOperator getOperator() {
+    public EbnfRepeatOperator getRepeatOperator() {
         return _repeatOperator;
     }
 
