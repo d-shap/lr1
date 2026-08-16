@@ -79,9 +79,9 @@ public final class EbnfGrammar implements Serializable {
      * @return the rule at the specified index.
      */
     public EbnfRule getRule(final int index) {
-        int size = _rulesList.size();
-        if (index < 0 || index >= size) {
-            String message = String.format("Index %s should be in bounds [0, %s)", index, size);
+        int count = _rulesList.size();
+        if (index < 0 || index >= count) {
+            String message = String.format("Index %s should be in bounds [0, %s)", index, count);
             throw new IndexOutOfBoundsException(message);
         }
         return _rulesList.get(index);

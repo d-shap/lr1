@@ -67,9 +67,9 @@ public final class EbnfChoice extends EbnfNode {
      * @return the expression at the specified index.
      */
     public EbnfNode getExpression(final int index) {
-        int size = _expressions.size();
-        if (index < 0 || index >= size) {
-            String message = String.format("Index %s should be in bounds [0, %s)", index, size);
+        int count = _expressions.size();
+        if (index < 0 || index >= count) {
+            String message = String.format("Index %s should be in bounds [0, %s)", index, count);
             throw new IndexOutOfBoundsException(message);
         }
         return _expressions.get(index);
