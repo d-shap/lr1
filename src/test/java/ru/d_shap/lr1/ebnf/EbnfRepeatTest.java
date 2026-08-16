@@ -72,7 +72,10 @@ public final class EbnfRepeatTest {
      */
     @Test
     public void getExpressionTest() {
-        // TODO
+        Position position = new Position(1, 1);
+        EbnfNode node = new EbnfTerminal(position, "a");
+        EbnfRepeat repeat = new EbnfRepeat(position, node, EbnfRepeatOperator.ZERO_OR_MANY);
+        Assertions.assertThat(repeat.getExpression()).isSameAs(node);
     }
 
     /**
@@ -80,7 +83,10 @@ public final class EbnfRepeatTest {
      */
     @Test
     public void getRepeatOperatorTest() {
-        // TODO
+        Position position = new Position(1, 1);
+        EbnfNode node = new EbnfTerminal(position, "a");
+        EbnfRepeat repeat = new EbnfRepeat(position, node, EbnfRepeatOperator.ZERO_OR_MANY);
+        Assertions.assertThat(repeat.getRepeatOperator()).isEqualTo(EbnfRepeatOperator.ZERO_OR_MANY);
     }
 
     /**
