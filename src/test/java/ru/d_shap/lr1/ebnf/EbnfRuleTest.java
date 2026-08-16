@@ -22,6 +22,7 @@ package ru.d_shap.lr1.ebnf;
 import org.junit.Test;
 
 import ru.d_shap.assertions.Assertions;
+import ru.d_shap.assertions.util.SerializationHelper;
 import ru.d_shap.lr1.Position;
 
 /**
@@ -119,7 +120,14 @@ public final class EbnfRuleTest {
      */
     @Test
     public void serializationTest() {
-        // TODO
+        Position position = new Position(10, 20);
+        EbnfNode node = new EbnfTerminal(position, "a");
+        EbnfRule rule = new EbnfRule(position, "n", node);
+        EbnfRule deserialized = SerializationHelper.serializeAndDeserialize(rule);
+        Assertions.assertThat(deserialized.getLine()).isEqualTo(10);
+        Assertions.assertThat(deserialized.getColumn()).isEqualTo(20);
+        Assertions.assertThat(deserialized.getName()).isEqualTo("n");
+        Assertions.assertThat(deserialized).hasToString("Rule(n=Terminal(a))");
     }
 
 }
