@@ -113,7 +113,99 @@ public final class EbnfGrammarTest {
      */
     @Test
     public void getRuleAtIndexTest() {
-        // TODO
+        Position position = new Position(1, 1);
+        EbnfNode node1 = new EbnfTerminal(position, "a");
+        EbnfRule rule1 = new EbnfRule(position, "n1", node1);
+        EbnfNode node2 = new EbnfReference(position, "b");
+        EbnfRule rule2 = new EbnfRule(position, "n2", node2);
+        EbnfNode node3 = new EbnfSpecial(position, "c");
+        EbnfRule rule3 = new EbnfRule(position, "n3", node3);
+
+        EbnfGrammar grammar0 = new EbnfGrammar(new ArrayList<EbnfRule>());
+        try {
+            grammar0.getRule(-1);
+            Assertions.fail("EbnfGrammar test fail");
+        } catch (IndexOutOfBoundsException ex) {
+            Assertions.assertThat(ex).hasMessage("Index -1 should be in bounds [0, 0)");
+        }
+        try {
+            grammar0.getRule(0);
+            Assertions.fail("EbnfGrammar test fail");
+        } catch (IndexOutOfBoundsException ex) {
+            Assertions.assertThat(ex).hasMessage("Index 0 should be in bounds [0, 0)");
+        }
+        try {
+            grammar0.getRule(1);
+            Assertions.fail("EbnfGrammar test fail");
+        } catch (IndexOutOfBoundsException ex) {
+            Assertions.assertThat(ex).hasMessage("Index 1 should be in bounds [0, 0)");
+        }
+
+        EbnfGrammar grammar1 = new EbnfGrammar(Collections.singletonList(rule1));
+        Assertions.assertThat(grammar1.getRule(0)).isSameAs(rule1);
+        try {
+            grammar1.getRule(-1);
+            Assertions.fail("EbnfGrammar test fail");
+        } catch (IndexOutOfBoundsException ex) {
+            Assertions.assertThat(ex).hasMessage("Index -1 should be in bounds [0, 1)");
+        }
+        try {
+            grammar1.getRule(1);
+            Assertions.fail("EbnfGrammar test fail");
+        } catch (IndexOutOfBoundsException ex) {
+            Assertions.assertThat(ex).hasMessage("Index 1 should be in bounds [0, 1)");
+        }
+        try {
+            grammar1.getRule(2);
+            Assertions.fail("EbnfGrammar test fail");
+        } catch (IndexOutOfBoundsException ex) {
+            Assertions.assertThat(ex).hasMessage("Index 2 should be in bounds [0, 1)");
+        }
+
+        EbnfGrammar grammar2 = new EbnfGrammar(Arrays.asList(rule1, rule2));
+        Assertions.assertThat(grammar2.getRule(0)).isSameAs(rule1);
+        Assertions.assertThat(grammar2.getRule(1)).isSameAs(rule2);
+        try {
+            grammar2.getRule(-1);
+            Assertions.fail("EbnfGrammar test fail");
+        } catch (IndexOutOfBoundsException ex) {
+            Assertions.assertThat(ex).hasMessage("Index -1 should be in bounds [0, 2)");
+        }
+        try {
+            grammar2.getRule(2);
+            Assertions.fail("EbnfGrammar test fail");
+        } catch (IndexOutOfBoundsException ex) {
+            Assertions.assertThat(ex).hasMessage("Index 2 should be in bounds [0, 2)");
+        }
+        try {
+            grammar2.getRule(3);
+            Assertions.fail("EbnfGrammar test fail");
+        } catch (IndexOutOfBoundsException ex) {
+            Assertions.assertThat(ex).hasMessage("Index 3 should be in bounds [0, 2)");
+        }
+
+        EbnfGrammar grammar3 = new EbnfGrammar(Arrays.asList(rule1, rule2, rule3));
+        Assertions.assertThat(grammar3.getRule(0)).isSameAs(rule1);
+        Assertions.assertThat(grammar3.getRule(1)).isSameAs(rule2);
+        Assertions.assertThat(grammar3.getRule(2)).isSameAs(rule3);
+        try {
+            grammar3.getRule(-1);
+            Assertions.fail("EbnfGrammar test fail");
+        } catch (IndexOutOfBoundsException ex) {
+            Assertions.assertThat(ex).hasMessage("Index -1 should be in bounds [0, 3)");
+        }
+        try {
+            grammar3.getRule(3);
+            Assertions.fail("EbnfGrammar test fail");
+        } catch (IndexOutOfBoundsException ex) {
+            Assertions.assertThat(ex).hasMessage("Index 3 should be in bounds [0, 3)");
+        }
+        try {
+            grammar3.getRule(4);
+            Assertions.fail("EbnfGrammar test fail");
+        } catch (IndexOutOfBoundsException ex) {
+            Assertions.assertThat(ex).hasMessage("Index 4 should be in bounds [0, 3)");
+        }
     }
 
     /**
