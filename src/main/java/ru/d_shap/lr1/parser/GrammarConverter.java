@@ -78,7 +78,9 @@ public final class GrammarConverter {
      * Convert EBNF grammar to production rules.
      */
     private void convertGrammar() {
-        for (EbnfRule ebnfRule : _ebnfGrammar.getRules()) {
+        int count = _ebnfGrammar.getCount();
+        for (int i = 0; i < count; i++) {
+            EbnfRule ebnfRule = _ebnfGrammar.getRule(i);
             String lhs = ebnfRule.getName();
             List<String> rhs = new ArrayList<>();
             convertNode(ebnfRule.getExpression(), rhs, lhs);
