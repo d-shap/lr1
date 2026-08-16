@@ -101,8 +101,8 @@ public final class EbnfReferenceTest {
     @Test
     public void serializationTest() {
         Position position = new Position(10, 20);
-        EbnfReference reference0 = new EbnfReference(position, "a");
-        EbnfReference deserialized = SerializationHelper.serializeAndDeserialize(reference0);
+        EbnfReference reference = new EbnfReference(position, "a");
+        EbnfReference deserialized = SerializationHelper.serializeAndDeserialize(reference);
         Assertions.assertThat(deserialized.getLine()).isEqualTo(10);
         Assertions.assertThat(deserialized.getColumn()).isEqualTo(20);
         Assertions.assertThat(deserialized.getName()).isEqualTo("a");
