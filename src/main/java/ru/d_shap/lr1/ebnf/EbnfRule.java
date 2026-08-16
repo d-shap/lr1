@@ -38,28 +38,34 @@ public final class EbnfRule extends EbnfNode {
      * Create new object.
      *
      * @param position   the position.
-     * @param name       the name of the EBNF rule.
-     * @param expression the expression of the EBNF rule.
+     * @param name       the name.
+     * @param expression the expression.
      */
     public EbnfRule(final Position position, final String name, final EbnfNode expression) {
         super(position);
+        if (name == null) {
+            throw new NullPointerException("Name should not be null");
+        }
         _name = name;
+        if (expression == null) {
+            throw new NullPointerException("Expression should not be null");
+        }
         _expression = expression;
     }
 
     /**
-     * Get the name of the EBNF rule.
+     * Get the name.
      *
-     * @return the name of the EBNF rule.
+     * @return the name.
      */
     public String getName() {
         return _name;
     }
 
     /**
-     * Get the expression of the EBNF rule.
+     * Get the expression.
      *
-     * @return the expression of the EBNF rule.
+     * @return the expression.
      */
     public EbnfNode getExpression() {
         return _expression;
