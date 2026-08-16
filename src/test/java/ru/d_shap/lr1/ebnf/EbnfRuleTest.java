@@ -45,10 +45,10 @@ public final class EbnfRuleTest {
     public void constructorTest() {
         Position position = new Position(1, 1);
         EbnfNode node = new EbnfTerminal(position, "a");
-        new EbnfRule(position, "a", node);
+        new EbnfRule(position, "n", node);
 
         try {
-            new EbnfRule(null, "a", node);
+            new EbnfRule(null, "n", node);
             Assertions.fail("EbnfRule test fail");
         } catch (NullPointerException ex) {
             Assertions.assertThat(ex).hasMessage("Position should not be null");
@@ -60,7 +60,7 @@ public final class EbnfRuleTest {
             Assertions.assertThat(ex).hasMessage("Name should not be null");
         }
         try {
-            new EbnfRule(position, "a", null);
+            new EbnfRule(position, "n", null);
             Assertions.fail("EbnfRule test fail");
         } catch (NullPointerException ex) {
             Assertions.assertThat(ex).hasMessage("Expression should not be null");
@@ -72,7 +72,17 @@ public final class EbnfRuleTest {
      */
     @Test
     public void getNameTest() {
-        // TODO
+        Position position = new Position(1, 1);
+        EbnfNode node = new EbnfTerminal(position, "a");
+
+        EbnfRule rule0 = new EbnfRule(position, "", node);
+        Assertions.assertThat(rule0.getName()).isEqualTo("");
+
+        EbnfRule rule1 = new EbnfRule(position, "n", node);
+        Assertions.assertThat(rule1.getName()).isEqualTo("n");
+
+        EbnfRule rule2 = new EbnfRule(position, "n12", node);
+        Assertions.assertThat(rule2.getName()).isEqualTo("n12");
     }
 
     /**
