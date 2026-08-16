@@ -23,10 +23,6 @@ import ru.d_shap.lr1.Position;
 
 /**
  * The EBNF repeat.
- * <p>
- * Supports:
- * - "*" (zero or more repetitions)
- * - "+" (one or more repetitions)
  *
  * @author Dmitry Shapovalov
  */
@@ -36,19 +32,19 @@ public final class EbnfRepeat extends EbnfNode {
 
     private final EbnfNode _expression;
 
-    private final EbnfRepeatOperator _operator;
+    private final EbnfRepeatOperator _repeatOperator;
 
     /**
      * Create new object.
      *
-     * @param position   the position.
-     * @param expression the expression of the EBNF repeat.
-     * @param operator   the repeat operator ("*" or "+").
+     * @param position       the position.
+     * @param expression     the expression.
+     * @param repeatOperator the repeat operator.
      */
-    public EbnfRepeat(final Position position, final EbnfNode expression, final EbnfRepeatOperator operator) {
+    public EbnfRepeat(final Position position, final EbnfNode expression, final EbnfRepeatOperator repeatOperator) {
         super(position);
         _expression = expression;
-        _operator = operator;
+        _repeatOperator = repeatOperator;
     }
 
     /**
@@ -66,12 +62,12 @@ public final class EbnfRepeat extends EbnfNode {
      * @return "*" for zero or more, "+" for one or more.
      */
     public EbnfRepeatOperator getOperator() {
-        return _operator;
+        return _repeatOperator;
     }
 
     @Override
     public String toString() {
-        return String.format("Repeat(%s%s)", _expression, _operator.getOperator());
+        return String.format("Repeat(%s%s)", _expression, _repeatOperator.getOperator());
     }
 
 }
