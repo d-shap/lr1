@@ -77,7 +77,10 @@ public final class EbnfOptionalTest {
      */
     @Test
     public void toStringTest() {
-        // TODO
+        Position position = new Position(1, 1);
+        EbnfNode node = new EbnfTerminal(position, "a");
+        EbnfOptional optional = new EbnfOptional(position, node);
+        Assertions.assertThat(optional).hasToString("Optional(Terminal(a))");
     }
 
     /**
