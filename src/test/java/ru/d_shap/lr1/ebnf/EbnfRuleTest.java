@@ -90,7 +90,10 @@ public final class EbnfRuleTest {
      */
     @Test
     public void getExpressionTest() {
-        // TODO
+        Position position = new Position(1, 1);
+        EbnfNode node = new EbnfTerminal(position, "a");
+        EbnfRule rule = new EbnfRule(position, "n", node);
+        Assertions.assertThat(rule.getExpression()).isSameAs(node);
     }
 
     /**
