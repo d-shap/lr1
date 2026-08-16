@@ -22,10 +22,12 @@ package ru.d_shap.lr1.ebnf;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 import org.junit.Test;
 
 import ru.d_shap.assertions.Assertions;
+import ru.d_shap.assertions.util.SerializationHelper;
 import ru.d_shap.lr1.Position;
 
 /**
@@ -271,7 +273,18 @@ public final class EbnfGrammarTest {
      */
     @Test
     public void serializationTest() {
-        // TODO
+        Position position = new Position(1, 1);
+        EbnfNode node1 = new EbnfTerminal(position, "a");
+        EbnfRule rule1 = new EbnfRule(position, "n1", node1);
+        EbnfNode node2 = new EbnfReference(position, "b");
+        EbnfRule rule2 = new EbnfRule(position, "n2", node2);
+        EbnfNode node3 = new EbnfSpecial(position, "c");
+        EbnfRule rule3 = new EbnfRule(position, "n3", node3);
+        List<EbnfRule> rules = Arrays.asList(rule1, rule2, rule3);
+        EbnfGrammar grammar = new EbnfGrammar(rules);
+        EbnfGrammar deserialized = SerializationHelper.serializeAndDeserialize(grammar);
+        Assertions.assertThat(deserialized.getCount()).isEqualTo(3);
+        Assertions.assertThat(deserialized).hasToString("[Rule(n1=Terminal(a)), Rule(n2=Reference(b)), Rule(n3=Special(c))]");
     }
 
 }
