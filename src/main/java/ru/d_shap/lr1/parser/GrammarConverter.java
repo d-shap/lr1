@@ -159,7 +159,7 @@ public final class GrammarConverter {
             recursive.add(auxName);
             addProduction(auxName, recursive);
 
-            if (repeat.getOperator() == EbnfRepeatOperator.ONE_OR_MANY) {
+            if (repeat.getRepeatOperator() == EbnfRepeatOperator.ONE_OR_MANY) {
                 // For A+: also add base case A → innerExpr
                 List<String> base = new ArrayList<>();
                 convertNode(repeat.getExpression(), base, auxName);
