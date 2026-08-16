@@ -97,7 +97,11 @@ public final class EbnfExceptTest {
      */
     @Test
     public void toStringTest() {
-        // TODO
+        Position position = new Position(1, 1);
+        EbnfNode node1 = new EbnfTerminal(position, "a");
+        EbnfNode node2 = new EbnfSpecial(position, "b");
+        EbnfExcept except = new EbnfExcept(position, node1, node2);
+        Assertions.assertThat(except).hasToString("Except(Terminal(a)-Special(b))");
     }
 
     /**
