@@ -66,7 +66,10 @@ public final class EbnfOptionalTest {
      */
     @Test
     public void getExpressionTest() {
-        // TODO
+        Position position = new Position(1, 1);
+        EbnfNode node = new EbnfTerminal(position, "a");
+        EbnfOptional optional = new EbnfOptional(position, node);
+        Assertions.assertThat(optional.getExpression()).isSameAs(node);
     }
 
     /**
