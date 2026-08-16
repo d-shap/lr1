@@ -43,7 +43,13 @@ public final class EbnfRepeat extends EbnfNode {
      */
     public EbnfRepeat(final Position position, final EbnfNode expression, final EbnfRepeatOperator repeatOperator) {
         super(position);
+        if (expression == null) {
+            throw new NullPointerException("Expression should not be null");
+        }
         _expression = expression;
+        if (repeatOperator == null) {
+            throw new NullPointerException("Repeat operator should not be null");
+        }
         _repeatOperator = repeatOperator;
     }
 
