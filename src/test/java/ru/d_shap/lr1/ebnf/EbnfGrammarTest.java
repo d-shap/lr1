@@ -213,7 +213,31 @@ public final class EbnfGrammarTest {
      */
     @Test
     public void getRuleWithNameTest() {
-        // TODO
+        Position position = new Position(1, 1);
+        EbnfNode node1 = new EbnfTerminal(position, "a");
+        EbnfRule rule1 = new EbnfRule(position, "n1", node1);
+        EbnfNode node2 = new EbnfReference(position, "b");
+        EbnfRule rule2 = new EbnfRule(position, "n2", node2);
+        EbnfNode node3 = new EbnfSpecial(position, "c");
+        EbnfRule rule3 = new EbnfRule(position, "n3", node3);
+
+        EbnfGrammar grammar0 = new EbnfGrammar(new ArrayList<EbnfRule>());
+        Assertions.assertThat(grammar0.getRule("n")).isNull();
+
+        EbnfGrammar grammar1 = new EbnfGrammar(Collections.singletonList(rule1));
+        Assertions.assertThat(grammar1.getRule("n1")).isSameAs(rule1);
+        Assertions.assertThat(grammar1.getRule("n")).isNull();
+
+        EbnfGrammar grammar2 = new EbnfGrammar(Arrays.asList(rule1, rule2));
+        Assertions.assertThat(grammar2.getRule("n1")).isSameAs(rule1);
+        Assertions.assertThat(grammar2.getRule("n2")).isSameAs(rule2);
+        Assertions.assertThat(grammar2.getRule("n")).isNull();
+
+        EbnfGrammar grammar3 = new EbnfGrammar(Arrays.asList(rule1, rule2, rule3));
+        Assertions.assertThat(grammar3.getRule("n1")).isSameAs(rule1);
+        Assertions.assertThat(grammar3.getRule("n2")).isSameAs(rule2);
+        Assertions.assertThat(grammar3.getRule("n3")).isSameAs(rule3);
+        Assertions.assertThat(grammar3.getRule("n")).isNull();
     }
 
     /**
