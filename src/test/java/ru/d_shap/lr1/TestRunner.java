@@ -91,7 +91,7 @@ public final class TestRunner {
         System.out.println(firstSets);
 
         // Build LR(1) states
-        String startSymbol = ebnfGrammar.getRules().get(0).getName();
+        String startSymbol = ebnfGrammar.getRule(0).getName();
         LR1StateBuilder stateBuilder = new LR1StateBuilder(grammarMap, firstSets);
 
         // Create initial item: [S' → S •, $]
