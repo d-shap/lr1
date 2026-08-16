@@ -94,7 +94,10 @@ public final class EbnfRepeatTest {
      */
     @Test
     public void toStringTest() {
-        // TODO
+        Position position = new Position(1, 1);
+        EbnfNode node = new EbnfTerminal(position, "a");
+        EbnfRepeat repeat = new EbnfRepeat(position, node, EbnfRepeatOperator.ZERO_OR_MANY);
+        Assertions.assertThat(repeat).hasToString("Repeat(Terminal(a)*)");
     }
 
     /**
