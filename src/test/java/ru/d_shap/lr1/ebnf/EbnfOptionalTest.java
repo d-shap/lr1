@@ -22,6 +22,7 @@ package ru.d_shap.lr1.ebnf;
 import org.junit.Test;
 
 import ru.d_shap.assertions.Assertions;
+import ru.d_shap.assertions.util.SerializationHelper;
 import ru.d_shap.lr1.Position;
 
 /**
@@ -88,7 +89,13 @@ public final class EbnfOptionalTest {
      */
     @Test
     public void serializationTest() {
-        // TODO
+        Position position = new Position(10, 20);
+        EbnfNode node = new EbnfTerminal(position, "a");
+        EbnfOptional optional = new EbnfOptional(position, node);
+        EbnfOptional deserialized = SerializationHelper.serializeAndDeserialize(optional);
+        Assertions.assertThat(deserialized.getLine()).isEqualTo(10);
+        Assertions.assertThat(deserialized.getColumn()).isEqualTo(20);
+        Assertions.assertThat(deserialized).hasToString("Optional(Terminal(a))");
     }
 
 }
