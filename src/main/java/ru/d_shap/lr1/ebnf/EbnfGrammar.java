@@ -21,7 +21,7 @@ package ru.d_shap.lr1.ebnf;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -34,58 +34,73 @@ public final class EbnfGrammar implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private final Map<String, EbnfRule> _rules;
+    private final List<EbnfRule> _rulesList;
+
+    private final Map<String, EbnfRule> _rulesMap;
 
     /**
      * Create new object.
      *
-     * @param rules the list of the EBNF rules.
+     * @param rules the rules.
      */
     public EbnfGrammar(final List<EbnfRule> rules) {
         super();
         if (rules == null) {
-            _rules = null;
-        } else {
-            _rules = new LinkedHashMap<>();
-            for (EbnfRule ebnfRule : rules) {
-                if (ebnfRule != null) {
-                    _rules.put(ebnfRule.getName(), ebnfRule);
-                }
+            throw new NullPointerException("Rules should not be null");
+        }
+        for (EbnfRule rule : rules) {
+            if (rule == null) {
+                throw new NullPointerException("Rule should not be null");
             }
+        }
+        _rulesList = new ArrayList<>();
+        _rulesMap = new HashMap<>();
+        for (EbnfRule rule : rules) {
+            _rulesList.add(rule);
+            String name = rule.getName();
+            _rulesMap.put(name, rule);
         }
     }
 
     /**
-     * Get the EBNF rule for the specified name.
+     * Get the number of the rules.
+     *
+     * @return the number of the rules.
+     */
+    public int getCount() {
+        return _rulesList.size();
+    }
+
+    /**
+     * Get the rule at the specified index.
+     *
+     * @param index the specified index.
+     *
+     * @return the rule at the specified index.
+     */
+    public EbnfRule getRule(final int index) {
+        int size = _rulesList.size();
+        if (index < 0 || index >= size) {
+            String message = String.format("Index %s should be in bounds [0, %s)", index, size);
+            throw new IndexOutOfBoundsException(message);
+        }
+        return _rulesList.get(index);
+    }
+
+    /**
+     * Get the rule with the specified name.
      *
      * @param name the specified name.
      *
-     * @return the EBNF rule for the specified name.
+     * @return the rule with the specified name.
      */
-    public EbnfRule getEbnfRule(final String name) {
-        if (_rules == null) {
-            return null;
-        } else {
-            return _rules.get(name);
-        }
-    }
-
-    /**
-     * Get all rules.
-     *
-     * @return the list of all rules.
-     */
-    public List<EbnfRule> getRules() {
-        if (_rules == null) {
-            return new ArrayList<>();
-        } else {
-            return new ArrayList<>(_rules.values());
-        }
+    public EbnfRule getRule(final String name) {
+        return _rulesMap.get(name);
     }
 
     @Override
     public String toString() {
-        return _rules.toString();
+        return _rulesList.toString();
     }
 
 }
