@@ -173,7 +173,7 @@ public final class EbnfValidator {
     }
 
     private void validateExcept(final EbnfExcept node) {
-        validateNode(node.getBase());
+        validateNode(node.getExpression());
         validateNode(node.getException());
     }
 
@@ -212,7 +212,7 @@ public final class EbnfValidator {
         } else if (node instanceof EbnfRepeat) {
             collectReferencedRules(((EbnfRepeat) node).getExpression());
         } else if (node instanceof EbnfExcept) {
-            collectReferencedRules(((EbnfExcept) node).getBase());
+            collectReferencedRules(((EbnfExcept) node).getExpression());
             collectReferencedRules(((EbnfExcept) node).getException());
         }
     }
@@ -255,7 +255,7 @@ public final class EbnfValidator {
         } else if (node instanceof EbnfRepeat) {
             collectDirectReferencesHelper(((EbnfRepeat) node).getExpression(), references);
         } else if (node instanceof EbnfExcept) {
-            collectDirectReferencesHelper(((EbnfExcept) node).getBase(), references);
+            collectDirectReferencesHelper(((EbnfExcept) node).getExpression(), references);
             collectDirectReferencesHelper(((EbnfExcept) node).getException(), references);
         }
     }
@@ -335,7 +335,7 @@ public final class EbnfValidator {
         }
 
         if (node instanceof EbnfExcept) {
-            return canBeEmpty(((EbnfExcept) node).getBase(), visitingRules);
+            return canBeEmpty(((EbnfExcept) node).getExpression(), visitingRules);
         }
 
         return false;
