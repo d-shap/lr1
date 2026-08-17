@@ -19,6 +19,8 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 package ru.d_shap.lr1.source;
 
+import java.io.IOException;
+
 /**
  * The String source.
  *
@@ -40,7 +42,7 @@ public final class StringSource<R> extends Source<String, R> {
     }
 
     @Override
-    protected void parseSource(final String source) {
+    protected void parseSource(final String source) throws IOException {
         int length = source.length();
         for (int i = 0; i < length; i++) {
             char ch = source.charAt(i);
