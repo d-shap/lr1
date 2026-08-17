@@ -19,6 +19,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 package ru.d_shap.lr1.source;
 
+import java.io.IOException;
 import java.io.Serializable;
 
 /**
@@ -65,22 +66,28 @@ public abstract class Source<S, R> implements Serializable {
         if (source == null) {
             throw new NullPointerException("Source should not be null");
         }
-        _charConsumer.reset();
-        _line = 1;
-        _column = 1;
-        parseSource(source);
-        _charConsumer.accept(0, 0, -1);
-        R result = _charConsumer.getResult();
-        _charConsumer.reset();
-        return result;
+        try {
+            _charConsumer.reset();
+            _line = 1;
+            _column = 1;
+            parseSource(source);
+            _charConsumer.accept(0, 0, -1);
+            R result = _charConsumer.getResult();
+            _charConsumer.reset();
+            return result;
+        } catch (IOException ex) {
+            throw new SourceException(ex);
+        }
     }
 
     /**
      * Parse the source.
      *
      * @param source the source.
+     *
+     * @throws IOException IO exception.
      */
-    protected abstract void parseSource(S source);
+    protected abstract void parseSource(S source) throws IOException;
 
     /**
      * Accept the char.
