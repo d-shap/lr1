@@ -24,11 +24,11 @@ import java.io.Serializable;
 /**
  * The char consumer.
  *
- * @param <T> the generic type of the result.
+ * @param <R> the generic type of the result.
  *
  * @author Dmitry Shapovalov
  */
-public interface CharConsumer<T> extends Serializable {
+public interface CharConsumer<R> extends Serializable {
 
     /**
      * Reset the consumer.
@@ -49,6 +49,6 @@ public interface CharConsumer<T> extends Serializable {
      *
      * @return the result.
      */
-    T getResult();
+    R getResult();
 
 }
