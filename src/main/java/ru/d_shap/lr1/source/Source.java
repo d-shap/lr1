@@ -95,13 +95,13 @@ public abstract class Source<S, R> implements Serializable {
      * @param ch the char.
      */
     protected final void accept(final int ch) {
+        _charConsumer.accept(_line, _column, ch);
         if (ch == '\n') {
             _line++;
             _column = 1;
         } else {
             _column++;
         }
-        _charConsumer.accept(_line, _column, ch);
     }
 
 }
