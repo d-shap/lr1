@@ -35,6 +35,10 @@ public abstract class Source<S, R> implements Serializable {
 
     private final CharConsumer<R> _charConsumer;
 
+    private int _line;
+
+    private int _column;
+
     /**
      * Create new object.
      *
@@ -46,6 +50,8 @@ public abstract class Source<S, R> implements Serializable {
             throw new NullPointerException("Char consumer should not be null");
         }
         _charConsumer = charConsumer;
+        _line = 0;
+        _column = 0;
     }
 
     /**
@@ -60,6 +66,8 @@ public abstract class Source<S, R> implements Serializable {
             throw new NullPointerException("Source should not be null");
         }
         _charConsumer.reset();
+        _line = 1;
+        _column = 1;
         parseSource(source);
         _charConsumer.accept(0, 0, -1);
         R result = _charConsumer.getResult();
@@ -80,7 +88,13 @@ public abstract class Source<S, R> implements Serializable {
      * @param ch the char.
      */
     protected final void accept(final int ch) {
-        _charConsumer.accept(0, 0, ch);
+        if (ch == '\n') {
+            _line++;
+            _column = 1;
+        } else {
+            _column++;
+        }
+        _charConsumer.accept(_line, _column, ch);
     }
 
 }
