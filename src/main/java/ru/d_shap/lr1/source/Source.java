@@ -72,9 +72,7 @@ public abstract class Source<S, R> implements Serializable {
             _column = 1;
             parseSource(source);
             _charConsumer.accept(0, 0, -1);
-            R result = _charConsumer.getResult();
-            _charConsumer.reset();
-            return result;
+            return _charConsumer.getResult();
         } catch (IOException ex) {
             throw new SourceException(ex);
         }
