@@ -18,6 +18,6 @@
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 /**
- * Package contains input classes.
+ * Package contains source classes.
  */
-package ru.d_shap.lr1.input;
+package ru.d_shap.lr1.source;
