@@ -55,6 +55,12 @@ public final class StringSourceTest {
 
         List<String> list3 = source.parse("a\nbc\n  \r\n d");
         Assertions.assertThat(list3).containsExactlyInOrder("97 at 1:1", "10 at 1:2", "98 at 2:1", "99 at 2:2", "10 at 2:3", "32 at 3:1", "32 at 3:2", "13 at 3:3", "10 at 3:4", "32 at 4:1", "100 at 4:2");
+
+        List<String> list4 = source.parse("\n\n\n");
+        Assertions.assertThat(list4).containsExactlyInOrder("10 at 1:1", "10 at 2:1", "10 at 3:1");
+
+        List<String> list5 = source.parse("\r\r\r");
+        Assertions.assertThat(list5).containsExactlyInOrder("13 at 1:1", "13 at 1:2", "13 at 1:3");
     }
 
 }
