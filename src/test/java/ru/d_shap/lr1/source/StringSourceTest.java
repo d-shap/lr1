@@ -19,6 +19,12 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 package ru.d_shap.lr1.source;
 
+import java.util.List;
+
+import org.junit.Test;
+
+import ru.d_shap.assertions.Assertions;
+
 /**
  * Tests for {@link StringSource}.
  *
@@ -31,6 +37,24 @@ public final class StringSourceTest {
      */
     public StringSourceTest() {
         super();
+    }
+
+    /**
+     * {@link StringSource} class test.
+     */
+    @Test
+    public void parseSourceTest() {
+        CharConsumer<List<String>> charConsumer = new CharConsumerImpl();
+        StringSource<List<String>> source = new StringSource<>(charConsumer);
+
+        List<String> list1 = source.parse("");
+        Assertions.assertThat(list1).containsExactlyInOrder();
+
+        List<String> list2 = source.parse("abc");
+        Assertions.assertThat(list2).containsExactlyInOrder("97 at 1:1", "98 at 1:2", "99 at 1:3");
+
+        List<String> list3 = source.parse("a\nbc\n  \n d");
+        Assertions.assertThat(list3).containsExactlyInOrder("97 at 1:1", "10 at 1:2", "98 at 2:1", "99 at 2:2", "10 at 2:3", "32 at 3:1", "32 at 3:2", "10 at 3:3", "32 at 4:1", "100 at 4:2");
     }
 
 }
