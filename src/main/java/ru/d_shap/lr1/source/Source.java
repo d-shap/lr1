@@ -42,6 +42,9 @@ public abstract class Source<S, R> implements Serializable {
      */
     protected Source(final CharConsumer<R> charConsumer) {
         super();
+        if (charConsumer == null) {
+            throw new NullPointerException("Char consumer should not be null");
+        }
         _charConsumer = charConsumer;
     }
 
@@ -53,6 +56,9 @@ public abstract class Source<S, R> implements Serializable {
      * @return the result.
      */
     public final R parse(final S source) {
+        if (source == null) {
+            throw new NullPointerException("Source should not be null");
+        }
         _charConsumer.reset();
         parseSource(source);
         _charConsumer.accept(0, 0, -1);
