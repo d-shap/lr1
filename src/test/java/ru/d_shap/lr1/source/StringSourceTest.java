@@ -24,6 +24,7 @@ import java.util.List;
 import org.junit.Test;
 
 import ru.d_shap.assertions.Assertions;
+import ru.d_shap.assertions.util.SerializationHelper;
 
 /**
  * Tests for {@link StringSource}.
@@ -61,6 +62,18 @@ public final class StringSourceTest {
 
         List<String> list5 = source.parse("\r\r\r");
         Assertions.assertThat(list5).containsExactlyInOrder("13 at 1:1", "13 at 1:2", "13 at 1:3");
+    }
+
+    /**
+     * {@link StringSource} class test.
+     */
+    @Test
+    public void serializationTest() {
+        CharConsumer<List<String>> charConsumer = new CharConsumerImpl();
+        StringSource<List<String>> source = new StringSource<>(charConsumer);
+        StringSource<List<String>> deserialized = SerializationHelper.serializeAndDeserialize(source);
+        List<String> list = deserialized.parse("abc");
+        Assertions.assertThat(list).containsExactlyInOrder("97 at 1:1", "98 at 1:2", "99 at 1:3");
     }
 
 }
