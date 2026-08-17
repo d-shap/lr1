@@ -19,35 +19,61 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 package ru.d_shap.lr1.source;
 
+import java.io.Serializable;
+
 /**
  * The source.
  *
  * @param <S> the generic type of the source.
- * @param <T> the generic type of the result.
+ * @param <R> the generic type of the result.
  *
  * @author Dmitry Shapovalov
  */
-public abstract class Source<S, T> {
+public abstract class Source<S, R> implements Serializable {
 
-    private final CharConsumer<T> _charConsumer;
+    private static final long serialVersionUID = 1L;
 
-    protected Source(final CharConsumer<T> charConsumer) {
+    private final CharConsumer<R> _charConsumer;
+
+    /**
+     * Create new object.
+     *
+     * @param charConsumer the char consumer.
+     */
+    protected Source(final CharConsumer<R> charConsumer) {
         super();
         _charConsumer = charConsumer;
     }
 
-    public final T parse(final S source) {
+    /**
+     * Parse the source and return the result.
+     *
+     * @param source the source.
+     *
+     * @return the result.
+     */
+    public final R parse(final S source) {
         _charConsumer.reset();
-        processSource(source);
+        parseSource(source);
         _charConsumer.accept(0, 0, -1);
-        T result = _charConsumer.getResult();
+        R result = _charConsumer.getResult();
         _charConsumer.reset();
         return result;
     }
 
-    protected abstract void processSource(S source);
+    /**
+     * Parse the source.
+     *
+     * @param source the source.
+     */
+    protected abstract void parseSource(S source);
 
-    protected final void accept(final char ch) {
+    /**
+     * Accept the char.
+     *
+     * @param ch the char.
+     */
+    protected final void accept(final int ch) {
         _charConsumer.accept(0, 0, ch);
     }
 
