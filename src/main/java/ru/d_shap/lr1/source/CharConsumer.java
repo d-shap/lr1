@@ -42,7 +42,7 @@ public interface CharConsumer<T> extends Serializable {
      * @param column the column.
      * @param ch     the char.
      */
-    void accept(int line, int column, char ch);
+    void accept(int line, int column, int ch);
 
     /**
      * Get the result.
