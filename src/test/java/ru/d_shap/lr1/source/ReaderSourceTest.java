@@ -26,6 +26,7 @@ import org.junit.Test;
 
 import ru.d_shap.assertions.Assertions;
 import ru.d_shap.assertions.mock.MockReader;
+import ru.d_shap.assertions.util.SerializationHelper;
 
 /**
  * Tests for {@link ReaderSource}.
@@ -108,6 +109,18 @@ public final class ReaderSourceTest {
         Assertions.assertThat(((MockReader) reader).isClosed()).isFalse();
         List<String> list = source.parse(reader);
         Assertions.assertThat(((MockReader) reader).isClosed()).isTrue();
+    }
+
+    /**
+     * {@link ReaderSource} class test.
+     */
+    @Test
+    public void serializationTest() {
+        CharConsumer<List<String>> charConsumer = new CharConsumerImpl();
+        ReaderSource<List<String>> source = new ReaderSource<>(charConsumer);
+        ReaderSource<List<String>> deserialized = SerializationHelper.serializeAndDeserialize(source);
+        List<String> list = deserialized.parse(MockReader.builder().setContent("abc").buildReader());
+        Assertions.assertThat(list).containsExactlyInOrder("97 at 1:1", "98 at 1:2", "99 at 1:3");
     }
 
 }

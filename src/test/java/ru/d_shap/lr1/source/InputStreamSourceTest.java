@@ -27,6 +27,7 @@ import org.junit.Test;
 
 import ru.d_shap.assertions.Assertions;
 import ru.d_shap.assertions.mock.MockInputStream;
+import ru.d_shap.assertions.util.SerializationHelper;
 
 /**
  * Tests for {@link InputStreamSource}.
@@ -109,6 +110,18 @@ public final class InputStreamSourceTest {
         Assertions.assertThat(((MockInputStream) inputStream).isClosed()).isFalse();
         List<String> list = source.parse(inputStream);
         Assertions.assertThat(((MockInputStream) inputStream).isClosed()).isTrue();
+    }
+
+    /**
+     * {@link InputStreamSource} class test.
+     */
+    @Test
+    public void serializationTest() {
+        CharConsumer<List<String>> charConsumer = new CharConsumerImpl();
+        InputStreamSource<List<String>> source = new InputStreamSource<>(charConsumer);
+        InputStreamSource<List<String>> deserialized = SerializationHelper.serializeAndDeserialize(source);
+        List<String> list = deserialized.parse(MockInputStream.builder().setContent("abc".getBytes(StandardCharsets.UTF_8)).buildInputStream());
+        Assertions.assertThat(list).containsExactlyInOrder("97 at 1:1", "98 at 1:2", "99 at 1:3");
     }
 
 }
