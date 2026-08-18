@@ -22,13 +22,13 @@ package ru.d_shap.lr1.source;
 import java.io.Serializable;
 
 /**
- * The char consumer with the next char.
+ * The extended char consumer.
  *
  * @param <R> the generic type of the result.
  *
  * @author Dmitry Shapovalov
  */
-public interface CharConsumer2<R> extends Serializable {
+public interface CharConsumerEx<R> extends Serializable {
 
     /**
      * Reset the consumer.
