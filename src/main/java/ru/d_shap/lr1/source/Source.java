@@ -56,6 +56,15 @@ public abstract class Source<S, R> implements Serializable {
     }
 
     /**
+     * Create new object.
+     *
+     * @param charConsumerEx the extended char consumer.
+     */
+    protected Source(final CharConsumerEx<R> charConsumerEx) {
+        this(new CharConsumerAdapter<>(charConsumerEx));
+    }
+
+    /**
      * Parse the source and return the result.
      *
      * @param source the source.
