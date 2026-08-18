@@ -71,7 +71,9 @@ public final class CharConsumerAdapter<R> implements CharConsumer<R> {
         } else {
             _charConsumerEx.accept(line, column, _char, _nextChar);
             if (_nextChar < 0) {
-                _charConsumerEx.accept(line, column, -1, -1);
+                _char = _nextChar;
+                _nextChar = -1;
+                _charConsumerEx.accept(line, column, _char, _nextChar);
             }
         }
     }
