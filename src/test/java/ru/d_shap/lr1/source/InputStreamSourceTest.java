@@ -19,6 +19,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 package ru.d_shap.lr1.source;
 
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
@@ -102,7 +103,12 @@ public final class InputStreamSourceTest {
      */
     @Test
     public void parseSourceClosedTest() {
-        // TODO
+        CharConsumer<List<String>> charConsumer = new CharConsumerImpl();
+        InputStreamSource<List<String>> source = new InputStreamSource<>(charConsumer);
+        InputStream inputStream = MockInputStream.builder().setContent("abc".getBytes(StandardCharsets.UTF_8)).buildInputStream();
+        Assertions.assertThat(((MockInputStream) inputStream).isClosed()).isFalse();
+        List<String> list = source.parse(inputStream);
+        Assertions.assertThat(((MockInputStream) inputStream).isClosed()).isTrue();
     }
 
 }

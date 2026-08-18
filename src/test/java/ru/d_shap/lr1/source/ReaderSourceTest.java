@@ -19,6 +19,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 package ru.d_shap.lr1.source;
 
+import java.io.Reader;
 import java.util.List;
 
 import org.junit.Test;
@@ -101,7 +102,12 @@ public final class ReaderSourceTest {
      */
     @Test
     public void parseSourceClosedTest() {
-        // TODO
+        CharConsumer<List<String>> charConsumer = new CharConsumerImpl();
+        ReaderSource<List<String>> source = new ReaderSource<>(charConsumer);
+        Reader reader = MockReader.builder().setContent("abc").buildReader();
+        Assertions.assertThat(((MockReader) reader).isClosed()).isFalse();
+        List<String> list = source.parse(reader);
+        Assertions.assertThat(((MockReader) reader).isClosed()).isTrue();
     }
 
 }
