@@ -64,4 +64,44 @@ public final class ReaderSourceTest {
         Assertions.assertThat(list5).containsExactlyInOrder("13 at 1:1", "13 at 1:2", "13 at 1:3");
     }
 
+    /**
+     * {@link ReaderSource} class test.
+     */
+    @Test
+    public void parseSourceReadExceptionTest() {
+        CharConsumer<List<String>> charConsumer = new CharConsumerImpl();
+        ReaderSource<List<String>> source = new ReaderSource<>(charConsumer);
+        try {
+            source.parse(MockReader.builder().setContent("abc").setReadException("read ex").buildReader());
+            Assertions.fail("ReaderSource test fail");
+        } catch (SourceException ex) {
+            Assertions.assertThat(ex).hasMessage("Source processing exception");
+            Assertions.assertThat(ex).hasCauseMessage("read ex");
+        }
+    }
+
+    /**
+     * {@link ReaderSource} class test.
+     */
+    @Test
+    public void parseSourceCloseExceptionTest() {
+        CharConsumer<List<String>> charConsumer = new CharConsumerImpl();
+        ReaderSource<List<String>> source = new ReaderSource<>(charConsumer);
+        try {
+            source.parse(MockReader.builder().setContent("abc").setCloseException("close ex").buildReader());
+            Assertions.fail("ReaderSource test fail");
+        } catch (SourceException ex) {
+            Assertions.assertThat(ex).hasMessage("Source processing exception");
+            Assertions.assertThat(ex).hasCauseMessage("close ex");
+        }
+    }
+
+    /**
+     * {@link ReaderSource} class test.
+     */
+    @Test
+    public void parseSourceClosedTest() {
+        // TODO
+    }
+
 }

@@ -65,4 +65,44 @@ public final class InputStreamSourceTest {
         Assertions.assertThat(list5).containsExactlyInOrder("13 at 1:1", "13 at 1:2", "13 at 1:3");
     }
 
+    /**
+     * {@link InputStreamSource} class test.
+     */
+    @Test
+    public void parseSourceReadExceptionTest() {
+        CharConsumer<List<String>> charConsumer = new CharConsumerImpl();
+        InputStreamSource<List<String>> source = new InputStreamSource<>(charConsumer);
+        try {
+            source.parse(MockInputStream.builder().setContent("abc".getBytes(StandardCharsets.UTF_8)).setReadException("read ex").buildInputStream());
+            Assertions.fail("InputStreamSource test fail");
+        } catch (SourceException ex) {
+            Assertions.assertThat(ex).hasMessage("Source processing exception");
+            Assertions.assertThat(ex).hasCauseMessage("read ex");
+        }
+    }
+
+    /**
+     * {@link InputStreamSource} class test.
+     */
+    @Test
+    public void parseSourceCloseExceptionTest() {
+        CharConsumer<List<String>> charConsumer = new CharConsumerImpl();
+        InputStreamSource<List<String>> source = new InputStreamSource<>(charConsumer);
+        try {
+            source.parse(MockInputStream.builder().setContent("abc".getBytes(StandardCharsets.UTF_8)).setCloseException("close ex").buildInputStream());
+            Assertions.fail("InputStreamSource test fail");
+        } catch (SourceException ex) {
+            Assertions.assertThat(ex).hasMessage("Source processing exception");
+            Assertions.assertThat(ex).hasCauseMessage("close ex");
+        }
+    }
+
+    /**
+     * {@link InputStreamSource} class test.
+     */
+    @Test
+    public void parseSourceClosedTest() {
+        // TODO
+    }
+
 }
