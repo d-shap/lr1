@@ -41,7 +41,7 @@ public final class CharConsumerAdapter<R> implements CharConsumer<R> {
     /**
      * Create new object.
      *
-     * @param charConsumerEx the extended char consumer
+     * @param charConsumerEx the extended char consumer.
      */
     public CharConsumerAdapter(final CharConsumerEx<R> charConsumerEx) {
         super();
