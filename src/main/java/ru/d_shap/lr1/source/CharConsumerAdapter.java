@@ -32,6 +32,12 @@ public final class CharConsumerAdapter<R> implements CharConsumer<R> {
 
     private final CharConsumerEx<R> _charConsumerEx;
 
+    private int _char;
+
+    private int _nextChar;
+
+    private boolean _first;
+
     /**
      * Create new object.
      *
@@ -43,16 +49,31 @@ public final class CharConsumerAdapter<R> implements CharConsumer<R> {
             throw new NullPointerException("Extended char consumer should not be null");
         }
         _charConsumerEx = charConsumerEx;
+        _char = 0;
+        _nextChar = 0;
+        _first = false;
     }
 
     @Override
     public void reset() {
         _charConsumerEx.reset();
+        _char = -1;
+        _nextChar = -1;
+        _first = true;
     }
 
     @Override
     public void accept(final int line, final int column, final int ch) {
-        _charConsumerEx.accept(line, column, ch, 0);
+        _char = _nextChar;
+        _nextChar = ch;
+        if (_first) {
+            _first = false;
+        } else {
+            _charConsumerEx.accept(line, column, _char, _nextChar);
+            if (_nextChar < 0) {
+                _charConsumerEx.accept(line, column, -1, -1);
+            }
+        }
     }
 
     @Override
