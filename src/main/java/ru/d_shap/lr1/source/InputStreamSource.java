@@ -25,7 +25,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 
 /**
- * The InputStream source.
+ * The input stream source.
  *
  * @param <R> the generic type of the result.
  *

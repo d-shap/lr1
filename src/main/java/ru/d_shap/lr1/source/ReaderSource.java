@@ -23,7 +23,7 @@ import java.io.IOException;
 import java.io.Reader;
 
 /**
- * The Reader source.
+ * The reader source.
  *
  * @param <R> the generic type of the result.
  *

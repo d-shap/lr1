@@ -22,7 +22,7 @@ package ru.d_shap.lr1.source;
 import java.io.IOException;
 
 /**
- * The String source.
+ * The string source.
  *
  * @param <R> the generic type of the result.
  *
