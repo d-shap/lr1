@@ -44,6 +44,15 @@ public final class InputStreamSource<R> extends Source<InputStream, R> {
         super(charConsumer);
     }
 
+    /**
+     * Create new object.
+     *
+     * @param charConsumerEx the extended char consumer.
+     */
+    public InputStreamSource(final CharConsumerEx<R> charConsumerEx) {
+        super(charConsumerEx);
+    }
+
     @Override
     protected void parseSource(final InputStream source) throws IOException {
         try {

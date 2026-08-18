@@ -41,6 +41,15 @@ public final class StringSource<R> extends Source<String, R> {
         super(charConsumer);
     }
 
+    /**
+     * Create new object.
+     *
+     * @param charConsumerEx the extended char consumer.
+     */
+    public StringSource(final CharConsumerEx<R> charConsumerEx) {
+        super(charConsumerEx);
+    }
+
     @Override
     protected void parseSource(final String source) throws IOException {
         int length = source.length();

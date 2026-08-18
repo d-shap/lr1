@@ -42,6 +42,15 @@ public final class ReaderSource<R> extends Source<Reader, R> {
         super(charConsumer);
     }
 
+    /**
+     * Create new object.
+     *
+     * @param charConsumerEx the extended char consumer.
+     */
+    public ReaderSource(final CharConsumerEx<R> charConsumerEx) {
+        super(charConsumerEx);
+    }
+
     @Override
     protected void parseSource(final Reader source) throws IOException {
         try {
