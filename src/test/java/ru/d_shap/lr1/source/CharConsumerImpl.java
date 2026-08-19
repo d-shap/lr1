@@ -31,19 +31,19 @@ public final class CharConsumerImpl implements CharConsumer<List<String>> {
 
     private static final long serialVersionUID = 1L;
 
-    private final List<String> _list;
+    private List<String> _list;
 
     /**
      * Create new object.
      */
     public CharConsumerImpl() {
         super();
-        _list = new ArrayList<>();
+        _list = null;
     }
 
     @Override
     public void reset() {
-        _list.clear();
+        _list = new ArrayList<>();
     }
 
     @Override
