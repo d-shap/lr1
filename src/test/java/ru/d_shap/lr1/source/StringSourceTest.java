@@ -68,6 +68,30 @@ public final class StringSourceTest {
      * {@link StringSource} class test.
      */
     @Test
+    public void parseSourceExTest() {
+        CharConsumerEx<List<String>> charConsumer = new CharConsumerExImpl();
+        StringSource<List<String>> source = new StringSource<>(charConsumer);
+
+        List<String> list1 = source.parse("");
+        Assertions.assertThat(list1).containsExactlyInOrder();
+
+        List<String> list2 = source.parse("abc");
+        Assertions.assertThat(list2).containsExactlyInOrder("97 (98) at 1:1", "98 (99) at 1:2", "99 (eof) at 1:3");
+
+        List<String> list3 = source.parse("a\nbc\n  \r\n d");
+        Assertions.assertThat(list3).containsExactlyInOrder("97 (10) at 1:1", "10 (98) at 1:2", "98 (99) at 2:1", "99 (10) at 2:2", "10 (32) at 2:3", "32 (32) at 3:1", "32 (13) at 3:2", "13 (10) at 3:3", "10 (32) at 3:4", "32 (100) at 4:1", "100 (eof) at 4:2");
+
+        List<String> list4 = source.parse("\n\n\n");
+        Assertions.assertThat(list4).containsExactlyInOrder("10 (10) at 1:1", "10 (10) at 2:1", "10 (eof) at 3:1");
+
+        List<String> list5 = source.parse("\r\r\r");
+        Assertions.assertThat(list5).containsExactlyInOrder("13 (13) at 1:1", "13 (13) at 1:2", "13 (eof) at 1:3");
+    }
+
+    /**
+     * {@link StringSource} class test.
+     */
+    @Test
     public void serializationTest() {
         CharConsumer<List<String>> charConsumer = new CharConsumerImpl();
         StringSource<List<String>> source = new StringSource<>(charConsumer);
