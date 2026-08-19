@@ -48,15 +48,17 @@ public final class CharConsumerExImpl implements CharConsumerEx<List<String>> {
 
     @Override
     public void accept(final int line, final int column, final int ch, final int next) {
-        if (ch >= 0) {
+        String str;
+        if (ch < 0) {
+            str = String.format("eof at %s:%s", line, column);
+        } else {
             if (next < 0) {
-                String str = String.format("%s (eof) at %s:%s", ch, line, column);
-                _list.add(str);
+                str = String.format("%s (eof) at %s:%s", ch, line, column);
             } else {
-                String str = String.format("%s (%s) at %s:%s", ch, next, line, column);
-                _list.add(str);
+                str = String.format("%s (%s) at %s:%s", ch, next, line, column);
             }
         }
+        _list.add(str);
     }
 
     @Override
