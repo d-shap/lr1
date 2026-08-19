@@ -51,19 +51,19 @@ public final class ReaderSourceTest {
         ReaderSource<List<String>> source = new ReaderSource<>(charConsumer);
 
         List<String> list1 = source.parse(MockReader.builder().setContent("").buildReader());
-        Assertions.assertThat(list1).containsExactlyInOrder();
+        Assertions.assertThat(list1).containsExactlyInOrder("eof at 0:0");
 
         List<String> list2 = source.parse(MockReader.builder().setContent("abc").buildReader());
-        Assertions.assertThat(list2).containsExactlyInOrder("97 at 1:1", "98 at 1:2", "99 at 1:3");
+        Assertions.assertThat(list2).containsExactlyInOrder("97 at 1:1", "98 at 1:2", "99 at 1:3", "eof at 0:0");
 
         List<String> list3 = source.parse(MockReader.builder().setContent("a\nbc\n  \r\n d").buildReader());
-        Assertions.assertThat(list3).containsExactlyInOrder("97 at 1:1", "10 at 1:2", "98 at 2:1", "99 at 2:2", "10 at 2:3", "32 at 3:1", "32 at 3:2", "13 at 3:3", "10 at 3:4", "32 at 4:1", "100 at 4:2");
+        Assertions.assertThat(list3).containsExactlyInOrder("97 at 1:1", "10 at 1:2", "98 at 2:1", "99 at 2:2", "10 at 2:3", "32 at 3:1", "32 at 3:2", "13 at 3:3", "10 at 3:4", "32 at 4:1", "100 at 4:2", "eof at 0:0");
 
         List<String> list4 = source.parse(MockReader.builder().setContent("\n\n\n").buildReader());
-        Assertions.assertThat(list4).containsExactlyInOrder("10 at 1:1", "10 at 2:1", "10 at 3:1");
+        Assertions.assertThat(list4).containsExactlyInOrder("10 at 1:1", "10 at 2:1", "10 at 3:1", "eof at 0:0");
 
         List<String> list5 = source.parse(MockReader.builder().setContent("\r\r\r").buildReader());
-        Assertions.assertThat(list5).containsExactlyInOrder("13 at 1:1", "13 at 1:2", "13 at 1:3");
+        Assertions.assertThat(list5).containsExactlyInOrder("13 at 1:1", "13 at 1:2", "13 at 1:3", "eof at 0:0");
     }
 
     /**
@@ -120,7 +120,7 @@ public final class ReaderSourceTest {
         ReaderSource<List<String>> source = new ReaderSource<>(charConsumer);
         ReaderSource<List<String>> deserialized = SerializationHelper.serializeAndDeserialize(source);
         List<String> list = deserialized.parse(MockReader.builder().setContent("abc").buildReader());
-        Assertions.assertThat(list).containsExactlyInOrder("97 at 1:1", "98 at 1:2", "99 at 1:3");
+        Assertions.assertThat(list).containsExactlyInOrder("97 at 1:1", "98 at 1:2", "99 at 1:3", "eof at 0:0");
     }
 
 }
