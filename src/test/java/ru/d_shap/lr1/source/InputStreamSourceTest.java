@@ -71,6 +71,30 @@ public final class InputStreamSourceTest {
      * {@link InputStreamSource} class test.
      */
     @Test
+    public void parseSourceExTest() {
+        CharConsumerEx<List<String>> charConsumerEx = new CharConsumerExImpl();
+        InputStreamSource<List<String>> source = new InputStreamSource<>(charConsumerEx);
+
+        List<String> list1 = source.parse(MockInputStream.builder().setContent("".getBytes(StandardCharsets.UTF_8)).buildInputStream());
+        Assertions.assertThat(list1).containsExactlyInOrder("eof at 0:0");
+
+        List<String> list2 = source.parse(MockInputStream.builder().setContent("abc".getBytes(StandardCharsets.UTF_8)).buildInputStream());
+        Assertions.assertThat(list2).containsExactlyInOrder("97 (98) at 1:1", "98 (99) at 1:2", "99 (eof) at 1:3", "eof at 0:0");
+
+        List<String> list3 = source.parse(MockInputStream.builder().setContent("a\nbc\n  \r\n d".getBytes(StandardCharsets.UTF_8)).buildInputStream());
+        Assertions.assertThat(list3).containsExactlyInOrder("97 (10) at 1:1", "10 (98) at 1:2", "98 (99) at 2:1", "99 (10) at 2:2", "10 (32) at 2:3", "32 (32) at 3:1", "32 (13) at 3:2", "13 (10) at 3:3", "10 (32) at 3:4", "32 (100) at 4:1", "100 (eof) at 4:2", "eof at 0:0");
+
+        List<String> list4 = source.parse(MockInputStream.builder().setContent("\n\n\n".getBytes(StandardCharsets.UTF_8)).buildInputStream());
+        Assertions.assertThat(list4).containsExactlyInOrder("10 (10) at 1:1", "10 (10) at 2:1", "10 (eof) at 3:1", "eof at 0:0");
+
+        List<String> list5 = source.parse(MockInputStream.builder().setContent("\r\r\r".getBytes(StandardCharsets.UTF_8)).buildInputStream());
+        Assertions.assertThat(list5).containsExactlyInOrder("13 (13) at 1:1", "13 (13) at 1:2", "13 (eof) at 1:3", "eof at 0:0");
+    }
+
+    /**
+     * {@link InputStreamSource} class test.
+     */
+    @Test
     public void parseSourceReadExceptionTest() {
         CharConsumer<List<String>> charConsumer = new CharConsumerImpl();
         InputStreamSource<List<String>> source = new InputStreamSource<>(charConsumer);
