@@ -84,26 +84,29 @@ public final class CharConsumerAdapter<R> implements CharConsumer<R> {
 
     @Override
     public void accept(final int line, final int column, final int ch) {
+        updateNextChar(line, column, ch);
+        if (_first) {
+            if (_nextChar < 0) {
+                updateNextChar(0, 0, -1);
+                _charConsumerEx.accept(_line, _column, _char, _nextChar);
+            }
+            _first = false;
+        } else {
+            _charConsumerEx.accept(_line, _column, _char, _nextChar);
+            if (_nextChar < 0) {
+                updateNextChar(0, 0, -1);
+                _charConsumerEx.accept(_line, _column, _char, _nextChar);
+            }
+        }
+    }
+
+    private void updateNextChar(final int line, final int column, final int ch) {
         _line = _nextLine;
         _nextLine = line;
         _column = _nextColumn;
         _nextColumn = column;
         _char = _nextChar;
         _nextChar = ch;
-        if (_first) {
-            _first = false;
-        } else {
-            _charConsumerEx.accept(_line, _column, _char, _nextChar);
-            if (_nextChar < 0) {
-                _line = _nextLine;
-                _nextLine = 0;
-                _column = _nextColumn;
-                _nextColumn = 0;
-                _char = _nextChar;
-                _nextChar = -1;
-                _charConsumerEx.accept(_line, _column, _char, _nextChar);
-            }
-        }
     }
 
     @Override
