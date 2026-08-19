@@ -70,6 +70,30 @@ public final class ReaderSourceTest {
      * {@link ReaderSource} class test.
      */
     @Test
+    public void parseSourceExTest() {
+        CharConsumerEx<List<String>> charConsumerEx = new CharConsumerExImpl();
+        ReaderSource<List<String>> source = new ReaderSource<>(charConsumerEx);
+
+        List<String> list1 = source.parse(MockReader.builder().setContent("").buildReader());
+        Assertions.assertThat(list1).containsExactlyInOrder("eof at 0:0");
+
+        List<String> list2 = source.parse(MockReader.builder().setContent("abc").buildReader());
+        Assertions.assertThat(list2).containsExactlyInOrder("97 (98) at 1:1", "98 (99) at 1:2", "99 (eof) at 1:3", "eof at 0:0");
+
+        List<String> list3 = source.parse(MockReader.builder().setContent("a\nbc\n  \r\n d").buildReader());
+        Assertions.assertThat(list3).containsExactlyInOrder("97 (10) at 1:1", "10 (98) at 1:2", "98 (99) at 2:1", "99 (10) at 2:2", "10 (32) at 2:3", "32 (32) at 3:1", "32 (13) at 3:2", "13 (10) at 3:3", "10 (32) at 3:4", "32 (100) at 4:1", "100 (eof) at 4:2", "eof at 0:0");
+
+        List<String> list4 = source.parse(MockReader.builder().setContent("\n\n\n").buildReader());
+        Assertions.assertThat(list4).containsExactlyInOrder("10 (10) at 1:1", "10 (10) at 2:1", "10 (eof) at 3:1", "eof at 0:0");
+
+        List<String> list5 = source.parse(MockReader.builder().setContent("\r\r\r").buildReader());
+        Assertions.assertThat(list5).containsExactlyInOrder("13 (13) at 1:1", "13 (13) at 1:2", "13 (eof) at 1:3", "eof at 0:0");
+    }
+
+    /**
+     * {@link ReaderSource} class test.
+     */
+    @Test
     public void parseSourceReadExceptionTest() {
         CharConsumer<List<String>> charConsumer = new CharConsumerImpl();
         ReaderSource<List<String>> source = new ReaderSource<>(charConsumer);
