@@ -69,8 +69,8 @@ public final class StringSourceTest {
      */
     @Test
     public void parseSourceExTest() {
-        CharConsumerEx<List<String>> charConsumer = new CharConsumerExImpl();
-        StringSource<List<String>> source = new StringSource<>(charConsumer);
+        CharConsumerEx<List<String>> charConsumerEx = new CharConsumerExImpl();
+        StringSource<List<String>> source = new StringSource<>(charConsumerEx);
 
         List<String> list1 = source.parse("");
         Assertions.assertThat(list1).containsExactlyInOrder("eof at 0:0");
