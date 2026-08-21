@@ -63,4 +63,31 @@ public final class SourceTest {
         }
     }
 
+    /**
+     * {@link Source} class test.
+     */
+    @Test
+    public void parseTest() {
+        CharConsumer<List<String>> charConsumer = new CharConsumerImpl();
+        StringSource<List<String>> source = new StringSource<>(charConsumer);
+
+        List<String> list1 = source.parse("");
+        Assertions.assertThat(list1).containsExactlyInOrder("eof at 0:0");
+
+        List<String> list2 = source.parse("abc");
+        Assertions.assertThat(list1).containsExactlyInOrder("97 at 1:1", "98 at 1:2", "99 at 1:3", "eof at 0:0");
+        Assertions.assertThat(list2).containsExactlyInOrder("97 at 1:1", "98 at 1:2", "99 at 1:3", "eof at 0:0");
+
+        List<String> list3 = source.parse("ab\r\nc");
+        Assertions.assertThat(list1).containsExactlyInOrder("97 at 1:1", "98 at 1:2", "13 at 1:3", "10 at 1:4", "99 at 2:1", "eof at 0:0");
+        Assertions.assertThat(list2).containsExactlyInOrder("97 at 1:1", "98 at 1:2", "13 at 1:3", "10 at 1:4", "99 at 2:1", "eof at 0:0");
+        Assertions.assertThat(list3).containsExactlyInOrder("97 at 1:1", "98 at 1:2", "13 at 1:3", "10 at 1:4", "99 at 2:1", "eof at 0:0");
+
+        List<String> list4 = source.parse("ab\rc\n");
+        Assertions.assertThat(list1).containsExactlyInOrder("97 at 1:1", "98 at 1:2", "13 at 1:3", "99 at 1:4", "10 at 1:5", "eof at 0:0");
+        Assertions.assertThat(list2).containsExactlyInOrder("97 at 1:1", "98 at 1:2", "13 at 1:3", "99 at 1:4", "10 at 1:5", "eof at 0:0");
+        Assertions.assertThat(list3).containsExactlyInOrder("97 at 1:1", "98 at 1:2", "13 at 1:3", "99 at 1:4", "10 at 1:5", "eof at 0:0");
+        Assertions.assertThat(list4).containsExactlyInOrder("97 at 1:1", "98 at 1:2", "13 at 1:3", "99 at 1:4", "10 at 1:5", "eof at 0:0");
+    }
+
 }
