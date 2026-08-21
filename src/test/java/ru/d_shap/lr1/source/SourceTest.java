@@ -19,11 +19,13 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 package ru.d_shap.lr1.source;
 
+import java.io.Reader;
 import java.util.List;
 
 import org.junit.Test;
 
 import ru.d_shap.assertions.Assertions;
+import ru.d_shap.assertions.mock.MockReader;
 import ru.d_shap.assertions.util.SerializationHelper;
 
 /**
@@ -95,6 +97,22 @@ public final class SourceTest {
             Assertions.fail("Source test fail");
         } catch (NullPointerException ex) {
             Assertions.assertThat(ex).hasMessage("Source should not be null");
+        }
+    }
+
+    /**
+     * {@link Source} class test.
+     */
+    @Test
+    public void parseFailTest() {
+        CharConsumer<List<String>> charConsumer = new CharConsumerImpl();
+        Source<Reader, List<String>> source = new ReaderSource<>(charConsumer);
+        try {
+            source.parse(MockReader.builder().setContent("abc").setReadException("read ex").buildReader());
+            Assertions.fail("Source test fail");
+        } catch (SourceException ex) {
+            Assertions.assertThat(ex).hasMessage("Source processing exception");
+            Assertions.assertThat(ex).hasCauseMessage("read ex");
         }
     }
 
