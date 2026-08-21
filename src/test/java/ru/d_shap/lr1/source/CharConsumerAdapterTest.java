@@ -60,7 +60,16 @@ public final class CharConsumerAdapterTest {
      */
     @Test
     public void resetTest() {
-        // TODO
+        CharConsumerEx<List<String>> charConsumerEx = new CharConsumerExImpl();
+        CharConsumerAdapter<List<String>> charConsumerAdapter = new CharConsumerAdapter<>(charConsumerEx);
+        Assertions.assertThat(charConsumerAdapter.getResult()).containsExactlyInOrder();
+        charConsumerAdapter.reset();
+        Assertions.assertThat(charConsumerAdapter.getResult()).containsExactlyInOrder();
+        charConsumerAdapter.accept(1, 1, '1');
+        charConsumerAdapter.accept(1, 1, -1);
+        Assertions.assertThat(charConsumerAdapter.getResult()).containsExactlyInOrder("49 (eof) at 1:1", "eof at 1:1");
+        charConsumerAdapter.reset();
+        Assertions.assertThat(charConsumerAdapter.getResult()).containsExactlyInOrder();
     }
 
     /**
