@@ -104,7 +104,26 @@ public final class CharConsumerAdapterTest {
      */
     @Test
     public void getResultTest() {
-        // TODO
+        CharConsumerEx<List<String>> charConsumerEx = new CharConsumerExImpl();
+        CharConsumerAdapter<List<String>> charConsumerAdapter = new CharConsumerAdapter<>(charConsumerEx);
+        Assertions.assertThat(charConsumerAdapter.getResult()).containsExactlyInOrder();
+        Assertions.assertThat(charConsumerAdapter.getResult()).containsExactlyInOrder();
+        charConsumerAdapter.reset();
+        Assertions.assertThat(charConsumerAdapter.getResult()).containsExactlyInOrder();
+        Assertions.assertThat(charConsumerAdapter.getResult()).containsExactlyInOrder();
+        charConsumerAdapter.accept(1, 1, '1');
+        Assertions.assertThat(charConsumerAdapter.getResult()).containsExactlyInOrder();
+        Assertions.assertThat(charConsumerAdapter.getResult()).containsExactlyInOrder();
+        charConsumerAdapter.accept(0, 0, -1);
+        Assertions.assertThat(charConsumerAdapter.getResult()).containsExactlyInOrder("49 (eof) at 1:1", "eof at 0:0");
+        Assertions.assertThat(charConsumerAdapter.getResult()).containsExactlyInOrder("49 (eof) at 1:1", "eof at 0:0");
+        charConsumerAdapter.reset();
+        Assertions.assertThat(charConsumerAdapter.getResult()).containsExactlyInOrder();
+        charConsumerAdapter.getResult().add("value");
+        Assertions.assertThat(charConsumerAdapter.getResult()).containsExactlyInOrder("value");
+        charConsumerAdapter.accept(0, 0, -1);
+        Assertions.assertThat(charConsumerAdapter.getResult()).containsExactlyInOrder("value", "eof at 0:0");
+        Assertions.assertThat(charConsumerAdapter.getResult()).containsExactlyInOrder("value", "eof at 0:0");
     }
 
     /**
