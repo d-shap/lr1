@@ -17,74 +17,46 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 /// ////////////////////////////////////////////////////////////////////////////////////////////////
-package ru.d_shap.lr1.lexer;
+package ru.d_shap.lr1.parser;
 
-import java.io.Serializable;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
- * The EBNF token.
+ * The pattern token rule.
  *
  * @author Dmitry Shapovalov
  */
-public final class EbnfToken implements Serializable {
+public final class PatternTokenRule extends TokenRule {
 
     private static final long serialVersionUID = 1L;
 
-    private final EbnfTokenType _tokenType;
-
-    private final String _tokenText;
-
-    private final int _line;
-
-    private final int _column;
-
-    EbnfToken(final EbnfTokenType tokenType, final String tokenText, final int line, final int column) {
-        super();
-        _tokenType = tokenType;
-        _tokenText = tokenText;
-        _line = line;
-        _column = column;
-    }
+    private final Pattern _pattern;
 
     /**
-     * Get the EBNF token type.
+     * Create new object.
      *
-     * @return the EBNF token type.
+     * @param tokenType the token type.
+     * @param regex     the regex for matching.
      */
-    public EbnfTokenType getTokenType() {
-        return _tokenType;
+    public PatternTokenRule(final String tokenType, final String regex) {
+        super(tokenType);
+        _pattern = Pattern.compile(regex);
     }
 
-    /**
-     * Get the EBNF token text.
-     *
-     * @return the EBNF token text.
-     */
-    public String getTokenText() {
-        return _tokenText;
-    }
-
-    /**
-     * Get the EBNF token line.
-     *
-     * @return the EBNF token line.
-     */
-    public int getLine() {
-        return _line;
-    }
-
-    /**
-     * Get the EBNF token column.
-     *
-     * @return the EBNF token column.
-     */
-    public int getColumn() {
-        return _column;
+    @Override
+    public String match(final String text) {
+        Matcher matcher = _pattern.matcher(text);
+        if (matcher.find()) {
+            return matcher.group(0);
+        } else {
+            return null;
+        }
     }
 
     @Override
     public String toString() {
-        return _tokenType.stringValue(_tokenText);
+        return "TokenRule{tokenType='" + getTokenType() + "', pattern='" + _pattern + "'}";
     }
 
 }

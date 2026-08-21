@@ -17,47 +17,74 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 /// ////////////////////////////////////////////////////////////////////////////////////////////////
-package ru.d_shap.lr1.lexer;
+package ru.d_shap.lr1.parser;
 
 import java.io.Serializable;
 
 /**
- * The token rule.
+ * The EBNF token.
  *
  * @author Dmitry Shapovalov
  */
-public abstract class TokenRule implements Serializable {
+public final class EbnfToken implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private final String _tokenType;
+    private final EbnfTokenType _tokenType;
 
-    /**
-     * Create new object.
-     *
-     * @param tokenType the token type.
-     */
-    protected TokenRule(final String tokenType) {
+    private final String _tokenText;
+
+    private final int _line;
+
+    private final int _column;
+
+    EbnfToken(final EbnfTokenType tokenType, final String tokenText, final int line, final int column) {
         super();
         _tokenType = tokenType;
+        _tokenText = tokenText;
+        _line = line;
+        _column = column;
     }
 
     /**
-     * Get the token type.
+     * Get the EBNF token type.
      *
-     * @return the token type.
+     * @return the EBNF token type.
      */
-    public String getTokenType() {
+    public EbnfTokenType getTokenType() {
         return _tokenType;
     }
 
     /**
-     * Check if the text matches the rule.
+     * Get the EBNF token text.
      *
-     * @param text the text.
-     *
-     * @return the matched text, or null if no match.
+     * @return the EBNF token text.
      */
-    public abstract String match(String text);
+    public String getTokenText() {
+        return _tokenText;
+    }
+
+    /**
+     * Get the EBNF token line.
+     *
+     * @return the EBNF token line.
+     */
+    public int getLine() {
+        return _line;
+    }
+
+    /**
+     * Get the EBNF token column.
+     *
+     * @return the EBNF token column.
+     */
+    public int getColumn() {
+        return _column;
+    }
+
+    @Override
+    public String toString() {
+        return _tokenType.stringValue(_tokenText);
+    }
 
 }

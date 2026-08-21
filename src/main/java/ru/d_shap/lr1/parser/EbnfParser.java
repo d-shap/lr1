@@ -36,8 +36,6 @@ import ru.d_shap.lr1.ebnf.EbnfRule;
 import ru.d_shap.lr1.ebnf.EbnfSequence;
 import ru.d_shap.lr1.ebnf.EbnfSpecial;
 import ru.d_shap.lr1.ebnf.EbnfTerminal;
-import ru.d_shap.lr1.lexer.EbnfToken;
-import ru.d_shap.lr1.lexer.EbnfTokenType;
 
 /**
  * The EBNF parser.

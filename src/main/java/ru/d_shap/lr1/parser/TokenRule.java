@@ -17,45 +17,47 @@
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
 /// ////////////////////////////////////////////////////////////////////////////////////////////////
-package ru.d_shap.lr1.lexer;
+package ru.d_shap.lr1.parser;
+
+import java.io.Serializable;
 
 /**
- * The character token rule.
+ * The token rule.
  *
  * @author Dmitry Shapovalov
  */
-public final class CharacterTokenRule extends TokenRule {
+public abstract class TokenRule implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private final char _character;
-
-    private final String _string;
+    private final String _tokenType;
 
     /**
      * Create new object.
      *
      * @param tokenType the token type.
-     * @param character the character.
      */
-    public CharacterTokenRule(final String tokenType, final char character) {
-        super(tokenType);
-        _character = character;
-        _string = String.valueOf(_character);
+    protected TokenRule(final String tokenType) {
+        super();
+        _tokenType = tokenType;
     }
 
-    @Override
-    public String match(final String text) {
-        if (text.length() > 0 && text.charAt(0) == _character) {
-            return _string;
-        } else {
-            return null;
-        }
+    /**
+     * Get the token type.
+     *
+     * @return the token type.
+     */
+    public String getTokenType() {
+        return _tokenType;
     }
 
-    @Override
-    public String toString() {
-        return "TokenRule{tokenType='" + getTokenType() + "', character='" + _character + "'}";
-    }
+    /**
+     * Check if the text matches the rule.
+     *
+     * @param text the text.
+     *
+     * @return the matched text, or null if no match.
+     */
+    public abstract String match(String text);
 
 }
