@@ -27,10 +27,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import ru.d_shap.lr1.lexer.CharacterTokenRule;
-import ru.d_shap.lr1.lexer.PatternTokenRule;
-import ru.d_shap.lr1.lexer.TokenRule;
+import ru.d_shap.lr1.parser.CharacterTokenRule;
+import ru.d_shap.lr1.parser.PatternTokenRule;
 import ru.d_shap.lr1.parser.Production;
+import ru.d_shap.lr1.parser.TokenRule;
 
 /**
  * Универсальный токенайзер, полностью управляемый грамматикой.
