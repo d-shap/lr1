@@ -66,8 +66,8 @@ public final class CharConsumerAdapterTest {
         charConsumerAdapter.reset();
         Assertions.assertThat(charConsumerAdapter.getResult()).containsExactlyInOrder();
         charConsumerAdapter.accept(1, 1, '1');
-        charConsumerAdapter.accept(1, 1, -1);
-        Assertions.assertThat(charConsumerAdapter.getResult()).containsExactlyInOrder("49 (eof) at 1:1", "eof at 1:1");
+        charConsumerAdapter.accept(0, 0, -1);
+        Assertions.assertThat(charConsumerAdapter.getResult()).containsExactlyInOrder("49 (eof) at 1:1", "eof at 0:0");
         charConsumerAdapter.reset();
         Assertions.assertThat(charConsumerAdapter.getResult()).containsExactlyInOrder();
     }
@@ -77,7 +77,26 @@ public final class CharConsumerAdapterTest {
      */
     @Test
     public void acceptTest() {
-        // TODO
+        CharConsumerEx<List<String>> charConsumerEx = new CharConsumerExImpl();
+        CharConsumerAdapter<List<String>> charConsumerAdapter = new CharConsumerAdapter<>(charConsumerEx);
+        charConsumerAdapter.reset();
+        Assertions.assertThat(charConsumerAdapter.getResult()).containsExactlyInOrder();
+        charConsumerAdapter.accept(0, 0, -1);
+        Assertions.assertThat(charConsumerAdapter.getResult()).containsExactlyInOrder("eof at 0:0");
+        charConsumerAdapter.reset();
+        Assertions.assertThat(charConsumerAdapter.getResult()).containsExactlyInOrder();
+        charConsumerAdapter.accept(1, 1, '1');
+        Assertions.assertThat(charConsumerAdapter.getResult()).containsExactlyInOrder();
+        charConsumerAdapter.accept(1, 2, '2');
+        Assertions.assertThat(charConsumerAdapter.getResult()).containsExactlyInOrder("49 (50) at 1:1");
+        charConsumerAdapter.accept(1, 3, '3');
+        Assertions.assertThat(charConsumerAdapter.getResult()).containsExactlyInOrder("49 (50) at 1:1", "50 (51) at 1:2");
+        charConsumerAdapter.accept(1, 4, '4');
+        Assertions.assertThat(charConsumerAdapter.getResult()).containsExactlyInOrder("49 (50) at 1:1", "50 (51) at 1:2", "51 (52) at 1:3");
+        charConsumerAdapter.accept(0, 0, -1);
+        Assertions.assertThat(charConsumerAdapter.getResult()).containsExactlyInOrder("49 (50) at 1:1", "50 (51) at 1:2", "51 (52) at 1:3", "52 (eof) at 1:4", "eof at 0:0");
+        charConsumerAdapter.reset();
+        Assertions.assertThat(charConsumerAdapter.getResult()).containsExactlyInOrder();
     }
 
     /**
