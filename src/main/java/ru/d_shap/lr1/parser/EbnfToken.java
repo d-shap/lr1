@@ -84,7 +84,7 @@ public final class EbnfToken implements Serializable {
 
     @Override
     public String toString() {
-        return _tokenType.stringValue(_tokenText);
+        return _tokenType.tokenText(_tokenText);
     }
 
 }

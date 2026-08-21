@@ -28,123 +28,123 @@ public enum EbnfTokenType {
 
     IDENTIFIER {
         @Override
-        String stringValue(final String tokenText) {
-            return name() + "(" + tokenText + ")";
+        String tokenText(final String text) {
+            return name() + "(" + text + ")";
         }
     },
 
     STRING {
         @Override
-        String stringValue(final String tokenText) {
-            return name() + "(" + tokenText + ")";
+        String tokenText(final String text) {
+            return name() + "(" + text + ")";
         }
     },
 
     EQUALS {
         @Override
-        String stringValue(final String tokenText) {
+        String tokenText(final String text) {
             return name();
         }
     },
 
     COMMA {
         @Override
-        String stringValue(final String tokenText) {
+        String tokenText(final String text) {
             return name();
         }
     },
 
     PIPE {
         @Override
-        String stringValue(final String tokenText) {
+        String tokenText(final String text) {
             return name();
         }
     },
 
     SEMICOLON {
         @Override
-        String stringValue(final String tokenText) {
+        String tokenText(final String text) {
             return name();
         }
     },
 
     LPAREN {
         @Override
-        String stringValue(final String tokenText) {
+        String tokenText(final String text) {
             return name();
         }
     },
 
     RPAREN {
         @Override
-        String stringValue(final String tokenText) {
+        String tokenText(final String text) {
             return name();
         }
     },
 
     LBRACKET {
         @Override
-        String stringValue(final String tokenText) {
+        String tokenText(final String text) {
             return name();
         }
     },
 
     RBRACKET {
         @Override
-        String stringValue(final String tokenText) {
+        String tokenText(final String text) {
             return name();
         }
     },
 
     LBRACE {
         @Override
-        String stringValue(final String tokenText) {
+        String tokenText(final String text) {
             return name();
         }
     },
 
     RBRACE {
         @Override
-        String stringValue(final String tokenText) {
+        String tokenText(final String text) {
             return name();
         }
     },
 
     QUESTION {
         @Override
-        String stringValue(final String tokenText) {
+        String tokenText(final String text) {
             return name();
         }
     },
 
     PLUS {
         @Override
-        String stringValue(final String tokenText) {
+        String tokenText(final String text) {
             return name();
         }
     },
 
     MINUS {
         @Override
-        String stringValue(final String tokenText) {
+        String tokenText(final String text) {
             return name();
         }
     },
 
     ASTERISK {
         @Override
-        String stringValue(final String tokenText) {
+        String tokenText(final String text) {
             return name();
         }
     },
 
     EOF {
         @Override
-        String stringValue(final String tokenText) {
+        String tokenText(final String text) {
             return name();
         }
     };
 
-    abstract String stringValue(String tokenText);
+    abstract String tokenText(String text);
 
 }
