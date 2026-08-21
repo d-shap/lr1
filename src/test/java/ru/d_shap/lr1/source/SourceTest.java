@@ -69,7 +69,7 @@ public final class SourceTest {
     @Test
     public void parseTest() {
         CharConsumer<List<String>> charConsumer = new CharConsumerImpl();
-        StringSource<List<String>> source = new StringSource<>(charConsumer);
+        Source<String, List<String>> source = new StringSource<>(charConsumer);
 
         List<String> list1 = source.parse("");
         Assertions.assertThat(list1).containsExactlyInOrder("eof at 0:0");
@@ -88,6 +88,13 @@ public final class SourceTest {
         Assertions.assertThat(list2).containsExactlyInOrder("97 at 1:1", "98 at 1:2", "13 at 1:3", "99 at 1:4", "10 at 1:5", "eof at 0:0");
         Assertions.assertThat(list3).containsExactlyInOrder("97 at 1:1", "98 at 1:2", "13 at 1:3", "99 at 1:4", "10 at 1:5", "eof at 0:0");
         Assertions.assertThat(list4).containsExactlyInOrder("97 at 1:1", "98 at 1:2", "13 at 1:3", "99 at 1:4", "10 at 1:5", "eof at 0:0");
+
+        try {
+            source.parse(null);
+            Assertions.fail("Source test fail");
+        } catch (NullPointerException ex) {
+            Assertions.assertThat(ex).hasMessage("Source should not be null");
+        }
     }
 
 }
