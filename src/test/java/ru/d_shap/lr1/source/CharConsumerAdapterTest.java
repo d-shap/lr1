@@ -24,6 +24,7 @@ import java.util.List;
 import org.junit.Test;
 
 import ru.d_shap.assertions.Assertions;
+import ru.d_shap.assertions.util.SerializationHelper;
 
 /**
  * Tests for {@link CharConsumerAdapter}.
@@ -131,7 +132,15 @@ public final class CharConsumerAdapterTest {
      */
     @Test
     public void serializationTest() {
-        // TODO
+        CharConsumerEx<List<String>> charConsumerEx = new CharConsumerExImpl();
+        CharConsumerAdapter<List<String>> charConsumerAdapter = new CharConsumerAdapter<>(charConsumerEx);
+        CharConsumerAdapter<List<String>> deserialized = SerializationHelper.serializeAndDeserialize(charConsumerAdapter);
+        deserialized.reset();
+        deserialized.accept(1, 1, '1');
+        deserialized.accept(1, 2, '2');
+        deserialized.accept(1, 3, '3');
+        deserialized.accept(0, 0, -1);
+        Assertions.assertThat(deserialized.getResult()).containsExactlyInOrder("49 (50) at 1:1", "50 (51) at 1:2", "51 (eof) at 1:3", "eof at 0:0");
     }
 
 }
