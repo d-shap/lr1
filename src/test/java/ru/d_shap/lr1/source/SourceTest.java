@@ -24,6 +24,7 @@ import java.util.List;
 import org.junit.Test;
 
 import ru.d_shap.assertions.Assertions;
+import ru.d_shap.assertions.util.SerializationHelper;
 
 /**
  * Tests for {@link Source}.
@@ -95,6 +96,18 @@ public final class SourceTest {
         } catch (NullPointerException ex) {
             Assertions.assertThat(ex).hasMessage("Source should not be null");
         }
+    }
+
+    /**
+     * {@link Source} class test.
+     */
+    @Test
+    public void serializationTest() {
+        CharConsumer<List<String>> charConsumer = new CharConsumerImpl();
+        Source<String, List<String>> source = new StringSource<>(charConsumer);
+        Source<String, List<String>> deserialized = SerializationHelper.serializeAndDeserialize(source);
+        List<String> list = deserialized.parse("abc");
+        Assertions.assertThat(list).containsExactlyInOrder("97 at 1:1", "98 at 1:2", "99 at 1:3", "eof at 0:0");
     }
 
 }
