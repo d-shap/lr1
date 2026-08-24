@@ -160,59 +160,59 @@ public final class EbnfTokenizer {
         // Single-character tokens
         if (currentChar == '=') {
             advance();
-            return new EbnfToken(new Position(startLine, startColumn), EbnfTokenType.EQUALS, "=");
+            return new EbnfToken(new Position(startLine, startColumn), EbnfTokenType.EQUALS, "");
         }
         if (currentChar == ',') {
             advance();
-            return new EbnfToken(new Position(startLine, startColumn), EbnfTokenType.COMMA, ",");
+            return new EbnfToken(new Position(startLine, startColumn), EbnfTokenType.COMMA, "");
         }
         if (currentChar == '|') {
             advance();
-            return new EbnfToken(new Position(startLine, startColumn), EbnfTokenType.PIPE, "|");
+            return new EbnfToken(new Position(startLine, startColumn), EbnfTokenType.PIPE, "");
         }
         if (currentChar == ';') {
             advance();
-            return new EbnfToken(new Position(startLine, startColumn), EbnfTokenType.SEMICOLON, ";");
+            return new EbnfToken(new Position(startLine, startColumn), EbnfTokenType.SEMICOLON, "");
         }
         if (currentChar == '(') {
             advance();
-            return new EbnfToken(new Position(startLine, startColumn), EbnfTokenType.LPAREN, "(");
+            return new EbnfToken(new Position(startLine, startColumn), EbnfTokenType.LPAREN, "");
         }
         if (currentChar == ')') {
             advance();
-            return new EbnfToken(new Position(startLine, startColumn), EbnfTokenType.RPAREN, ")");
+            return new EbnfToken(new Position(startLine, startColumn), EbnfTokenType.RPAREN, "");
         }
         if (currentChar == '[') {
             advance();
-            return new EbnfToken(new Position(startLine, startColumn), EbnfTokenType.LBRACKET, "[");
+            return new EbnfToken(new Position(startLine, startColumn), EbnfTokenType.LBRACKET, "");
         }
         if (currentChar == ']') {
             advance();
-            return new EbnfToken(new Position(startLine, startColumn), EbnfTokenType.RBRACKET, "]");
+            return new EbnfToken(new Position(startLine, startColumn), EbnfTokenType.RBRACKET, "");
         }
         if (currentChar == '{') {
             advance();
-            return new EbnfToken(new Position(startLine, startColumn), EbnfTokenType.LBRACE, "{");
+            return new EbnfToken(new Position(startLine, startColumn), EbnfTokenType.LBRACE, "");
         }
         if (currentChar == '}') {
             advance();
-            return new EbnfToken(new Position(startLine, startColumn), EbnfTokenType.RBRACE, "}");
+            return new EbnfToken(new Position(startLine, startColumn), EbnfTokenType.RBRACE, "");
         }
         if (currentChar == '?') {
             advance();
-            return new EbnfToken(new Position(startLine, startColumn), EbnfTokenType.QUESTION, "?");
+            return new EbnfToken(new Position(startLine, startColumn), EbnfTokenType.QUESTION, "");
         }
         if (currentChar == '+') {
             advance();
-            return new EbnfToken(new Position(startLine, startColumn), EbnfTokenType.PLUS, "+");
+            return new EbnfToken(new Position(startLine, startColumn), EbnfTokenType.PLUS, "");
         }
         if (currentChar == '-') {
             advance();
-            return new EbnfToken(new Position(startLine, startColumn), EbnfTokenType.PLUS, "-");
+            return new EbnfToken(new Position(startLine, startColumn), EbnfTokenType.PLUS, "");
         }
         if (currentChar == '*') {
             advance();
-            return new EbnfToken(new Position(startLine, startColumn), EbnfTokenType.ASTERISK, "*");
+            return new EbnfToken(new Position(startLine, startColumn), EbnfTokenType.ASTERISK, "");
         }
 
         // String tokens (quoted with single or double quotes)
