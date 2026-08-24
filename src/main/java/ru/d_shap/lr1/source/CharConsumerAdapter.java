@@ -46,12 +46,7 @@ public final class CharConsumerAdapter<R> implements CharConsumer<R> {
 
     private boolean _first;
 
-    /**
-     * Create new object.
-     *
-     * @param charConsumerEx the extended char consumer.
-     */
-    public CharConsumerAdapter(final CharConsumerEx<R> charConsumerEx) {
+    CharConsumerAdapter(final CharConsumerEx<R> charConsumerEx) {
         super();
         if (charConsumerEx == null) {
             throw new NullPointerException("Extended char consumer should not be null");
