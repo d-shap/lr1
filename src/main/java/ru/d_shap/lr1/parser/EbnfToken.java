@@ -1,4 +1,4 @@
-/// ////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////
 // LR(1) parser implementation.
 // Copyright (C) 2026 Dmitry Shapovalov.
 //
@@ -16,10 +16,12 @@
 //
 // You should have received a copy of the GNU Lesser General Public License
 // along with this program. If not, see <http://www.gnu.org/licenses/>.
-/// ////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////
 package ru.d_shap.lr1.parser;
 
 import java.io.Serializable;
+
+import ru.d_shap.lr1.Position;
 
 /**
  * The EBNF token.
@@ -30,20 +32,35 @@ public final class EbnfToken implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    private final Position _position;
+
     private final EbnfTokenType _tokenType;
 
-    private final String _tokenText;
+    private final String _tokenValue;
 
-    private final int _line;
-
-    private final int _column;
-
-    EbnfToken(final EbnfTokenType tokenType, final String tokenText, final int line, final int column) {
+    EbnfToken(final Position position, final EbnfTokenType tokenType, final String tokenValue) {
         super();
+        if (position == null) {
+            throw new NullPointerException("Position should not be null");
+        }
+        _position = position;
+        if (tokenType == null) {
+            throw new NullPointerException("Token type should not be null");
+        }
         _tokenType = tokenType;
-        _tokenText = tokenText;
-        _line = line;
-        _column = column;
+        if (tokenValue == null) {
+            throw new NullPointerException("Token value should not be null");
+        }
+        _tokenValue = tokenValue;
+    }
+
+    /**
+     * Get the position.
+     *
+     * @return the position.
+     */
+    public Position getPosition() {
+        return _position;
     }
 
     /**
@@ -56,35 +73,17 @@ public final class EbnfToken implements Serializable {
     }
 
     /**
-     * Get the EBNF token text.
+     * Get the EBNF token value.
      *
-     * @return the EBNF token text.
+     * @return the EBNF token value.
      */
-    public String getTokenText() {
-        return _tokenText;
-    }
-
-    /**
-     * Get the EBNF token line.
-     *
-     * @return the EBNF token line.
-     */
-    public int getLine() {
-        return _line;
-    }
-
-    /**
-     * Get the EBNF token column.
-     *
-     * @return the EBNF token column.
-     */
-    public int getColumn() {
-        return _column;
+    public String getTokenValue() {
+        return _tokenValue;
     }
 
     @Override
     public String toString() {
-        return _tokenType.tokenText(_tokenText);
+        return _tokenType.tokenText(_tokenValue);
     }
 
 }
