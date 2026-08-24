@@ -30,6 +30,7 @@ import java.util.List;
 
 import ru.d_shap.lr1.EbnfException;
 import ru.d_shap.lr1.EbnfParseException;
+import ru.d_shap.lr1.Position;
 
 /**
  * The EBNF tokenizer.
@@ -103,7 +104,7 @@ public final class EbnfTokenizer {
             EbnfToken token = nextToken();
             tokens.add(token);
         }
-        EbnfToken token = new EbnfToken(EbnfTokenType.EOF, "", _line, _column);
+        EbnfToken token = new EbnfToken(new Position(_line, _column), EbnfTokenType.EOF, "");
         tokens.add(token);
         return tokens;
     }
@@ -159,59 +160,59 @@ public final class EbnfTokenizer {
         // Single-character tokens
         if (currentChar == '=') {
             advance();
-            return new EbnfToken(EbnfTokenType.EQUALS, "=", startLine, startColumn);
+            return new EbnfToken(new Position(startLine, startColumn), EbnfTokenType.EQUALS, "=");
         }
         if (currentChar == ',') {
             advance();
-            return new EbnfToken(EbnfTokenType.COMMA, ",", startLine, startColumn);
+            return new EbnfToken(new Position(startLine, startColumn), EbnfTokenType.COMMA, ",");
         }
         if (currentChar == '|') {
             advance();
-            return new EbnfToken(EbnfTokenType.PIPE, "|", startLine, startColumn);
+            return new EbnfToken(new Position(startLine, startColumn), EbnfTokenType.PIPE, "|");
         }
         if (currentChar == ';') {
             advance();
-            return new EbnfToken(EbnfTokenType.SEMICOLON, ";", startLine, startColumn);
+            return new EbnfToken(new Position(startLine, startColumn), EbnfTokenType.SEMICOLON, ";");
         }
         if (currentChar == '(') {
             advance();
-            return new EbnfToken(EbnfTokenType.LPAREN, "(", startLine, startColumn);
+            return new EbnfToken(new Position(startLine, startColumn), EbnfTokenType.LPAREN, "(");
         }
         if (currentChar == ')') {
             advance();
-            return new EbnfToken(EbnfTokenType.RPAREN, ")", startLine, startColumn);
+            return new EbnfToken(new Position(startLine, startColumn), EbnfTokenType.RPAREN, ")");
         }
         if (currentChar == '[') {
             advance();
-            return new EbnfToken(EbnfTokenType.LBRACKET, "[", startLine, startColumn);
+            return new EbnfToken(new Position(startLine, startColumn), EbnfTokenType.LBRACKET, "[");
         }
         if (currentChar == ']') {
             advance();
-            return new EbnfToken(EbnfTokenType.RBRACKET, "]", startLine, startColumn);
+            return new EbnfToken(new Position(startLine, startColumn), EbnfTokenType.RBRACKET, "]");
         }
         if (currentChar == '{') {
             advance();
-            return new EbnfToken(EbnfTokenType.LBRACE, "{", startLine, startColumn);
+            return new EbnfToken(new Position(startLine, startColumn), EbnfTokenType.LBRACE, "{");
         }
         if (currentChar == '}') {
             advance();
-            return new EbnfToken(EbnfTokenType.RBRACE, "}", startLine, startColumn);
+            return new EbnfToken(new Position(startLine, startColumn), EbnfTokenType.RBRACE, "}");
         }
         if (currentChar == '?') {
             advance();
-            return new EbnfToken(EbnfTokenType.QUESTION, "?", startLine, startColumn);
+            return new EbnfToken(new Position(startLine, startColumn), EbnfTokenType.QUESTION, "?");
         }
         if (currentChar == '+') {
             advance();
-            return new EbnfToken(EbnfTokenType.PLUS, "+", startLine, startColumn);
+            return new EbnfToken(new Position(startLine, startColumn), EbnfTokenType.PLUS, "+");
         }
         if (currentChar == '-') {
             advance();
-            return new EbnfToken(EbnfTokenType.PLUS, "-", startLine, startColumn);
+            return new EbnfToken(new Position(startLine, startColumn), EbnfTokenType.PLUS, "-");
         }
         if (currentChar == '*') {
             advance();
-            return new EbnfToken(EbnfTokenType.ASTERISK, "*", startLine, startColumn);
+            return new EbnfToken(new Position(startLine, startColumn), EbnfTokenType.ASTERISK, "*");
         }
 
         // String tokens (quoted with single or double quotes)
@@ -233,7 +234,7 @@ public final class EbnfTokenizer {
             text.append(peek());
             advance();
         }
-        return new EbnfToken(EbnfTokenType.IDENTIFIER, text.toString(), startLine, startColumn);
+        return new EbnfToken(new Position(startLine, startColumn), EbnfTokenType.IDENTIFIER, text.toString());
     }
 
     private boolean isIdentifierStart(final char ch) {
@@ -286,7 +287,7 @@ public final class EbnfTokenizer {
             throw new EbnfException("Unterminated string at line " + startLine + ", column " + startColumn);
         }
         advance();
-        return new EbnfToken(EbnfTokenType.STRING, text.toString(), startLine, startColumn);
+        return new EbnfToken(new Position(startLine, startColumn), EbnfTokenType.STRING, text.toString());
     }
 
     private char peek() {

@@ -77,9 +77,9 @@ public final class EbnfParser {
 
     private EbnfRule parseRule() {
         EbnfToken token = expect(EbnfTokenType.IDENTIFIER);
-        int line = token.getLine();
-        int column = token.getColumn();
-        String tokenText = token.getTokenText();
+        int line = token.getPosition().getLine();
+        int column = token.getPosition().getColumn();
+        String tokenText = token.getTokenValue();
         expect(EbnfTokenType.EQUALS);
         EbnfNode node = parseExpression();
         expect(EbnfTokenType.SEMICOLON);
@@ -146,9 +146,9 @@ public final class EbnfParser {
     private EbnfNode parseFactor() {
         EbnfToken token = peek();
         EbnfTokenType tokenType = token.getTokenType();
-        String tokenText = token.getTokenText();
-        int line = token.getLine();
-        int column = token.getColumn();
+        String tokenText = token.getTokenValue();
+        int line = token.getPosition().getLine();
+        int column = token.getPosition().getColumn();
         if (tokenType == EbnfTokenType.IDENTIFIER) {
             consume();
             return new EbnfReference(new Position(line, column), tokenText);
@@ -161,7 +161,7 @@ public final class EbnfParser {
             consume();
             StringBuilder text = new StringBuilder();
             while (!isAtEnd() && !check(EbnfTokenType.QUESTION)) {
-                text.append(peek().getTokenText());
+                text.append(peek().getTokenValue());
                 consume();
             }
             expect(EbnfTokenType.QUESTION);
