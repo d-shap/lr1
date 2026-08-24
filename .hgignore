@@ -13,6 +13,7 @@ glob:**/target/
 .idea/copyright/
 .idea/dictionaries/
 .idea/libraries/
+.idea/checkstyle-idea.xml
 .idea/compiler.xml
 .idea/dataSources.xml
 .idea/jarRepositories.xml
