@@ -71,7 +71,7 @@ public final class EbnfTokenTest {
      */
     @Test
     public void getPositionTest() {
-        Position position = new Position(10, 20);
+        Position position = new Position(1, 1);
         EbnfToken token = new EbnfToken(position, EbnfTokenType.ASTERISK, "*");
         Assertions.assertThat(token.getPosition()).isSameAs(position);
     }
@@ -81,7 +81,7 @@ public final class EbnfTokenTest {
      */
     @Test
     public void getTokenTypeTest() {
-        Position position = new Position(10, 20);
+        Position position = new Position(1, 1);
         EbnfToken token = new EbnfToken(position, EbnfTokenType.ASTERISK, "*");
         Assertions.assertThat(token.getTokenType()).isEqualTo(EbnfTokenType.ASTERISK);
     }
@@ -91,7 +91,7 @@ public final class EbnfTokenTest {
      */
     @Test
     public void getTokenValueTest() {
-        Position position = new Position(10, 20);
+        Position position = new Position(1, 1);
         EbnfToken token = new EbnfToken(position, EbnfTokenType.ASTERISK, "*");
         Assertions.assertThat(token.getTokenValue()).isEqualTo("*");
     }
@@ -101,7 +101,16 @@ public final class EbnfTokenTest {
      */
     @Test
     public void toStringTest() {
-        // TODO
+        Position position = new Position(1, 1);
+
+        EbnfToken ebnfToken1 = new EbnfToken(position, EbnfTokenType.IDENTIFIER, "value");
+        Assertions.assertThat(ebnfToken1).hasToString("IDENTIFIER(value)");
+
+        EbnfToken ebnfToken2 = new EbnfToken(position, EbnfTokenType.EQUALS, "=");
+        Assertions.assertThat(ebnfToken2).hasToString("EQUALS");
+
+        EbnfToken ebnfToken3 = new EbnfToken(position, EbnfTokenType.ASTERISK, "*");
+        Assertions.assertThat(ebnfToken3).hasToString("ASTERISK");
     }
 
     /**
