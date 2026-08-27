@@ -20,78 +20,49 @@
 package ru.d_shap.lr1.parser;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.StringReader;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
 import ru.d_shap.lr1.EbnfException;
 import ru.d_shap.lr1.EbnfParseException;
 import ru.d_shap.lr1.Position;
+import ru.d_shap.lr1.source.CharConsumerEx;
 
 /**
  * The EBNF tokenizer.
  *
  * @author Dmitry Shapovalov
  */
-public final class EbnfTokenizer {
+public final class EbnfTokenizer<R> implements CharConsumerEx<List<EbnfToken>> {
 
-    private final Reader _reader;
+    private final EbnfTokenConsumer<R> _tokenConsumer;
 
-    private int _line;
-
-    private int _column;
-
-    private int _currentChar;
-
-    private int _nextChar;
-
-    private EbnfTokenizer(final Reader reader) {
+    /**
+     * Create new object.
+     *
+     * @param tokenConsumer the token consumer.
+     */
+    public EbnfTokenizer(final EbnfTokenConsumer<R> tokenConsumer) {
         super();
-        _reader = reader;
-        _line = 1;
-        _column = 1;
-        readNextChar();
-        readNextChar();
+        if (tokenConsumer == null) {
+            throw new NullPointerException("Token consumer should not be null");
+        }
+        _tokenConsumer = tokenConsumer;
     }
 
-    /**
-     * Tokenize the string.
-     *
-     * @param string the string.
-     *
-     * @return the EBNF tokens.
-     */
-    public static List<EbnfToken> tokenize(final String string) {
-        Reader reader = new StringReader(string);
-        return tokenize(reader);
+    @Override
+    public void reset() {
+        _tokenConsumer.reset();
     }
 
-    /**
-     * Tokenize the input stream.
-     *
-     * @param inputStream the input stream.
-     *
-     * @return the EBNF tokens.
-     */
-    public static List<EbnfToken> tokenize(final InputStream inputStream) {
-        Reader reader = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
-        return tokenize(reader);
+    @Override
+    public void accept(final int line, final int column, final int ch, final int next) {
+
     }
 
-    /**
-     * Tokenize the reader.
-     *
-     * @param reader the reader.
-     *
-     * @return the EBNF tokens.
-     */
-    public static List<EbnfToken> tokenize(final Reader reader) {
-        EbnfTokenizer tokenizer = new EbnfTokenizer(reader);
-        return tokenizer.tokenize();
+    @Override
+    public EbnfToken getResult() {
+        return _tokenConsumer.getResult();
     }
 
     private List<EbnfToken> tokenize() {
