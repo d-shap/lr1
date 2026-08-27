@@ -335,7 +335,12 @@ public final class EbnfTokenizer<R> implements CharConsumerEx<R> {
 
         @Override
         State accept(final int line, final int column, final int ch, final int next) {
-            // Single-character tokens
+            // whitespace tokens
+            if (Character.isWhitespace(ch)) {
+                return _defaultState;
+            }
+
+            // single-character tokens
             if (ch == '=') {
                 Position position = new Position(line, column);
                 EbnfToken token = new EbnfToken(position, EbnfTokenType.EQUALS, "");
@@ -420,6 +425,8 @@ public final class EbnfTokenizer<R> implements CharConsumerEx<R> {
                 _tokenConsumer.accept(token);
                 return _defaultState;
             }
+
+            throw new EbnfException("Unexpected character: '" + ch + "' at line " + line + ", column " + column);
         }
 
     }
