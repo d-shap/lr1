@@ -20,6 +20,7 @@
 package ru.d_shap.lr1.parser;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +40,10 @@ public final class EbnfTokenizer<R> implements CharConsumerEx<R> {
 
     private final EbnfTokenConsumer<R> _tokenConsumer;
 
+    private final State _defaultState;
+
+    private State _currentState;
+
     /**
      * Create new object.
      *
@@ -50,16 +55,20 @@ public final class EbnfTokenizer<R> implements CharConsumerEx<R> {
             throw new NullPointerException("Token consumer should not be null");
         }
         _tokenConsumer = tokenConsumer;
+
+        _defaultState = new DefaultState();
+        _currentState = null;
     }
 
     @Override
     public void reset() {
         _tokenConsumer.reset();
+        _currentState = _defaultState;
     }
 
     @Override
     public void accept(final int line, final int column, final int ch, final int next) {
-
+        _currentState = _currentState.accept(line, column, ch, next);
     }
 
     @Override
@@ -302,6 +311,117 @@ public final class EbnfTokenizer<R> implements CharConsumerEx<R> {
 
     private boolean isAtEnd() {
         return _currentChar < 0;
+    }
+
+    private abstract static class State implements Serializable {
+
+        private static final long serialVersionUID = 1L;
+
+        State() {
+            super();
+        }
+
+        abstract State accept(int line, int column, int ch, int next);
+
+    }
+
+    private final class DefaultState extends State {
+
+        private static final long serialVersionUID = 1L;
+
+        DefaultState() {
+            super();
+        }
+
+        @Override
+        State accept(final int line, final int column, final int ch, final int next) {
+            // Single-character tokens
+            if (ch == '=') {
+                Position position = new Position(line, column);
+                EbnfToken token = new EbnfToken(position, EbnfTokenType.EQUALS, "");
+                _tokenConsumer.accept(token);
+                return _defaultState;
+            }
+            if (ch == ',') {
+                Position position = new Position(line, column);
+                EbnfToken token = new EbnfToken(position, EbnfTokenType.COMMA, "");
+                _tokenConsumer.accept(token);
+                return _defaultState;
+            }
+            if (ch == '|') {
+                Position position = new Position(line, column);
+                EbnfToken token = new EbnfToken(position, EbnfTokenType.PIPE, "");
+                _tokenConsumer.accept(token);
+                return _defaultState;
+            }
+            if (ch == ';') {
+                Position position = new Position(line, column);
+                EbnfToken token = new EbnfToken(position, EbnfTokenType.SEMICOLON, "");
+                _tokenConsumer.accept(token);
+                return _defaultState;
+            }
+            if (ch == '(') {
+                Position position = new Position(line, column);
+                EbnfToken token = new EbnfToken(position, EbnfTokenType.LPAREN, "");
+                _tokenConsumer.accept(token);
+                return _defaultState;
+            }
+            if (ch == ')') {
+                Position position = new Position(line, column);
+                EbnfToken token = new EbnfToken(position, EbnfTokenType.RPAREN, "");
+                _tokenConsumer.accept(token);
+                return _defaultState;
+            }
+            if (ch == '[') {
+                Position position = new Position(line, column);
+                EbnfToken token = new EbnfToken(position, EbnfTokenType.LBRACKET, "");
+                _tokenConsumer.accept(token);
+                return _defaultState;
+            }
+            if (ch == ']') {
+                Position position = new Position(line, column);
+                EbnfToken token = new EbnfToken(position, EbnfTokenType.RBRACKET, "");
+                _tokenConsumer.accept(token);
+                return _defaultState;
+            }
+            if (ch == '{') {
+                Position position = new Position(line, column);
+                EbnfToken token = new EbnfToken(position, EbnfTokenType.LBRACE, "");
+                _tokenConsumer.accept(token);
+                return _defaultState;
+            }
+            if (ch == '}') {
+                Position position = new Position(line, column);
+                EbnfToken token = new EbnfToken(position, EbnfTokenType.RBRACE, "");
+                _tokenConsumer.accept(token);
+                return _defaultState;
+            }
+            if (ch == '?') {
+                Position position = new Position(line, column);
+                EbnfToken token = new EbnfToken(position, EbnfTokenType.QUESTION, "");
+                _tokenConsumer.accept(token);
+                return _defaultState;
+            }
+            if (ch == '+') {
+                Position position = new Position(line, column);
+                EbnfToken token = new EbnfToken(position, EbnfTokenType.PLUS, "");
+                _tokenConsumer.accept(token);
+                return _defaultState;
+            }
+            if (ch == '-') {
+                Position position = new Position(line, column);
+                EbnfToken token = new EbnfToken(position, EbnfTokenType.MINUS, "");
+                _tokenConsumer.accept(token);
+                return _defaultState;
+            }
+            if (ch == '*') {
+                Position position = new Position(line, column);
+                EbnfToken token = new EbnfToken(position, EbnfTokenType.ASTERISK, "");
+                _tokenConsumer.accept(token);
+                return _defaultState;
+            }
+        }
+
     }
 
 }
