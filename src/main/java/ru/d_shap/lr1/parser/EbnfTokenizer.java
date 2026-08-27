@@ -19,13 +19,11 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 package ru.d_shap.lr1.parser;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import ru.d_shap.lr1.EbnfException;
-import ru.d_shap.lr1.EbnfParseException;
 import ru.d_shap.lr1.Position;
 import ru.d_shap.lr1.source.CharConsumerEx;
 
@@ -207,92 +205,6 @@ public final class EbnfTokenizer<R> implements CharConsumerEx<R> {
 
     private boolean isIdentifierPart(final char ch) {
         return isIdentifierStart(ch) || ch >= '0' && ch <= '9';
-    }
-
-    private EbnfToken parseString(final char quoteChar, final int startLine, final int startColumn) {
-        advance();
-        StringBuilder text = new StringBuilder();
-        while (!isAtEnd() && peek() != quoteChar) {
-            if (peek() == '\\') {
-                advance();
-                if (!isAtEnd()) {
-                    char escaped = peek();
-                    switch (escaped) {
-                        case 'n':
-                            text.append('\n');
-                            break;
-                        case 't':
-                            text.append('\t');
-                            break;
-                        case 'r':
-                            text.append('\r');
-                            break;
-                        case '\\':
-                            text.append('\\');
-                            break;
-                        case '"':
-                            text.append('"');
-                            break;
-                        case '\'':
-                            text.append('\'');
-                            break;
-                        default:
-                            text.append(escaped);
-                            break;
-                    }
-                    advance();
-                }
-            } else {
-                text.append(peek());
-                advance();
-            }
-        }
-        if (isAtEnd()) {
-            throw new EbnfException("Unterminated string at line " + startLine + ", column " + startColumn);
-        }
-        advance();
-        return new EbnfToken(new Position(startLine, startColumn), EbnfTokenType.STRING, text.toString());
-    }
-
-    private char peek() {
-        if (isAtEnd()) {
-            return '\0';
-        } else {
-            return (char) _currentChar;
-        }
-    }
-
-    private char peekNext() {
-        if (isAtEnd()) {
-            return '\0';
-        } else {
-            return (char) _nextChar;
-        }
-    }
-
-    private void advance() {
-        if (!isAtEnd()) {
-            if (_currentChar == '\n') {
-                _line++;
-                _column = 1;
-            } else {
-                _column++;
-            }
-            readNextChar();
-        }
-    }
-
-    private void readNextChar() {
-        try {
-            _currentChar = _nextChar;
-            _nextChar = _reader.read();
-        } catch (IOException ex) {
-            throw new EbnfParseException("Read exception", ex);
-        }
-    }
-
-    private boolean isAtEnd() {
-        return _currentChar < 0;
     }
 
     abstract static class State implements Serializable {
