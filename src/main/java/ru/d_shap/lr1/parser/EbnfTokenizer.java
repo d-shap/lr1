@@ -58,6 +58,8 @@ public final class EbnfTokenizer<R> implements CharConsumerEx<R> {
 
     private State _currentState;
 
+    private final StringBuilder _text;
+
     /**
      * Create new object.
      *
@@ -79,12 +81,15 @@ public final class EbnfTokenizer<R> implements CharConsumerEx<R> {
         _stringAposState = new StringAposState();
         _stringAposEscapeState = new StringAposEscapeState();
         _currentState = null;
+
+        _text = new StringBuilder();
     }
 
     @Override
     public void reset() {
         _tokenConsumer.reset();
         _currentState = _defaultState;
+        _text.setLength(0);
     }
 
     @Override
@@ -413,9 +418,11 @@ public final class EbnfTokenizer<R> implements CharConsumerEx<R> {
             }
 
             if (ch == '"') {
+                _text.setLength(0);
                 return _stringQuotState;
             }
             if (ch == '\'') {
+                _text.setLength(0);
                 return _stringAposState;
             }
 
@@ -492,12 +499,18 @@ public final class EbnfTokenizer<R> implements CharConsumerEx<R> {
         @Override
         State accept(final int line, final int column, final int ch, final int next) {
             if (ch == '"') {
+                Position position = new Position(line, column);
+                String text = _text.toString();
+                _text.setLength(0);
+                EbnfToken token = new EbnfToken(position, EbnfTokenType.STRING, text);
+                _tokenConsumer.accept(token);
                 return _defaultState;
             }
             if (ch == '\\') {
                 return _stringQuotEscapeState;
             }
 
+            _text.append(ch);
             return _stringQuotState;
         }
 
@@ -514,21 +527,27 @@ public final class EbnfTokenizer<R> implements CharConsumerEx<R> {
         @Override
         State accept(final int line, final int column, final int ch, final int next) {
             if (ch == 't') {
+                _text.append('\t');
                 return _stringQuotState;
             }
             if (ch == 'r') {
+                _text.append('\r');
                 return _stringQuotState;
             }
             if (ch == 'n') {
+                _text.append('\n');
                 return _stringQuotState;
             }
             if (ch == '\\') {
+                _text.append('\n');
                 return _stringQuotState;
             }
             if (ch == '"') {
+                _text.append('"');
                 return _stringQuotState;
             }
             if (ch == '\'') {
+                _text.append('\'');
                 return _stringQuotState;
             }
 
@@ -548,12 +567,18 @@ public final class EbnfTokenizer<R> implements CharConsumerEx<R> {
         @Override
         State accept(final int line, final int column, final int ch, final int next) {
             if (ch == '\'') {
+                Position position = new Position(line, column);
+                String text = _text.toString();
+                _text.setLength(0);
+                EbnfToken token = new EbnfToken(position, EbnfTokenType.STRING, text);
+                _tokenConsumer.accept(token);
                 return _defaultState;
             }
             if (ch == '\\') {
                 return _stringAposEscapeState;
             }
 
+            _text.append(ch);
             return _stringAposState;
         }
 
@@ -570,21 +595,27 @@ public final class EbnfTokenizer<R> implements CharConsumerEx<R> {
         @Override
         State accept(final int line, final int column, final int ch, final int next) {
             if (ch == 't') {
+                _text.append('\t');
                 return _stringAposState;
             }
             if (ch == 'r') {
+                _text.append('\r');
                 return _stringAposState;
             }
             if (ch == 'n') {
+                _text.append('\n');
                 return _stringAposState;
             }
             if (ch == '\\') {
+                _text.append('\\');
                 return _stringAposState;
             }
             if (ch == '"') {
+                _text.append('"');
                 return _stringAposState;
             }
             if (ch == '\'') {
+                _text.append('\'');
                 return _stringAposState;
             }
 
