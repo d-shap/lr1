@@ -300,17 +300,21 @@ public final class EbnfTokenizer<R> implements CharConsumerEx<R> {
 
         @Override
         State accept(final int line, final int column, final int ch, final int next) {
-            // whitespace tokens
+            if (ch < 0) {
+                Position position = new Position(line, column);
+                EbnfToken token = new EbnfToken(position, EbnfTokenType.EOF, "");
+                _tokenConsumer.accept(token);
+                return _defaultState;
+            }
+
             if (Character.isWhitespace(ch)) {
                 return _defaultState;
             }
 
-            // comment tokens
             if (ch == '(' && next == '*') {
                 return _commentStartState;
             }
 
-            // single-character tokens
             if (ch == '=') {
                 Position position = new Position(line, column);
                 EbnfToken token = new EbnfToken(position, EbnfTokenType.EQUALS, "");
