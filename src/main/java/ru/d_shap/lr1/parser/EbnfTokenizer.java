@@ -42,6 +42,12 @@ public final class EbnfTokenizer<R> implements CharConsumerEx<R> {
 
     private final State _defaultState;
 
+    private final State _commentStartState;
+
+    private final State _commentState;
+
+    private final State _commentEndState;
+
     private State _currentState;
 
     /**
@@ -57,6 +63,9 @@ public final class EbnfTokenizer<R> implements CharConsumerEx<R> {
         _tokenConsumer = tokenConsumer;
 
         _defaultState = new DefaultState();
+        _commentStartState = new CommentStartState();
+        _commentState = new CommentState();
+        _commentEndState = new CommentEndState();
         _currentState = null;
     }
 
@@ -340,6 +349,11 @@ public final class EbnfTokenizer<R> implements CharConsumerEx<R> {
                 return _defaultState;
             }
 
+            // comment tokens
+            if (ch == '(' && next == '*') {
+                return _commentStartState;
+            }
+
             // single-character tokens
             if (ch == '=') {
                 Position position = new Position(line, column);
@@ -423,6 +437,63 @@ public final class EbnfTokenizer<R> implements CharConsumerEx<R> {
                 Position position = new Position(line, column);
                 EbnfToken token = new EbnfToken(position, EbnfTokenType.ASTERISK, "");
                 _tokenConsumer.accept(token);
+                return _defaultState;
+            }
+
+            throw new EbnfException("Unexpected character: '" + ch + "' at line " + line + ", column " + column);
+        }
+
+    }
+
+    private final class CommentStartState extends State {
+
+        private static final long serialVersionUID = 1L;
+
+        CommentStartState() {
+            super();
+        }
+
+        @Override
+        State accept(final int line, final int column, final int ch, final int next) {
+            if (ch == '*') {
+                return _commentState;
+            }
+
+            throw new EbnfException("Unexpected character: '" + ch + "' at line " + line + ", column " + column);
+        }
+
+    }
+
+    private final class CommentState extends State {
+
+        private static final long serialVersionUID = 1L;
+
+        CommentState() {
+            super();
+        }
+
+        @Override
+        State accept(final int line, final int column, final int ch, final int next) {
+            if (ch == '*' && next == ')') {
+                return _commentEndState;
+            }
+
+            return _commentState;
+        }
+
+    }
+
+    private final class CommentEndState extends State {
+
+        private static final long serialVersionUID = 1L;
+
+        CommentEndState() {
+            super();
+        }
+
+        @Override
+        State accept(final int line, final int column, final int ch, final int next) {
+            if (ch == ')') {
                 return _defaultState;
             }
 
