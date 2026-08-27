@@ -88,7 +88,6 @@ public final class EbnfTokenizer<R> implements CharConsumerEx<R> {
     private List<EbnfToken> tokenize() {
         List<EbnfToken> tokens = new ArrayList<>();
         while (!isAtEnd()) {
-            skipWhitespaceAndComments();
             if (isAtEnd()) {
                 break;
             }
@@ -98,49 +97,6 @@ public final class EbnfTokenizer<R> implements CharConsumerEx<R> {
         EbnfToken token = new EbnfToken(new Position(_line, _column), EbnfTokenType.EOF, "");
         tokens.add(token);
         return tokens;
-    }
-
-    private void skipWhitespaceAndComments() {
-        while (!isAtEnd()) {
-            char currentChar = peek();
-            if (currentChar == ' ' || currentChar == '\t' || currentChar == '\r') {
-                advance();
-            } else if (currentChar == '\n') {
-                advance();
-                _line++;
-                _column = 1;
-            } else if (currentChar == '(' && peekNext() == '*') {
-                // Skip EBNF comment (* ... *)
-                skipEbnfComment();
-            } else {
-                break;
-            }
-        }
-    }
-
-    private void skipEbnfComment() {
-        advance(); // skip '('
-        advance(); // skip '*'
-        int depth = 1;
-        while (!isAtEnd() && depth > 0) {
-            if (peek() == '(' && peekNext() == '*') {
-                // Nested comment start
-                advance();
-                advance();
-                depth++;
-            } else if (peek() == '*' && peekNext() == ')') {
-                // Comment end
-                advance();
-                advance();
-                depth--;
-            } else {
-                if (peek() == '\n') {
-                    _line++;
-                    _column = 1;
-                }
-                advance();
-            }
-        }
     }
 
     private EbnfToken nextToken() {
