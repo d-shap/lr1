@@ -278,7 +278,7 @@ public final class EbnfTokenizer<R> implements CharConsumerEx<R> {
         return _currentChar < 0;
     }
 
-    private abstract static class State implements Serializable {
+    abstract static class State implements Serializable {
 
         private static final long serialVersionUID = 1L;
 
@@ -290,7 +290,7 @@ public final class EbnfTokenizer<R> implements CharConsumerEx<R> {
 
     }
 
-    private final class DefaultState extends State {
+    final class DefaultState extends State {
 
         private static final long serialVersionUID = 1L;
 
@@ -405,7 +405,7 @@ public final class EbnfTokenizer<R> implements CharConsumerEx<R> {
 
     }
 
-    private final class CommentStartState extends State {
+    final class CommentStartState extends State {
 
         private static final long serialVersionUID = 1L;
 
@@ -424,7 +424,7 @@ public final class EbnfTokenizer<R> implements CharConsumerEx<R> {
 
     }
 
-    private final class CommentState extends State {
+    final class CommentState extends State {
 
         private static final long serialVersionUID = 1L;
 
@@ -443,7 +443,7 @@ public final class EbnfTokenizer<R> implements CharConsumerEx<R> {
 
     }
 
-    private final class CommentEndState extends State {
+    final class CommentEndState extends State {
 
         private static final long serialVersionUID = 1L;
 
