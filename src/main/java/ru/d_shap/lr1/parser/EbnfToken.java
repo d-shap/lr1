@@ -64,18 +64,18 @@ public final class EbnfToken implements Serializable {
     }
 
     /**
-     * Get the EBNF token type.
+     * Get the token type.
      *
-     * @return the EBNF token type.
+     * @return the token type.
      */
     public EbnfTokenType getTokenType() {
         return _tokenType;
     }
 
     /**
-     * Get the EBNF token value.
+     * Get the token value.
      *
-     * @return the EBNF token value.
+     * @return the token value.
      */
     public String getTokenValue() {
         return _tokenValue;
