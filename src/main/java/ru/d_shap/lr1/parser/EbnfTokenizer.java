@@ -50,7 +50,11 @@ public final class EbnfTokenizer<R> implements CharConsumerEx<R> {
 
     private final State _stringQuotState;
 
+    private final State _stringQuotEscapeState;
+
     private final State _stringAposState;
+
+    private final State _stringAposEscapeState;
 
     private State _currentState;
 
@@ -71,7 +75,9 @@ public final class EbnfTokenizer<R> implements CharConsumerEx<R> {
         _commentState = new CommentState();
         _commentEndState = new CommentEndState();
         _stringQuotState = new StringQuotState();
+        _stringQuotEscapeState = new StringQuotEscapeState();
         _stringAposState = new StringAposState();
+        _stringAposEscapeState = new StringAposEscapeState();
         _currentState = null;
     }
 
@@ -488,7 +494,25 @@ public final class EbnfTokenizer<R> implements CharConsumerEx<R> {
             if (ch == '"') {
                 return _defaultState;
             }
+            if (ch == '\\') {
+                return _stringQuotEscapeState;
+            }
 
+            return _stringQuotState;
+        }
+
+    }
+
+    final class StringQuotEscapeState extends State {
+
+        private static final long serialVersionUID = 1L;
+
+        StringQuotEscapeState() {
+            super();
+        }
+
+        @Override
+        State accept(final int line, final int column, final int ch, final int next) {
             return _stringQuotState;
         }
 
@@ -507,7 +531,25 @@ public final class EbnfTokenizer<R> implements CharConsumerEx<R> {
             if (ch == '\'') {
                 return _defaultState;
             }
+            if (ch == '\\') {
+                return _stringAposEscapeState;
+            }
 
+            return _stringAposState;
+        }
+
+    }
+
+    final class StringAposEscapeState extends State {
+
+        private static final long serialVersionUID = 1L;
+
+        StringAposEscapeState() {
+            super();
+        }
+
+        @Override
+        State accept(final int line, final int column, final int ch, final int next) {
             return _stringAposState;
         }
 
