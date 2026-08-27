@@ -513,7 +513,26 @@ public final class EbnfTokenizer<R> implements CharConsumerEx<R> {
 
         @Override
         State accept(final int line, final int column, final int ch, final int next) {
-            return _stringQuotState;
+            if (ch == 't') {
+                return _stringQuotState;
+            }
+            if (ch == 'r') {
+                return _stringQuotState;
+            }
+            if (ch == 'n') {
+                return _stringQuotState;
+            }
+            if (ch == '\\') {
+                return _stringQuotState;
+            }
+            if (ch == '"') {
+                return _stringQuotState;
+            }
+            if (ch == '\'') {
+                return _stringQuotState;
+            }
+
+            throw new EbnfException("Unexpected character: '" + ch + "' at line " + line + ", column " + column);
         }
 
     }
@@ -550,7 +569,26 @@ public final class EbnfTokenizer<R> implements CharConsumerEx<R> {
 
         @Override
         State accept(final int line, final int column, final int ch, final int next) {
-            return _stringAposState;
+            if (ch == 't') {
+                return _stringAposState;
+            }
+            if (ch == 'r') {
+                return _stringAposState;
+            }
+            if (ch == 'n') {
+                return _stringAposState;
+            }
+            if (ch == '\\') {
+                return _stringAposState;
+            }
+            if (ch == '"') {
+                return _stringAposState;
+            }
+            if (ch == '\'') {
+                return _stringAposState;
+            }
+
+            throw new EbnfException("Unexpected character: '" + ch + "' at line " + line + ", column " + column);
         }
 
     }
