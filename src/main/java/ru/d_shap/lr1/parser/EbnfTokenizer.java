@@ -33,7 +33,9 @@ import ru.d_shap.lr1.source.CharConsumerEx;
  *
  * @author Dmitry Shapovalov
  */
-public final class EbnfTokenizer<R> implements CharConsumerEx<List<EbnfToken>> {
+public final class EbnfTokenizer<R> implements CharConsumerEx<R> {
+
+    private static final long serialVersionUID = 1L;
 
     private final EbnfTokenConsumer<R> _tokenConsumer;
 
