@@ -48,6 +48,10 @@ public final class EbnfTokenizer<R> implements CharConsumerEx<R> {
 
     private final State _commentEndState;
 
+    private final State _stringQuotState;
+
+    private final State _stringAposState;
+
     private State _currentState;
 
     /**
@@ -66,6 +70,8 @@ public final class EbnfTokenizer<R> implements CharConsumerEx<R> {
         _commentStartState = new CommentStartState();
         _commentState = new CommentState();
         _commentEndState = new CommentEndState();
+        _stringQuotState = new StringQuotState();
+        _stringAposState = new StringAposState();
         _currentState = null;
     }
 
@@ -400,6 +406,13 @@ public final class EbnfTokenizer<R> implements CharConsumerEx<R> {
                 return _defaultState;
             }
 
+            if (ch == '"') {
+                return _stringQuotState;
+            }
+            if (ch == '\'') {
+                return _stringAposState;
+            }
+
             throw new EbnfException("Unexpected character: '" + ch + "' at line " + line + ", column " + column);
         }
 
@@ -458,6 +471,44 @@ public final class EbnfTokenizer<R> implements CharConsumerEx<R> {
             }
 
             throw new EbnfException("Unexpected character: '" + ch + "' at line " + line + ", column " + column);
+        }
+
+    }
+
+    final class StringQuotState extends State {
+
+        private static final long serialVersionUID = 1L;
+
+        StringQuotState() {
+            super();
+        }
+
+        @Override
+        State accept(final int line, final int column, final int ch, final int next) {
+            if (ch == '"') {
+                return _defaultState;
+            }
+
+            return _stringQuotState;
+        }
+
+    }
+
+    final class StringAposState extends State {
+
+        private static final long serialVersionUID = 1L;
+
+        StringAposState() {
+            super();
+        }
+
+        @Override
+        State accept(final int line, final int column, final int ch, final int next) {
+            if (ch == '\'') {
+                return _defaultState;
+            }
+
+            return _stringAposState;
         }
 
     }
