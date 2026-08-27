@@ -63,7 +63,7 @@ public final class EbnfTokenizer<R> implements CharConsumerEx<R> {
     }
 
     @Override
-    public EbnfToken getResult() {
+    public R getResult() {
         return _tokenConsumer.getResult();
     }
 
