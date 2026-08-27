@@ -36,9 +36,9 @@ public interface EbnfTokenConsumer<R> extends Serializable {
     void reset();
 
     /**
-     * Accept the EBNF token.
+     * Accept the token.
      *
-     * @param token the EBNF token.
+     * @param token the token.
      */
     void accept(EbnfToken token);
 
