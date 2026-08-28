@@ -42,12 +42,12 @@ public final class Position implements Serializable {
      */
     public Position(final int line, final int column) {
         super();
-        if (line <= 0) {
-            throw new IllegalArgumentException("Line should be positive");
+        if (line < 0) {
+            throw new IllegalArgumentException("Line should not be negative");
         }
         _line = line;
-        if (column <= 0) {
-            throw new IllegalArgumentException("Column should be positive");
+        if (column < 0) {
+            throw new IllegalArgumentException("Column should not be negative");
         }
         _column = column;
     }
