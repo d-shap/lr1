@@ -20,8 +20,6 @@
 package ru.d_shap.lr1.parser;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 import ru.d_shap.lr1.EbnfException;
 import ru.d_shap.lr1.Position;
@@ -54,6 +52,8 @@ public final class EbnfTokenizer<R> implements CharConsumerEx<R> {
 
     private final State _stringAposEscapeState;
 
+    private final State _identifierState;
+
     private State _currentState;
 
     private final StringBuilder _text;
@@ -78,8 +78,9 @@ public final class EbnfTokenizer<R> implements CharConsumerEx<R> {
         _stringQuotEscapeState = new StringQuotEscapeState();
         _stringAposState = new StringAposState();
         _stringAposEscapeState = new StringAposEscapeState();
-        _currentState = null;
+        _identifierState = new IdentifierState();
 
+        _currentState = null;
         _text = new StringBuilder();
     }
 
@@ -100,110 +101,11 @@ public final class EbnfTokenizer<R> implements CharConsumerEx<R> {
         return _tokenConsumer.getResult();
     }
 
-    private List<EbnfToken> tokenize() {
-        List<EbnfToken> tokens = new ArrayList<>();
-        while (!isAtEnd()) {
-            if (isAtEnd()) {
-                break;
-            }
-            EbnfToken token = nextToken();
-            tokens.add(token);
-        }
-        EbnfToken token = new EbnfToken(new Position(_line, _column), EbnfTokenType.EOF, "");
-        tokens.add(token);
-        return tokens;
-    }
-
-    private EbnfToken nextToken() {
-        int startLine = _line;
-        int startColumn = _column;
-        char currentChar = peek();
-
-        // Single-character tokens
-        if (currentChar == '=') {
-            advance();
-            return new EbnfToken(new Position(startLine, startColumn), EbnfTokenType.EQUALS, "");
-        }
-        if (currentChar == ',') {
-            advance();
-            return new EbnfToken(new Position(startLine, startColumn), EbnfTokenType.COMMA, "");
-        }
-        if (currentChar == '|') {
-            advance();
-            return new EbnfToken(new Position(startLine, startColumn), EbnfTokenType.PIPE, "");
-        }
-        if (currentChar == ';') {
-            advance();
-            return new EbnfToken(new Position(startLine, startColumn), EbnfTokenType.SEMICOLON, "");
-        }
-        if (currentChar == '(') {
-            advance();
-            return new EbnfToken(new Position(startLine, startColumn), EbnfTokenType.LPAREN, "");
-        }
-        if (currentChar == ')') {
-            advance();
-            return new EbnfToken(new Position(startLine, startColumn), EbnfTokenType.RPAREN, "");
-        }
-        if (currentChar == '[') {
-            advance();
-            return new EbnfToken(new Position(startLine, startColumn), EbnfTokenType.LBRACKET, "");
-        }
-        if (currentChar == ']') {
-            advance();
-            return new EbnfToken(new Position(startLine, startColumn), EbnfTokenType.RBRACKET, "");
-        }
-        if (currentChar == '{') {
-            advance();
-            return new EbnfToken(new Position(startLine, startColumn), EbnfTokenType.LBRACE, "");
-        }
-        if (currentChar == '}') {
-            advance();
-            return new EbnfToken(new Position(startLine, startColumn), EbnfTokenType.RBRACE, "");
-        }
-        if (currentChar == '?') {
-            advance();
-            return new EbnfToken(new Position(startLine, startColumn), EbnfTokenType.QUESTION, "");
-        }
-        if (currentChar == '+') {
-            advance();
-            return new EbnfToken(new Position(startLine, startColumn), EbnfTokenType.PLUS, "");
-        }
-        if (currentChar == '-') {
-            advance();
-            return new EbnfToken(new Position(startLine, startColumn), EbnfTokenType.PLUS, "");
-        }
-        if (currentChar == '*') {
-            advance();
-            return new EbnfToken(new Position(startLine, startColumn), EbnfTokenType.ASTERISK, "");
-        }
-
-        // String tokens (quoted with single or double quotes)
-        if (currentChar == '"' || currentChar == '\'') {
-            return parseString(currentChar, startLine, startColumn);
-        }
-
-        // Identifier tokens (letters, digits, underscores)
-        if (isIdentifierStart(currentChar)) {
-            return parseIdentifier(startLine, startColumn);
-        }
-
-        throw new EbnfException("Unexpected character: '" + currentChar + "' at line " + startLine + ", column " + startColumn);
-    }
-
-    private EbnfToken parseIdentifier(final int startLine, final int startColumn) {
-        StringBuilder text = new StringBuilder();
-        while (!isAtEnd() && isIdentifierPart(peek())) {
-            text.append(peek());
-            advance();
-        }
-        return new EbnfToken(new Position(startLine, startColumn), EbnfTokenType.IDENTIFIER, text.toString());
-    }
-
-    private boolean isIdentifierStart(final char ch) {
+    private boolean isIdentifierStart(final int ch) {
         return ch >= 'a' && ch <= 'z' || ch >= 'A' && ch <= 'Z' || ch == '_';
     }
 
-    private boolean isIdentifierPart(final char ch) {
+    private boolean isIdentifierPart(final int ch) {
         return isIdentifierStart(ch) || ch >= '0' && ch <= '9';
     }
 
@@ -233,7 +135,7 @@ public final class EbnfTokenizer<R> implements CharConsumerEx<R> {
                 Position position = new Position(line, column);
                 EbnfToken token = new EbnfToken(position, EbnfTokenType.EOF, "");
                 _tokenConsumer.accept(token);
-                return _defaultState;
+                return null;
             }
 
             if (Character.isWhitespace(ch)) {
@@ -336,6 +238,21 @@ public final class EbnfTokenizer<R> implements CharConsumerEx<R> {
             if (ch == '\'') {
                 _text.setLength(0);
                 return _stringAposState;
+            }
+
+            if (isIdentifierStart(ch)) {
+                _text.setLength(0);
+                _text.append(ch);
+                if (isIdentifierPart(next)) {
+                    return _identifierState;
+                } else {
+                    Position position = new Position(line, column);
+                    String text = _text.toString();
+                    _text.setLength(0);
+                    EbnfToken token = new EbnfToken(position, EbnfTokenType.IDENTIFIER, text);
+                    _tokenConsumer.accept(token);
+                    return _defaultState;
+                }
             }
 
             throw new EbnfException("Unexpected character: '" + ch + "' at line " + line + ", column " + column);
@@ -532,6 +449,33 @@ public final class EbnfTokenizer<R> implements CharConsumerEx<R> {
             }
 
             throw new EbnfException("Unexpected character: '" + ch + "' at line " + line + ", column " + column);
+        }
+
+    }
+
+    final class IdentifierState extends State {
+
+        private static final long serialVersionUID = 1L;
+
+        IdentifierState() {
+            super();
+        }
+
+        @Override
+        State accept(final int line, final int column, final int ch, final int next) {
+            if (isIdentifierPart(ch)) {
+                _text.append(ch);
+            }
+            if (isIdentifierPart(next)) {
+                return _identifierState;
+            } else {
+                Position position = new Position(line, column);
+                String text = _text.toString();
+                _text.setLength(0);
+                EbnfToken token = new EbnfToken(position, EbnfTokenType.IDENTIFIER, text);
+                _tokenConsumer.accept(token);
+                return _defaultState;
+            }
         }
 
     }
