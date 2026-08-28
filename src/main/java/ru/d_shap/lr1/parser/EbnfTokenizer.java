@@ -242,7 +242,7 @@ public final class EbnfTokenizer<R> implements CharConsumerEx<R> {
 
             if (isIdentifierStart(ch)) {
                 _text.setLength(0);
-                _text.append(ch);
+                _text.append((char) ch);
                 if (isIdentifierPart(next)) {
                     return _identifierState;
                 } else {
@@ -407,7 +407,7 @@ public final class EbnfTokenizer<R> implements CharConsumerEx<R> {
                 return _stringAposEscapeState;
             }
 
-            _text.append(ch);
+            _text.append((char) ch);
             return _stringAposState;
         }
 
@@ -464,7 +464,7 @@ public final class EbnfTokenizer<R> implements CharConsumerEx<R> {
         @Override
         State accept(final int line, final int column, final int ch, final int next) {
             if (isIdentifierPart(ch)) {
-                _text.append(ch);
+                _text.append((char) ch);
             }
             if (isIdentifierPart(next)) {
                 return _identifierState;
