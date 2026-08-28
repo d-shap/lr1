@@ -28,6 +28,8 @@ import ru.d_shap.lr1.source.CharConsumerEx;
 /**
  * The EBNF tokenizer.
  *
+ * @param <R> the generic type of the result.
+ *
  * @author Dmitry Shapovalov
  */
 public final class EbnfTokenizer<R> implements CharConsumerEx<R> {
