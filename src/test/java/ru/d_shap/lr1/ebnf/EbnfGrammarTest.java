@@ -273,7 +273,7 @@ public final class EbnfGrammarTest {
      */
     @Test
     public void serializationTest() {
-        Position position = new Position(0, 0);
+        Position position = new Position(10, 20);
         EbnfNode node1 = new EbnfTerminal(position, "a");
         EbnfRule rule1 = new EbnfRule(position, "n1", node1);
         EbnfNode node2 = new EbnfReference(position, "b");
@@ -284,6 +284,12 @@ public final class EbnfGrammarTest {
         EbnfGrammar grammar = new EbnfGrammar(rules);
         EbnfGrammar deserialized = SerializationHelper.serializeAndDeserialize(grammar);
         Assertions.assertThat(deserialized.getCount()).isEqualTo(3);
+        Assertions.assertThat(deserialized.getRule(0).getLine()).isEqualTo(10);
+        Assertions.assertThat(deserialized.getRule(0).getColumn()).isEqualTo(20);
+        Assertions.assertThat(deserialized.getRule(1).getLine()).isEqualTo(10);
+        Assertions.assertThat(deserialized.getRule(1).getColumn()).isEqualTo(20);
+        Assertions.assertThat(deserialized.getRule(2).getLine()).isEqualTo(10);
+        Assertions.assertThat(deserialized.getRule(2).getColumn()).isEqualTo(20);
         Assertions.assertThat(deserialized).hasToString("[Rule(n1=Terminal(a)), Rule(n2=Reference(b)), Rule(n3=Special(c))]");
     }
 
