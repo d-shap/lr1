@@ -44,7 +44,7 @@ public final class EbnfRuleTest {
      */
     @Test
     public void constructorTest() {
-        Position position = new Position(1, 1);
+        Position position = new Position(0, 0);
         EbnfNode node = new EbnfTerminal(position, "a");
         new EbnfRule(position, "n", node);
 
@@ -73,7 +73,7 @@ public final class EbnfRuleTest {
      */
     @Test
     public void getNameTest() {
-        Position position = new Position(1, 1);
+        Position position = new Position(0, 0);
         EbnfNode node = new EbnfTerminal(position, "a");
 
         EbnfRule rule0 = new EbnfRule(position, "", node);
@@ -91,7 +91,7 @@ public final class EbnfRuleTest {
      */
     @Test
     public void getExpressionTest() {
-        Position position = new Position(1, 1);
+        Position position = new Position(0, 0);
         EbnfNode node = new EbnfTerminal(position, "a");
         EbnfRule rule = new EbnfRule(position, "n", node);
         Assertions.assertThat(rule.getExpression()).isSameAs(node);
@@ -102,7 +102,7 @@ public final class EbnfRuleTest {
      */
     @Test
     public void toStringTest() {
-        Position position = new Position(1, 1);
+        Position position = new Position(0, 0);
         EbnfNode node = new EbnfTerminal(position, "a");
 
         EbnfRule rule0 = new EbnfRule(position, "", node);

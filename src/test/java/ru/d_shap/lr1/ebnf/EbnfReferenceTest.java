@@ -44,7 +44,7 @@ public final class EbnfReferenceTest {
      */
     @Test
     public void constructorTest() {
-        Position position = new Position(1, 1);
+        Position position = new Position(0, 0);
         new EbnfReference(position, "a");
 
         try {
@@ -66,7 +66,7 @@ public final class EbnfReferenceTest {
      */
     @Test
     public void getNameTest() {
-        Position position = new Position(1, 1);
+        Position position = new Position(0, 0);
 
         EbnfReference reference0 = new EbnfReference(position, "");
         Assertions.assertThat(reference0.getName()).isEqualTo("");
@@ -83,7 +83,7 @@ public final class EbnfReferenceTest {
      */
     @Test
     public void toStringTest() {
-        Position position = new Position(1, 1);
+        Position position = new Position(0, 0);
 
         EbnfReference reference0 = new EbnfReference(position, "");
         Assertions.assertThat(reference0).hasToString("Reference()");

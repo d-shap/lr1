@@ -44,7 +44,7 @@ public final class EbnfTerminalTest {
      */
     @Test
     public void constructorTest() {
-        Position position = new Position(1, 1);
+        Position position = new Position(0, 0);
         new EbnfTerminal(position, "a");
 
         try {
@@ -66,7 +66,7 @@ public final class EbnfTerminalTest {
      */
     @Test
     public void getValueTest() {
-        Position position = new Position(1, 1);
+        Position position = new Position(0, 0);
 
         EbnfTerminal terminal0 = new EbnfTerminal(position, "");
         Assertions.assertThat(terminal0.getValue()).isEqualTo("");
@@ -83,7 +83,7 @@ public final class EbnfTerminalTest {
      */
     @Test
     public void toStringTest() {
-        Position position = new Position(1, 1);
+        Position position = new Position(0, 0);
 
         EbnfTerminal terminal0 = new EbnfTerminal(position, "");
         Assertions.assertThat(terminal0).hasToString("Terminal()");

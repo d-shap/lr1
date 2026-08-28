@@ -49,7 +49,7 @@ public final class EbnfGrammarTest {
      */
     @Test
     public void constructorTest() {
-        Position position = new Position(1, 1);
+        Position position = new Position(0, 0);
         EbnfNode node1 = new EbnfTerminal(position, "a");
         EbnfRule rule1 = new EbnfRule(position, "n1", node1);
         EbnfNode node2 = new EbnfReference(position, "b");
@@ -89,7 +89,7 @@ public final class EbnfGrammarTest {
      */
     @Test
     public void getCountTest() {
-        Position position = new Position(1, 1);
+        Position position = new Position(0, 0);
         EbnfNode node1 = new EbnfTerminal(position, "a");
         EbnfRule rule1 = new EbnfRule(position, "n1", node1);
         EbnfNode node2 = new EbnfReference(position, "b");
@@ -115,7 +115,7 @@ public final class EbnfGrammarTest {
      */
     @Test
     public void getRuleAtIndexTest() {
-        Position position = new Position(1, 1);
+        Position position = new Position(0, 0);
         EbnfNode node1 = new EbnfTerminal(position, "a");
         EbnfRule rule1 = new EbnfRule(position, "n1", node1);
         EbnfNode node2 = new EbnfReference(position, "b");
@@ -215,7 +215,7 @@ public final class EbnfGrammarTest {
      */
     @Test
     public void getRuleWithNameTest() {
-        Position position = new Position(1, 1);
+        Position position = new Position(0, 0);
         EbnfNode node1 = new EbnfTerminal(position, "a");
         EbnfRule rule1 = new EbnfRule(position, "n1", node1);
         EbnfNode node2 = new EbnfReference(position, "b");
@@ -247,7 +247,7 @@ public final class EbnfGrammarTest {
      */
     @Test
     public void toStringTest() {
-        Position position = new Position(1, 1);
+        Position position = new Position(0, 0);
         EbnfNode node1 = new EbnfTerminal(position, "a");
         EbnfRule rule1 = new EbnfRule(position, "n1", node1);
         EbnfNode node2 = new EbnfReference(position, "b");
@@ -273,7 +273,7 @@ public final class EbnfGrammarTest {
      */
     @Test
     public void serializationTest() {
-        Position position = new Position(1, 1);
+        Position position = new Position(0, 0);
         EbnfNode node1 = new EbnfTerminal(position, "a");
         EbnfRule rule1 = new EbnfRule(position, "n1", node1);
         EbnfNode node2 = new EbnfReference(position, "b");

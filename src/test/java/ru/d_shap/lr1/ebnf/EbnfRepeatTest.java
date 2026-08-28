@@ -44,7 +44,7 @@ public final class EbnfRepeatTest {
      */
     @Test
     public void constructorTest() {
-        Position position = new Position(1, 1);
+        Position position = new Position(0, 0);
         EbnfNode node = new EbnfTerminal(position, "a");
         new EbnfRepeat(position, node, EbnfRepeatOperator.ZERO_OR_MANY);
 
@@ -73,7 +73,7 @@ public final class EbnfRepeatTest {
      */
     @Test
     public void getExpressionTest() {
-        Position position = new Position(1, 1);
+        Position position = new Position(0, 0);
         EbnfNode node = new EbnfTerminal(position, "a");
         EbnfRepeat repeat = new EbnfRepeat(position, node, EbnfRepeatOperator.ZERO_OR_MANY);
         Assertions.assertThat(repeat.getExpression()).isSameAs(node);
@@ -84,7 +84,7 @@ public final class EbnfRepeatTest {
      */
     @Test
     public void getRepeatOperatorTest() {
-        Position position = new Position(1, 1);
+        Position position = new Position(0, 0);
         EbnfNode node = new EbnfTerminal(position, "a");
         EbnfRepeat repeat = new EbnfRepeat(position, node, EbnfRepeatOperator.ZERO_OR_MANY);
         Assertions.assertThat(repeat.getRepeatOperator()).isEqualTo(EbnfRepeatOperator.ZERO_OR_MANY);
@@ -95,7 +95,7 @@ public final class EbnfRepeatTest {
      */
     @Test
     public void toStringTest() {
-        Position position = new Position(1, 1);
+        Position position = new Position(0, 0);
         EbnfNode node = new EbnfTerminal(position, "a");
         EbnfRepeat repeat = new EbnfRepeat(position, node, EbnfRepeatOperator.ZERO_OR_MANY);
         Assertions.assertThat(repeat).hasToString("Repeat(Terminal(a)*)");

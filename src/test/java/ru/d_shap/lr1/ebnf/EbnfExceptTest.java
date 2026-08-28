@@ -44,7 +44,7 @@ public final class EbnfExceptTest {
      */
     @Test
     public void constructorTest() {
-        Position position = new Position(1, 1);
+        Position position = new Position(0, 0);
         EbnfNode node1 = new EbnfTerminal(position, "a");
         EbnfNode node2 = new EbnfSpecial(position, "b");
         new EbnfExcept(position, node1, node2);
@@ -74,7 +74,7 @@ public final class EbnfExceptTest {
      */
     @Test
     public void getExpressionTest() {
-        Position position = new Position(1, 1);
+        Position position = new Position(0, 0);
         EbnfNode node1 = new EbnfTerminal(position, "a");
         EbnfNode node2 = new EbnfSpecial(position, "b");
         EbnfExcept except = new EbnfExcept(position, node1, node2);
@@ -86,7 +86,7 @@ public final class EbnfExceptTest {
      */
     @Test
     public void getExceptionTest() {
-        Position position = new Position(1, 1);
+        Position position = new Position(0, 0);
         EbnfNode node1 = new EbnfTerminal(position, "a");
         EbnfNode node2 = new EbnfSpecial(position, "b");
         EbnfExcept except = new EbnfExcept(position, node1, node2);
@@ -98,7 +98,7 @@ public final class EbnfExceptTest {
      */
     @Test
     public void toStringTest() {
-        Position position = new Position(1, 1);
+        Position position = new Position(0, 0);
         EbnfNode node1 = new EbnfTerminal(position, "a");
         EbnfNode node2 = new EbnfSpecial(position, "b");
         EbnfExcept except = new EbnfExcept(position, node1, node2);

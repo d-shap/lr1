@@ -44,7 +44,7 @@ public final class EbnfOptionalTest {
      */
     @Test
     public void constructorTest() {
-        Position position = new Position(1, 1);
+        Position position = new Position(0, 0);
         EbnfNode node = new EbnfTerminal(position, "a");
         new EbnfOptional(position, node);
 
@@ -67,7 +67,7 @@ public final class EbnfOptionalTest {
      */
     @Test
     public void getExpressionTest() {
-        Position position = new Position(1, 1);
+        Position position = new Position(0, 0);
         EbnfNode node = new EbnfTerminal(position, "a");
         EbnfOptional optional = new EbnfOptional(position, node);
         Assertions.assertThat(optional.getExpression()).isSameAs(node);
@@ -78,7 +78,7 @@ public final class EbnfOptionalTest {
      */
     @Test
     public void toStringTest() {
-        Position position = new Position(1, 1);
+        Position position = new Position(0, 0);
         EbnfNode node = new EbnfTerminal(position, "a");
         EbnfOptional optional = new EbnfOptional(position, node);
         Assertions.assertThat(optional).hasToString("Optional(Terminal(a))");

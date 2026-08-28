@@ -44,7 +44,7 @@ public final class EbnfSpecialTest {
      */
     @Test
     public void constructorTest() {
-        Position position = new Position(1, 1);
+        Position position = new Position(0, 0);
         new EbnfSpecial(position, "a");
 
         try {
@@ -66,7 +66,7 @@ public final class EbnfSpecialTest {
      */
     @Test
     public void getValueTest() {
-        Position position = new Position(1, 1);
+        Position position = new Position(0, 0);
 
         EbnfSpecial special0 = new EbnfSpecial(position, "");
         Assertions.assertThat(special0.getValue()).isEqualTo("");
@@ -83,7 +83,7 @@ public final class EbnfSpecialTest {
      */
     @Test
     public void toStringTest() {
-        Position position = new Position(1, 1);
+        Position position = new Position(0, 0);
 
         EbnfSpecial special0 = new EbnfSpecial(position, "");
         Assertions.assertThat(special0).hasToString("Special()");

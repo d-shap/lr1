@@ -49,7 +49,7 @@ public final class EbnfChoiceTest {
      */
     @Test
     public void constructorTest() {
-        Position position = new Position(1, 1);
+        Position position = new Position(0, 0);
         EbnfNode node1 = new EbnfTerminal(position, "a");
         EbnfNode node2 = new EbnfReference(position, "b");
         EbnfNode node3 = new EbnfSpecial(position, "c");
@@ -75,7 +75,7 @@ public final class EbnfChoiceTest {
      */
     @Test
     public void getCountTest() {
-        Position position = new Position(1, 1);
+        Position position = new Position(0, 0);
         EbnfNode node1 = new EbnfTerminal(position, "a");
         EbnfNode node2 = new EbnfReference(position, "b");
         EbnfNode node3 = new EbnfSpecial(position, "c");
@@ -98,7 +98,7 @@ public final class EbnfChoiceTest {
      */
     @Test
     public void getExpressionTest() {
-        Position position = new Position(1, 1);
+        Position position = new Position(0, 0);
         EbnfNode node1 = new EbnfTerminal(position, "a");
         EbnfNode node2 = new EbnfReference(position, "b");
         EbnfNode node3 = new EbnfSpecial(position, "c");
@@ -195,7 +195,7 @@ public final class EbnfChoiceTest {
      */
     @Test
     public void toStringTest() {
-        Position position = new Position(1, 1);
+        Position position = new Position(0, 0);
         EbnfNode node1 = new EbnfTerminal(position, "a");
         EbnfNode node2 = new EbnfReference(position, "b");
         EbnfNode node3 = new EbnfSpecial(position, "c");

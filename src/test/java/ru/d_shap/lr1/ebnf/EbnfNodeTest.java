@@ -44,7 +44,7 @@ public final class EbnfNodeTest {
      */
     @Test
     public void constructorTest() {
-        new EbnfNode(new Position(1, 1));
+        new EbnfNode(new Position(0, 0));
 
         try {
             new EbnfNode(null);
@@ -69,6 +69,7 @@ public final class EbnfNodeTest {
      */
     @Test
     public void getLineTest() {
+        Assertions.assertThat(new EbnfNode(new Position(0, 0)).getLine()).isEqualTo(0);
         Assertions.assertThat(new EbnfNode(new Position(1, 1)).getLine()).isEqualTo(1);
         Assertions.assertThat(new EbnfNode(new Position(10, 20)).getLine()).isEqualTo(10);
     }
@@ -78,6 +79,7 @@ public final class EbnfNodeTest {
      */
     @Test
     public void getColumnTest() {
+        Assertions.assertThat(new EbnfNode(new Position(0, 0)).getColumn()).isEqualTo(0);
         Assertions.assertThat(new EbnfNode(new Position(1, 1)).getColumn()).isEqualTo(1);
         Assertions.assertThat(new EbnfNode(new Position(10, 20)).getColumn()).isEqualTo(20);
     }
