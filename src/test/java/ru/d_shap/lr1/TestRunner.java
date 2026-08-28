@@ -20,6 +20,8 @@
 package ru.d_shap.lr1;
 
 import java.io.InputStream;
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -34,6 +36,7 @@ import ru.d_shap.lr1.ebnf.EbnfGrammar;
 import ru.d_shap.lr1.parser.ActionGotoTable;
 import ru.d_shap.lr1.parser.EbnfParser;
 import ru.d_shap.lr1.parser.EbnfToken;
+import ru.d_shap.lr1.parser.EbnfTokenConsumer;
 import ru.d_shap.lr1.parser.EbnfTokenizer;
 import ru.d_shap.lr1.parser.FirstSetComputer;
 import ru.d_shap.lr1.parser.GrammarConverter;
@@ -42,6 +45,8 @@ import ru.d_shap.lr1.parser.LR1ItemSet;
 import ru.d_shap.lr1.parser.LR1StateBuilder;
 import ru.d_shap.lr1.parser.LR1TableBuilder;
 import ru.d_shap.lr1.parser.Production;
+import ru.d_shap.lr1.source.InputStreamSource;
+import ru.d_shap.lr1.source.Source;
 import ru.d_shap.lr1.validator.EbnfValidator;
 
 /**
@@ -49,7 +54,9 @@ import ru.d_shap.lr1.validator.EbnfValidator;
  *
  * @author Dmitry Shapovalov
  */
-public final class TestRunner {
+public final class TestRunner implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     /**
      * Create new object.
@@ -60,8 +67,32 @@ public final class TestRunner {
 
     @Test
     public void runMath() throws Tokenizer.TokenizerException {
+        EbnfTokenConsumer<List<EbnfToken>> tokenConsumer = new EbnfTokenConsumer<List<EbnfToken>>() {
+
+            private static final long serialVersionUID = 1L;
+
+            private List<EbnfToken> _list;
+
+            @Override
+            public void reset() {
+                _list = new ArrayList<>();
+            }
+
+            @Override
+            public void accept(final EbnfToken token) {
+                _list.add(token);
+            }
+
+            @Override
+            public List<EbnfToken> getResult() {
+                return _list;
+            }
+
+        };
+        EbnfTokenizer<List<EbnfToken>> ebnfTokenizer = new EbnfTokenizer<>(tokenConsumer);
+        Source<InputStream, List<EbnfToken>> source = new InputStreamSource<>(ebnfTokenizer);
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream("math.ebnf");
-        List<EbnfToken> ebnfTokens = EbnfTokenizer.tokenize(inputStream);
+        List<EbnfToken> ebnfTokens = source.parse(inputStream);
         System.out.println("=== TOKENS ===");
         System.out.println(ebnfTokens);
 
