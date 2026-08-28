@@ -43,33 +43,22 @@ public final class PositionTest {
      */
     @Test
     public void constructorTest() {
+        new Position(0, 0);
         new Position(1, 1);
         new Position(1, 2);
         new Position(2, 1);
 
         try {
-            new Position(0, 1);
-            Assertions.fail("Position test fail");
-        } catch (IllegalArgumentException ex) {
-            Assertions.assertThat(ex).hasMessage("Line should be positive");
-        }
-        try {
             new Position(-1, 1);
             Assertions.fail("Position test fail");
         } catch (IllegalArgumentException ex) {
-            Assertions.assertThat(ex).hasMessage("Line should be positive");
-        }
-        try {
-            new Position(1, 0);
-            Assertions.fail("Position test fail");
-        } catch (IllegalArgumentException ex) {
-            Assertions.assertThat(ex).hasMessage("Column should be positive");
+            Assertions.assertThat(ex).hasMessage("Line should not be negative");
         }
         try {
             new Position(1, -1);
             Assertions.fail("Position test fail");
         } catch (IllegalArgumentException ex) {
-            Assertions.assertThat(ex).hasMessage("Column should be positive");
+            Assertions.assertThat(ex).hasMessage("Column should not be negative");
         }
     }
 
